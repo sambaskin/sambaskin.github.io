@@ -1,31 +1,214 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Sam Baskin</h1>
-<p>samsonbaskin&gmail.com</p>
 
-<h2> 
-Design
-</h2>
+<div id="SITE_CONTAINER">
 
-<h2> 
-Magazine
-</h2>
+			<div id="main" style= "padding-left:auto; padding-right:auto;"" >
+				<body>
+				<h1 style="margin-top:50px;">
 
-<h2>
-Video
-</h2>
+					SAM BASKIN
+				</h1>
+				
+				<p>
+					samsonbaskin@gmail.com
+				</p>
+
+				<h2> 
+					Design
+				</h2>
+
+					<div id="gallery">
+
+						<div id = "pic">
+							
+							<img id="myImg" src="portfolioPics/Design/refrigeratorRunning.png" alt="Post Card" >
+
+							<div id="myModal" class = "modal">
+							<span class="close">&times;</span>
+							<img class="modal-content" id="img01">
+							<div id="caption"></div>
+							</div>
+
+						</div> 
+
+						<div id = "pic">
+							<img id="myImg" src="portfolioPics/Design/installGuide.png" alt="Install Guide" >
+
+							<div id="myModal" class = "modal">
+							<span class="close">&times;</span>
+							<img class="modal-content" id="img01">
+							<div id="caption"></div>
+							</div>
+
+						</div> 						
+
+						<div id = "pic">
+							<img src="portfolioPics/Design/troubleShooting.png" alt="Table of Contents">
+						</div> 
 
 
-<h2>
-Fun
-</h2>
+					</div>
 
-</body>
 
-<style>
-h1 { color:blue; }
-</style>
+				<h2> 
+					Magazine
+				</h2>
+
+					<div id="gallery">
+						<div class="modalImage" onclick="onClick(this)">
+							<img src="portfolioPics/Magazine/cover.png" alt="Cover">
+						</div> 
+
+						<div class="modalImage" onclick="onClick(this)">
+							<img src="portfolioPics/Magazine/toc.png" alt="Table of Contents">
+						</div> 
+
+						<div class="modalImage" onclick="onClick(this)">
+							<img src="portfolioPics/Magazine/skylineArticle.png" alt="Skyline Article">
+						</div> 
+
+						<div class="modalImage" onclick="onClick(this)">
+							<img src="portfolioPics/Magazine/democracySurvey.png" alt="Democracy Survey">
+						</div> 
+						<div id="modal01" class="modal" onclick="this.style.display='none'">
+					  	<span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					  	<div class="modal-content">
+					    <img id="img01" style="max-width:100%">
+					  	</div>
+						</div>
+
+					</div>
+
+
+				<h2>
+					Video
+				</h2>
+				<div id="gallery">
+						<div id = "pic">
+							<img src="portfolioPics/Video/piezoBuzzer.jpg" alt="Piezzo Buzzer Tutorial">
+						</div> 
+
+						<div id = "pic">
+							<img src="portfolioPics/Video/chinchilla.png" alt="Chinchilla"">
+						</div> 
+
+						
+					</div>
+
+
+
+				<h2>
+					Fun
+				</h2>
+
+		</body>
+
+	</div>
+
+	<style>
+	h1 { font: normal normal bold 24px/1.4em 'open sans',sans-serif; text-align: center;}
+	h2 { font: normal normal normal 24px/1.4em 'open sans',sans-serif; }
+	p { font: normal normal normal 18px/1.4em 'open sans',sans-serif; text-align: center;}
+	#main {  width:100%;}
+	#gallery{display:flex; height:250px; padding-top:20px; padding-bottom:20px;}
+	#pic { width:20%; padding-left:15px; padding-rigth:15px; }
+	#SITE_CONTAINER{ width:1024px; margin:auto;}
+	img{width:100%; border:1px; border-color:rgba(200,200,200); border-style:solid; display:flex; }
+
+		/* Style the Image Used to Trigger the Modal */
+		.modalImage {
+		  border-radius: 0px;
+		  cursor: pointer;
+		  transition: 0.3s;
+		}
+
+		.modalImage:hover {opacity: 0.7;}
+
+		/* The Modal (background) */
+		.modal {
+		  display: none; /* Hidden by default */
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  padding-top: 20px; /* Location of the box */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: auto; /* Enable scroll if needed */
+		  background-color: rgb(0,0,0); /* Fallback color */
+		  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+		}
+
+		/* Modal Content (Image) */
+		.modal-content {
+		  margin: auto;
+		  display: block;
+		  max-height: 90%;
+		  width:unset!important;
+
+		}
+
+		/* Caption of Modal Image (Image Text) - Same Width as the Image */
+		#caption {
+		  margin: auto;
+		  display: block;
+		  width: 80%;
+		  max-width: 700px;
+		  text-align: center;
+		  color: #ccc;
+		  padding: 10px 0;
+		  height: 150px;
+		}
+
+		/* Add Animation - Zoom in the Modal */
+		.modal-content, #caption { 
+		  animation-name: zoom;
+		  animation-duration: 0.6s;
+		}
+
+		@keyframes zoom {
+		  from {transform:scale(0)} 
+		  to {transform:scale(1)}
+		}
+
+		/* The Close Button */
+		.close {
+		  position: absolute;
+		  top: 15px;
+		  right: 35px;
+		  color: #f1f1f1;
+		  font-size: 40px;
+		  font-weight: bold;
+		  transition: 0.3s;
+		}
+
+		.close:hover,
+		.close:focus {
+		  color: #bbb;
+		  text-decoration: none;
+		  cursor: pointer;
+		}
+
+		/* 100% Image Width on Smaller Screens */
+		@media only screen and (max-width: 700px){
+		  .modal-content {
+		  }
+		}
+
+
+
+	</style>
+
+	<script>
+		function onClick(element) {
+		  document.getElementById("img01").src = element.src;
+		  document.getElementById("modal01").style.display = "block";
+		}
+	</script>
+
+</div>
+
 </html>
 
 <css>
