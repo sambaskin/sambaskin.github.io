@@ -18,34 +18,32 @@
 					Design
 				</h2>
 
-					<div id="gallery">
-
-						<div id = "pic">
+					<div class="gallery">
+						<div id = "pic1" class = "pic" >
 							
-							<img id="myImg" src="portfolioPics/Design/refrigeratorRunning.png" alt="Post Card" >
-
-							<div id="myModal" class = "modal">
-							<span class="close">&times;</span>
-							<img class="modal-content" id="img01">
-							<div id="caption"></div>
-							</div>
-
+							<img src="portfolioPics/Design/refrigeratorRunning.png" class="picRow1"alt="Post Card" onclick="openModal();currentSlide(1)" >
 						</div> 
 
-						<div id = "pic">
-							<img id="myImg" src="portfolioPics/Design/installGuide.png" alt="Install Guide" >
-
-							<div id="myModal" class = "modal">
-							<span class="close">&times;</span>
-							<img class="modal-content" id="img01">
-							<div id="caption"></div>
-							</div>
-
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Design/installGuide.png" class="picRow1" alt="Install Guide" onclick="openModal();currentSlide(2)" >
 						</div> 						
 
-						<div id = "pic">
-							<img src="portfolioPics/Design/troubleShooting.png" alt="Table of Contents">
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Design/troubleShooting.png" class="picRow1" alt="Table of Contents" onclick="openModal();currentSlide(3)" >
 						</div> 
+
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Design/resetDevice.png" class="picRow1" alt="Rest Device Instructions" onclick="openModal();currentSlide(4)" >
+						</div> 
+
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Design/gatewaySpecs.png" class="picRow1" alt="Gateway Specification Sheet" onclick="openModal();currentSlide(5)" >
+						</div> 
+
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Design/sensorSpecs.png" class="picRow1" alt="Sensor Specification Sheet" onclick="openModal();currentSlide(6)" >
+						</div> 
+
 
 
 					</div>
@@ -55,159 +53,218 @@
 					Magazine
 				</h2>
 
-					<div id="gallery">
-						<div class="modalImage" onclick="onClick(this)">
-							<img src="portfolioPics/Magazine/cover.png" alt="Cover">
+					<div class="gallery">
+						<div id = "pic1" class = "pic" >
+							
+							<img src="portfolioPics/Magazine/cover.png" alt="Cover" class="picRow1" onclick="openModal();currentSlide(7)" >
 						</div> 
 
-						<div class="modalImage" onclick="onClick(this)">
-							<img src="portfolioPics/Magazine/toc.png" alt="Table of Contents">
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Magazine/toc.png" alt="Table of Contents" class="picRow1" onclick="openModal();currentSlide(8)" >
+						</div> 						
+
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Magazine/skylineArticle.png" alt="Skyline Article" class="picRow1" onclick="openModal();currentSlide(9)" >
 						</div> 
 
-						<div class="modalImage" onclick="onClick(this)">
-							<img src="portfolioPics/Magazine/skylineArticle.png" alt="Skyline Article">
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/Magazine/democracySurvey.png" alt="Democracy Survey"class="picRow1" onclick="openModal();currentSlide(10)" >
 						</div> 
 
-						<div class="modalImage" onclick="onClick(this)">
-							<img src="portfolioPics/Magazine/democracySurvey.png" alt="Democracy Survey">
-						</div> 
-						<div id="modal01" class="modal" onclick="this.style.display='none'">
-					  	<span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					  	<div class="modal-content">
-					    <img id="img01" style="max-width:100%">
-					  	</div>
-						</div>
+
 
 					</div>
 
 
-				<h2>
-					Video
-				</h2>
-				<div id="gallery">
-						<div id = "pic">
-							<img src="portfolioPics/Video/piezoBuzzer.jpg" alt="Piezzo Buzzer Tutorial">
-						</div> 
+				
+<!-- LIGHT BOX -->
+			  <div id="myModal" class="modal">
+			  <span class="close cursor" onclick="closeModal()">&times;</span>
+			  <div class="modal-content">
 
-						<div id = "pic">
-							<img src="portfolioPics/Video/chinchilla.png" alt="Chinchilla"">
-						</div> 
+			  	<!-- Design-->
 
-						
-					</div>
+			    <div class="mySlides">
+			      <img src="portfolioPics/Design/refrigeratorRunning.png" style="width:100%"class="slideImg">
+			    </div>
 
+			    <div class="mySlides">
+			      <img src="portfolioPics/Design/installGuide.png" style="width:100%"class="slideImg">
+			    </div>
 
+			    <div class="mySlides">
+			      <img src="portfolioPics/Design/troubleShooting.png" style="width:100%" class="slideImg">
+			    </div>
 
-				<h2>
-					Fun
-				</h2>
+			    <div class="mySlides">
+			      <img src="portfolioPics/Design/resetDevice.png" style="width:100%"class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src="portfolioPics/Design/gatewaySpecs.png" style="width:100%"class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src="portfolioPics/Design/sensorSpecs.png" style="width:100%" class="slideImg">
+			    </div>
+
+			   	<!-- Magazine-->
+			     <div class="mySlides">
+			      <img src="portfolioPics/Magazine/cover.png"  style="width:100%"class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src="portfolioPics/Magazine/toc.png" style="width:100%"class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src="portfolioPics/Magazine/skylineArticle.png" style="width:100%" class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src= "portfolioPics/Magazine/democracySurvey.png" style="width:100%" class="slideImg">
+			    </div>
+
+			  </div>
+			  </div>
+
 
 		</body>
 
 	</div>
-
+</div>
 	<style>
 	h1 { font: normal normal bold 24px/1.4em 'open sans',sans-serif; text-align: center;}
-	h2 { font: normal normal normal 24px/1.4em 'open sans',sans-serif; }
+	h2 { font: normal normal normal 24px/1.4em 'open sans',sans-serif; padding-left:8px;}
 	p { font: normal normal normal 18px/1.4em 'open sans',sans-serif; text-align: center;}
 	#main {  width:100%;}
 	#gallery{display:flex; height:250px; padding-top:20px; padding-bottom:20px;}
 	#pic { width:20%; padding-left:15px; padding-rigth:15px; }
-	#SITE_CONTAINER{ width:1024px; margin:auto;}
+	#SITE_CONTAINER{ width:824px; margin:auto;}
 	img{width:100%; border:1px; border-color:rgba(200,200,200); border-style:solid; display:flex; }
 
-		/* Style the Image Used to Trigger the Modal */
-		.modalImage {
-		  border-radius: 0px;
-		  cursor: pointer;
-		  transition: 0.3s;
+
+		.gallery > .pic {
+		  padding: 0 8px;
+
 		}
 
-		.modalImage:hover {opacity: 0.7;}
+		.gallery:after {
+		  content: "";
+		  display: flex;
+		  clear: both;
+		  display:flex;
+		  flex-wrap:wrap;
+		}
+
+		/* Create four equal columns that floats next to eachother */
+		.pic {
+		  float: left;
+		}
 
 		/* The Modal (background) */
 		.modal {
-		  display: none; /* Hidden by default */
-		  position: fixed; /* Stay in place */
-		  z-index: 1; /* Sit on top */
-		  padding-top: 20px; /* Location of the box */
+		  display: none;
+		  position: fixed;
+		  z-index: 1;
+		  padding-top: 40px;
 		  left: 0;
 		  top: 0;
-		  width: 100%; /* Full width */
-		  height: 100%; /* Full height */
-		  overflow: auto; /* Enable scroll if needed */
-		  background-color: rgb(0,0,0); /* Fallback color */
-		  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+		  width: 100%;
+		  height: 100%;
+		  overflow: auto;
+		  background-color: black;
 		}
 
-		/* Modal Content (Image) */
+		/* Modal Content */
 		.modal-content {
+		  position: relative;
+		  background-color: #fefefe;
 		  margin: auto;
-		  display: block;
-		  max-height: 90%;
-		  width:unset!important;
-
-		}
-
-		/* Caption of Modal Image (Image Text) - Same Width as the Image */
-		#caption {
-		  margin: auto;
-		  display: block;
-		  width: 80%;
-		  max-width: 700px;
+		  padding: auto;
 		  text-align: center;
-		  color: #ccc;
-		  padding: 10px 0;
-		  height: 150px;
+		  width: 100%;
+		  max-width: 1200px;
 		}
 
-		/* Add Animation - Zoom in the Modal */
-		.modal-content, #caption { 
-		  animation-name: zoom;
-		  animation-duration: 0.6s;
-		}
-
-		@keyframes zoom {
-		  from {transform:scale(0)} 
-		  to {transform:scale(1)}
-		}
 
 		/* The Close Button */
 		.close {
+		  color: white;
 		  position: absolute;
-		  top: 15px;
-		  right: 35px;
-		  color: #f1f1f1;
-		  font-size: 40px;
+		  top: 10px;
+		  right: 25px;
+		  font-size: 35px;
 		  font-weight: bold;
-		  transition: 0.3s;
 		}
 
 		.close:hover,
 		.close:focus {
-		  color: #bbb;
+		  color: #999;
 		  text-decoration: none;
 		  cursor: pointer;
 		}
-
-		/* 100% Image Width on Smaller Screens */
-		@media only screen and (max-width: 700px){
-		  .modal-content {
-		  }
+		.slideImg
+		{
+			height: 80vh!important;
+			width: unset!important;
+			display: unset!important;
 		}
+		.mySlides
+		{
+			background-color:rgba(0,0,0,1);
 
+		}
+		.picRow1
+		{
+			width:256px;
+			height:256px;
+			object-fit:cover;
+			object-position:100% 0;
+			margin-bottom:15px;
+
+		}
 
 
 	</style>
 
-	<script>
-		function onClick(element) {
-		  document.getElementById("img01").src = element.src;
-		  document.getElementById("modal01").style.display = "block";
-		}
-	</script>
+		<script>
+// Open the Modal
+function openModal() {
+  document.getElementById('myModal').style.display = "block";
+}
 
-</div>
+// Close the Modal
+function closeModal() {
+  document.getElementById('myModal').style.display = "none";
+}
+
+
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
+
 
 </html>
 
