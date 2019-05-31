@@ -57,7 +57,29 @@
 					</div>
 
 				<h2> 
-					VeriSolutions Work
+					Mobile Youth Atlanta
+				</h2>
+					<div class="gallery">
+						<div id = "pic1" class = "pic" >
+							
+							<img src="portfolioPics/MYA/Map.png" class="picRow1"alt="Post Card" onclick="openModal();currentSlide(12)" >
+						</div> 
+
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/MYA/Banner.png" class="picRow1" alt="Install Guide" onclick="openModal();currentSlide(13)" >
+						</div> 						
+
+						<div id = "pic2" class = "pic" class="picRow1">
+							<img src="portfolioPics/MYA/Graph.png" class="picRow1" alt="Table of Contents" onclick="openModal();currentSlide(14)" >
+						</div> 
+
+
+
+
+					</div>
+
+				<h2> 
+					VeriSolutions
 				</h2>
 
 					<div class="gallery">
@@ -145,7 +167,14 @@
 					src="https://www.youtube.com/embed/HF47AKVahOs" allowfullscreen="allowfullscreen">
 					</iframe>
 					</div>
+			    <!-- Next/previous controls -->
+				    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+				    <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
+				    <!-- Caption text -->
+				    <div class="caption-container">
+				      <p id="caption"></p>
+				    </div>
 
 
 				
@@ -199,6 +228,18 @@
 
 			    <div class="mySlides">
 			      <img src= "portfolioPics/Magazine/birdArticle.png" style="width:100%" class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src= "portfolioPics/MYA/Map.png" style="width:100%" class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src= "portfolioPics/MYA/Banner.png" style="width:100%" class="slideImg">
+			    </div>
+
+			    <div class="mySlides">
+			      <img src= "portfolioPics/MYA/Graph.png" style="width:100%" class="slideImg">
 			    </div>
 
 			  </div>
@@ -291,6 +332,14 @@
 			background-color:rgba(0,0,0,1);
 
 		}
+
+		.caption-container {
+  			text-align: center;
+  			background-color: black;
+  			padding: 2px 16px;
+  			color: white;
+		}
+
 		.picRow1
 		{
 			width:256px;
@@ -308,7 +357,41 @@
 			padding: 0 8px;
 			margin-bottom:15px;
 		}
+		/* Next & previous buttons */
+		.prev,
+		.next {
+		  cursor: pointer;
+		  position: absolute;
+		  top: 50%;
+		  width: auto;
+		  padding: 16px;
+		  margin-top: -50px;
+		  color: white;
+		  font-weight: bold;
+		  font-size: 20px;
+		  transition: 0.6s ease;
+		  border-radius: 0 3px 3px 0;
+		  user-select: none;
+		  -webkit-user-select: none;
+		}
 
+		/* Position the "next button" to the right */
+		.next {
+		  right: 0;
+		  border-radius: 3px 0 0 3px;
+		}
+
+		/* On hover, add a black background color with a little bit see-through */
+		.prev:hover,
+		.next:hover {
+		  background-color: rgba(0, 0, 0, 0.8);
+		}
+		.caption-container {
+		  text-align: center;
+		  background-color: black;
+		  padding: 2px 16px;
+		  color: white;
+		}
 
 	</style>
 
