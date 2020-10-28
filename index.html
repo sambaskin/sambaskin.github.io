@@ -27,10 +27,9 @@
 			</h2>
 
 			<div id="featured_container">
-				<img src="portfolioPics/Magazine2020/3484spring2020.png" class="featuredImg" onclick="openModal();currentSlide(1)"style="height: 40%; padding-left:20px;padding-right:20px;"></a>
+				<img src="portfolioPics/Magazine2020/3484fall2020cover.png" class="featuredImg" onclick="openModal();currentSlide(34)"style="height: 40%; padding-left:20px;padding-right:20px;"></a>
 
-				<img src="portfolioPics/SAMLab/odmtsanimation.png" class="flexpic" style="height: 40%;" onclick="openModal();currentSlide(16)">
-
+				<img src="portfolioPics/SAMLab/odmtsanimation.png" class="featuredImg" style="height: 40%;" onclick="openModal();currentSlide(16)">
 
 				<img src="refrigeratorRunning.png" id="featuredImg" onclick="openModal();currentSlide(3)">			
 				
@@ -64,13 +63,18 @@
 			</div>
 			<div id="flex-gallery">
 				<div id="flex-gallery">
+				<img src="portfolioPics/Magazine2020/3484fall2020cover.png" class="flexpic" onclick="openModal();currentSlide(34)">
+					<img src="portfolioPics/Magazine2020/disconnected.png" class="flexpic" onclick="openModal();currentSlide(32)">
+					<img src="portfolioPics/Magazine2020/changingcity.png" class="flexpic" onclick="openModal();currentSlide(33)">
 
+
+
+				</div>
+				<div id="flex-gallery">
 					<img src="portfolioPics/Magazine2020/3484spring2020.png" class="flexpic" onclick="openModal();currentSlide(1)">
 					<img src="portfolioPics/Magazine2020/climate.png" class="flexpic" onclick="openModal();currentSlide(5)">
 					<img src="portfolioPics/Magazine2020/skyline.png" class="flexpic" onclick="openModal();currentSlide(6)">
 
-					
-					
 				</div>
 			</div>
 			<div class="role" style="color: white; padding-bottom: 15px; opacity: 50%;">
@@ -437,6 +441,25 @@
 	   	<!-- 31 -->	    
 	    <div class="mySlides">
 	   	<iframe width="720" height="360" src="https://www.youtube.com/embed/tEtplhqMjJg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	    </div>
+
+	   	<!-- 32 -->	    
+
+	   	<div class="mySlides">
+	    	<iframe src= "portfolioPics/Magazine2020/disconnected.pdf" width:100% height:80% id="pdfframe"></iframe>
+
+	    </div>
+	   	<!-- 33 -->
+	   	<div class="mySlides">
+ 	    	<iframe src= "portfolioPics/Magazine2020/changingcity.pdf" width:100% height:80% id="pdfframe"></iframe>
+
+
+	    </div>	  
+
+	   	<!-- 34 -->	    
+  		<div class="mySlides">
+	    	<iframe src= "portfolioPics/Magazine2020/3484fall2020.pdf" width:100% height:80% id="pdfframe"></iframe>
+
 	    </div>
 
 
@@ -831,6 +854,7 @@
 
 	function closeModal() {
 	  document.getElementById("myModal").style.display = "none";
+	  player.stopVideo()
 	}
 
 	var slideIndex = 1;
