@@ -27,9 +27,9 @@
 			</h2>
 
 			<div id="featured_container">
-				<img src="portfolioPics/Magazine2020/3484fall2020cover.png" class="featuredImg" onclick="openModal();currentSlide(34)"style="height: 40%; padding-left:20px;padding-right:20px;"></a>
+				<img src="portfolioPics/Magazine2020/3484fall2020cover.png" id="featuredImg" onclick="openModal();currentSlide(34)"style="height: 40%; padding-left:20px;padding-right:20px;"></a>
 
-				<img src="portfolioPics/SAMLab/odmtsanimation.png" class="featuredImg" style="height: 40%;" onclick="openModal();currentSlide(16)">
+				<img src="portfolioPics/SAMLab/odmtsanimation.png" id="featuredImg" style="height: 40%;" onclick="openModal();currentSlide(16)">
 
 				<img src="refrigeratorRunning.png" id="featuredImg" onclick="openModal();currentSlide(3)">			
 				
@@ -282,7 +282,15 @@
 	  <div class="modal-content">
 		<!-- 1 -->
 	    <div class="mySlides">
-	    	<iframe src= "portfolioPics/Magazine2020/3484spring2020.pdf" width:100% height:80% id="pdfframe"> </iframe>
+
+	    	<div class="leftSlide">
+	    	<iframe src= "portfolioPics/Magazine2020/3484spring2020.pdf" width:100% height:80% id="pdfframe"> </iframe>	 
+	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">3484 Magazine Fall 2020</h3>
+	    	<p class="slideHeader">I was in charge of the design and layout for the first issue of 3484 Magazine. I established design themes and standards that would be replicated for future issues. 
+	    	</p>
+	    	</div>
 	    </div>
 
 	    <!-- 2 -->
@@ -293,25 +301,48 @@
 
 		<!-- 3 -->
 	    <div class="mySlides">
+			<div class="leftSlide">
 	      <img src="refrigeratorRunning.png" style="height:80%">
+	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Refrigerator Running?</h3>
+	    	<p class="slideHeader">Postcard created to send to restaurants as an ad for the Verisolutions temperature monitoring system.
+			</p>
+	    	</div>
+
 	    </div>
 
 		<!-- 4 -->
 	    <div class="mySlides">
 	     <!--duplicate pdf, not needed. Keep this div for future changes. <iframe src= "portfolioPics/Magazine2020/3484spring2020.pdf" width:100% height:80% id="pdfframe"> </iframe>-->
+
 	    </div>
 
 
 		<!-- 5 -->	    
 	    <div class="mySlides">
+	    	<div class="leftSlide">
 	    	<iframe src= "portfolioPics/Magazine2020/climate.pdf" width:100% height:80% id="pdfframe"></iframe>
+	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Moving the Needle</h3>
+	    	<p class="slideHeader">Moving the Needle uses graphs and a timeline to explain Atlanta’s progress and efforts to fight climate change.</p>
+	    	</div>
 	    </div>
 
 
 
 	    <!-- 6 HERE -->	    
 	    <div class="mySlides">
-	      <img src="portfolioPics/Magazine2020/skyline.png" style="height:80%">
+	      	<div class="leftSlide">
+	      	<img src="portfolioPics/Magazine2020/skyline.png" style="height:80%">
+	      	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Skyline Article</h3>
+	    	<p class="slideHeader">The Skyline article shows new buildings in Atlanta by depicting how they will change the city’s skyline.
+	    	</p>
+	    	</div>
+
 	    </div>
 
 	   	<!-- 7 -->	    
@@ -342,124 +373,271 @@
 	   	<!-- 12 -->	    
 	    <div class="mySlides">
 	     <img src="portfolioPics/Instagram/igstonemountain.jpg" style="height:80%">
+
 	    </div>
 
 	   	<!-- 13 TO HERE-->	    
 	    <div class="mySlides">    
-	     <iframe width="720" height="360" src="https://www.youtube.com/embed/ObNGDu_kXQ8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-	    </div>
+
+	     	<div class="leftSlide">
+	     	<iframe width="720" height="360" src="https://www.youtube.com/embed/ObNGDu_kXQ8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	     	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">On Demand System Wide Visualization</h3>
+	    	<p class="slideHeader">I was asked to create short clips of the lab’s on demand transit system in action. This clip shows the full system from a wide view. I created this visualization using Python and Deck.GL.   </p>
+	    	</div>
+		</div>
 
 
 	   	<!-- 14 -->	    
 	    <div class="mySlides"> 
+	     <div class="leftSlide">
 	    	<iframe width="720" height="360" src="https://www.youtube.com/embed/4lok3KcvytE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">On Demand System Multizoom</h3>
+	    	<p class="slideHeader">This visualization shows three different zoom levels of the system operating. The goal was to show how the overall system flows throughout the city and how it works on a vehicle scale. I created this visualization using Python and Deck.GL.  </p>
+	    	</div>
 	    </div>
 
 	   	<!-- 15 -->	    
 	    <div class="mySlides">
-	     <iframe width="720" height="360" src="https://www.youtube.com/embed/TEZniYzzaXQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	     <div class="leftSlide">
+	     	<iframe width="720" height="360" src="https://www.youtube.com/embed/TEZniYzzaXQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>	
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Carpool Trip Visualization</h3>
+	    	<p class="slideHeader">I created a visualization of a carpool project using Carto.VL.  A series of rings shows the number of passengers in the car, and blue dots show pickups. All of these vehicles are driving to the same block in Midtown Atlanta. </p>
+	    	</div>
 	    </div>
 
 	   	<!-- 16 -->	    
 	    <div class="mySlides">
-	     <iframe width="720" height="360" src="https://www.youtube.com/embed/P3sYKbyT888" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+     	    <div class="leftSlide">
+	    	 	     <iframe width="720" height="360" src="https://www.youtube.com/embed/P3sYKbyT888" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 	
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">On Demand System Animation</h3>
+	    	<p class="slideHeader">This video explains how the on demand system works on a user-level. There was no clear explanation in any lab presentation of how the system works for the actual users. My goal was to create a professional and understandable animation to explain the system. I created this video using Adobe XD, Illustrator, After Effects, and Premiere. </p>
+	    	</div>
 	    </div>
 
 
 	   	<!-- 17 -->	    
 	    <div class="mySlides">
-	     <iframe width="720" height="360" src="https://www.youtube.com/embed/mr4HGT9I1qw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	     <div class="leftSlide">
+	    	 <iframe width="720" height="360" src="https://www.youtube.com/embed/mr4HGT9I1qw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 	
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Carpool Scale Animation</h3>
+	    	<p class="slideHeader">I created this animation to show the complexity of the carpool system. It was used as a clip in presentations on the carpool project. The carpool visualization shows cars in the Atlanta metro area travelling to one block in midtown. This shows just how large of an area the system is working with. Created in Adobe After Effects.</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 18 -->	    
 	    <div class="mySlides">
-	    <iframe width="720" height="360" src="https://www.youtube.com/embed/Yv6Mc3pstSw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	    	<div class="leftSlide">
+	   			 <iframe width="720" height="360" src="https://www.youtube.com/embed/Yv6Mc3pstSw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>	    	
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Carpool Scale Animation</h3>
+	    	<p class="slideHeader">I created this animation to show the complexity of the carpool system. It was used as a clip in presentations on the carpool project. The carpool visualization shows cars in the Atlanta metro area travelling to one block in midtown. This shows just how large of an area the system is working with. Created in Adobe After Effects.</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 19 -->	    
 	    <div class="mySlides">
-	     <img src="portfolioPics/SAMLab/barGraph.png" style="height:80%">
+	    	<div class="leftSlide">
+	    		<img src="portfolioPics/SAMLab/barGraph.png" style="height:80%">
+	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Carpool Bar Graph</h3>
+	    	<p class="slideHeader">This is another piece used in presentations about the carpool project. I created a simple bar graph to show the difference in traffic volume before and after the simulated implementation of the project.</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 20 -->	    
 	    <div class="mySlides">
-	     <img src="VS/dashboard.png" style="height:80%">
+ 	       	<div class="leftSlide">
+	     		<img src="VS/dashboard.png" style="height:80%">
+    		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Analytics Dashboard Mockup</h3>
+	    		<p class="slideHeader">I designed an analytics dashboard to increase the value of the Verisolutions system. I had to be conscious of mobile and desktop versions as well as the various levels of the platform and types of sensors.
+
+				</p>
+	    	</div>
 	    </div>
 
 	    <!-- 21 -->	    
 	    <div class="mySlides">
-	     <img src="VS/refrigeratorRunning.png" style="height:80%">
+	       	<div class="leftSlide">
+	     		<img src="VS/refrigeratorRunning.png" style="height:80%">
+    		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Refrigerator Running?</h3>
+	    		<p class="slideHeader">Postcard created to send to restaurants as an ad for the Verisolutions temperature monitoring system.
+
+				</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 22 -->	    
 	    <div class="mySlides">
-	     <img src="VS/gatewaySpecs.png" style="height:80%">
+  	    	<div class="leftSlide">
+	   		     <img src="VS/gatewaySpecs.png" style="height:80%">
+    		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Gateway Spec Sheet</h3>
+	    		<p class="slideHeader">Specification sheet for Verisolutions hardware.
+
+				</p>
+	    	</div>
 	    </div>
 
 	    <!-- 23 -->	    
 	    <div class="mySlides">
-	     <img src="VS/installGuide.png" style="height:80%">
+  	    	<div class="leftSlide">
+			   	<img src="VS/installGuide.png" style="height:80%">
+    		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Installation Guide</h3>
+	    		<p class="slideHeader">Instruction guide created for the Verisolutions system
+				</p>
+	    	</div>
 	    </div>
 
 	    <!-- 24 -->	    
 	    <div class="mySlides">
-	     <img src="VS/resetDevice.png" style="height:80%">
+ 	    	<div class="leftSlide">
+			   	<img src="VS/resetDevice.png" style="height:80%">
+    		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Troubleshooting Guide</h3>
+	    		<p class="slideHeader">Instruction guide created for the Verisolutions system
+				</p>
+	    	</div>
 	    </div>	  
 
 	    <!-- 25 -->	    
 	    <div class="mySlides">
-	     <img src="VS/troubleShooting.png" style="height:80%">
+	    	<div class="leftSlide">
+			    <img src="VS/troubleShooting.png" style="height:80%">
+		
+    		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Troubleshooting Guide</h3>
+	    		<p class="slideHeader">Instruction guide created for the Verisolutions system
+				</p>
+	    	</div>
 	    </div>
 
 	    <!-- 26 -->	    
 	    <div class="mySlides">
-	    <iframe width="720" height="360" src="https://www.youtube.com/embed/K8AnlUT0ng0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+	    	<div class="leftSlide">
+    	    	<iframe width="720" height="360" src="https://www.youtube.com/embed/K8AnlUT0ng0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>   		
+    		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Piezo Buzzer Tutorial</h3>
+	    		<p class="slideHeader">Tutorial created for a simple Arduino component. I focussed on explaining how the part worked and how to use it with Arduino boards and software.
+				</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 27 -->	    
 	    <div class="mySlides">
-	    <iframe width="720" height="360" src="https://www.youtube.com/embed/gTAuYjdXUlM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	    	<div class="leftSlide">
+		    	<iframe width="720" height="360" src="https://www.youtube.com/embed/gTAuYjdXUlM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>	   		</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Solargraphy Tutorial</h3>
+	    		<p class="slideHeader">Tutorial created for solargraphy pinhole cameras. A Polish man in the comments got pretty angry at me for this video for some reason.</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 28 -->	    
 	    <div class="mySlides">
-	    <iframe width="720" height="360" src="https://www.youtube.com/embed/d1iOtOqiQUo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    		<div class="leftSlide">
+    		<iframe width="720" height="360" src="https://www.youtube.com/embed/d1iOtOqiQUo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	   		</div>
+
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Jitter-Bot Tutorial</h3>
+	    	<p class="slideHeader">Tutorial created for an easy-to-build “robot.” This video was designed as a project for kids and parents to work on together.</p>
+	    	</div>
 	    </div>
 
 	    <!-- 29 -->	    
 	    <div class="mySlides">
+	    	<div class="leftSlide">
 	    	     <img src="portfolioPics/MYA/Map.png" style="height:80%">
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Marta Army Age Map</h3>
+	    	<p class="slideHeader">This map was on display at Marta Army’s Atlanta Streets Alive booth. It calls attention to the lack of transit accessibility for families in Atlanta. Marta Army is an Atlanta-based transit advocacy group that I worked with from 2019 to 2020.</p>
+	    	</div>
 
 	    </div>
 
 	    <!-- 30 -->	    
 	    <div class="mySlides">
-	    	     <img src="portfolioPics/MYA/Graph.png" style="height:80%">
+	    	<div class="leftSlide">
+    	    <img src="portfolioPics/MYA/Graph.png" style="height:80%">
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Marta Army Bar Graph</h3>
+	    	<p class="slideHeader">This graph was on display at Marta Army’s Atlanta Streets Alive booth. It calls attention to the lack of transit accessibility for families in Atlanta. Marta Army is an Atlanta-based transit advocacy group that I worked with from 2019 to 2020.</p>
+	    	</div>
 
 	    </div>
 
 	   	<!-- 31 -->	    
 	    <div class="mySlides">
-	   	<iframe width="720" height="360" src="https://www.youtube.com/embed/tEtplhqMjJg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+	   		<div class="leftSlide">
+		   	<iframe width="720" height="360" src="https://www.youtube.com/embed/tEtplhqMjJg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>	    	
+	   		</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Chinchilla Music Video</h3>
+	    	<p class="slideHeader">I was asked to create a music video with interesting visuals. The song was about a stalker, so I decided to style it similar to a ransom note. I used a combination of actual stop-motion photography and faux stop-motion photography by animating images in Final Cut Pro.  </p>
+	    	</div>
+
 	    </div>
 
 	   	<!-- 32 -->	    
 
 	   	<div class="mySlides">
-	    	<iframe src= "portfolioPics/Magazine2020/disconnected.pdf" width:100% height:80% id="pdfframe"></iframe>
-
+			<div class="leftSlide">
+	    		<iframe src= "portfolioPics/Magazine2020/disconnected.pdf" width:100% height:80% id="pdfframe"></iframe>
+	    	</div>
+	    	<div class="rightSlide">
+	    		<h3 class="slideHeader">Disconnected</h3>
+	    		<p class="slideHeader">This article explores the ways that highways in Atlanta were used as a tool for displacement and segregation. I styled headers and statistics to look like highway signs. The signs were created using Adobe XD and Photoshop. On the third page, I combined present aerial imagery with archival aerial imagery from 1949 to show the destruction caused by the interstate system. </p>
+	    		</div>
 	    </div>
 	   	<!-- 33 -->
 	   	<div class="mySlides">
+ 	    	<div class="leftSlide">
  	    	<iframe src= "portfolioPics/Magazine2020/changingcity.pdf" width:100% height:80% id="pdfframe"></iframe>
-
+	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Changing City</h3>
+	    	<p class="slideHeader">This was an infographic from the Fall 2020 issue of 3484 Magazine. My goal was to showcase new transit developments, trails and parks around Atlanta. I created icons for each development to give a uniform and understandable visual explanation for what each development would look like. </p>
+	    	</div>
 
 	    </div>	  
 
 	   	<!-- 34 -->	    
   		<div class="mySlides">
+  			<div class="leftSlide">
 	    	<iframe src= "portfolioPics/Magazine2020/3484fall2020.pdf" width:100% height:80% id="pdfframe"></iframe>
-
+	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">3484 Magazine Fall 2020</h3>
+	    	<p class="slideHeader">I was in charge of the overall layout and design for this issue. I also fully designed and wrote several articles.
+	    </p>
+	    	</div>
 	    </div>
 
 
@@ -501,6 +679,7 @@
 		margin-top: 10px;
 		margin-bottom: 10px;
 	}
+
 
 	#magazine
 	{
@@ -581,7 +760,7 @@
 	}
 	#pdfframe
 	{
-		width: 70%;
+		width: 100%;
 		height: 80%;
 	}
 	#misc
@@ -694,6 +873,7 @@
 	#featuredImg:hover
 	{
 		opacity: 0.75;
+		cursor: pointer;
 	}
 
 	#flex-gallery 
@@ -752,7 +932,7 @@
 	  margin: auto;
 	  padding: 0;
 	  width: 90%;
-	  max-width: 1200px;
+	  /*max-width: 1200px;*/
 	}
 
 	/* The Close Button */
@@ -775,6 +955,30 @@
 	/* Hide the slides by default */
 	.mySlides {
 	  display: none;
+	  height: 100%;
+	  box-sizing: border-box;
+	}
+	.leftSlide
+	{
+		width: 100%;
+	}
+	.rightSlide
+	{
+		width: 20%;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+	h3.slideHeader
+	{
+		font-family: 'Montserrat';
+		color: #ffffff;
+
+	}
+	p.slideHeader
+	{
+		color: #ffffff;
+		margin: 0px;
 	}
 
 	/* Next & previous buttons */
@@ -881,7 +1085,7 @@
 	  for (i = 0; i < dots.length; i++) {
 	      dots[i].className = dots[i].className.replace(" active", "");
 	  }
-	  slides[slideIndex-1].style.display = "block";
+	  slides[slideIndex-1].style.display = "flex";
 	  dots[slideIndex-1].className += " active";
 	  captionText.innerHTML = dots[slideIndex-1].alt;
 	}
