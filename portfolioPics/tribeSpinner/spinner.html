@@ -1,0 +1,194 @@
+<html>
+	<head>
+		<!--Code adapted from superteachertools.us by Sam Baskin November 2020-->
+        <meta charset="utf-8">
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="main.css" type="text/css" />
+        <script type="text/javascript" src="Winwheel.js"></script>
+        <script src="TweenMax.min.js"></script>
+
+         <link href="../css/bootstrap.css" rel="stylesheet">
+   </head>
+
+   <div id="text">
+   	<h2 id="header"> WHAT'S YOUR PRIORITY FOR 2021?</h2>
+   	<p id="bodyText"> Click anywhere on the wheel to spin. And remember, Tribe can help you with any of these issues.</p>
+   </div>
+
+   	<div id="container" onClick="resetWheel(); powerSelected(1); startSpin();">
+	    <img src="pointer.png" id="pointer" style="position: relative; top:60px;"><br>
+	    <img src="TRB-Website-Logo-white.png" id="logo" style="position: relative; top:275px; width:50px; height:50px;"><br>
+	    <canvas onClick="resetWheel(); powerSelected(1); startSpin();" id="canvas" width="500" height="500">
+	        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+	    </canvas>
+		</div>
+	</div>
+
+	<script>
+        // Create new wheel object specifying the parameters at creation time.
+        var theWheel = new Winwheel({
+            'numSegments'  : 10,     // Specify number of segments.
+            'outerRadius'  : 250,   // Set outer radius so wheel fits inside the background.
+            'textFontSize' : 18,    // Set font size as desired.
+			//'textOrientation' : 'vertical', // Make text vertical so goes down from the outside of wheel.
+            'textAlignment'   : 'outer',    // Align text to outside of wheel.
+			'segments'     :        // Define segments including colour and text.
+            [
+               {'fillStyle' : '#19aad1', 'text' : 'Reinventing the Intranet'},
+               {'fillStyle' : '#b3b3b3', 'text' : 'Communications Audit'},
+               {'fillStyle' : '#19aad1', 'text' : 'Non-Desk Communications'},
+               {'fillStyle' : '#b3b3b3', 'text' : 'Engaging Remote Employees'},
+               {'fillStyle' : '#19aad1', 'text' : 'Vision & Values'},
+               {'fillStyle' : '#b3b3b3', 'text' : 'Diversity & Inclusion'},
+               {'fillStyle' : '#19aad1', 'text' : 'Manager Toolkits'},
+               {'fillStyle' : '#b3b3b3', 'text' : 'Employee Mental Health'},
+               {'fillStyle' : '#19aad1', 'text' : 'Change Management'},
+               {'fillStyle' : '#b3b3b3', 'text' : 'Leadership Communications'}                
+
+           	],
+            'animation' :           // Specify the animation to use.
+            {
+                'type'     : 'spinToStop',
+                'duration' : 3,     // Duration in seconds.
+                'spins'    : 8     // Number of complete spins.
+                //'callbackFinished' : 'alertPrize()'
+            }
+        });
+        
+        // Vars used by the code in this page to do power controls.
+        var wheelPower    = 0;
+        var wheelSpinning = false;
+        
+        // -------------------------------------------------------
+        // Function to handle the onClick on the power buttons.
+        // -------------------------------------------------------
+        function powerSelected(powerLevel)
+        {
+            // Ensure that power can't be changed while wheel is spinning.
+            if (wheelSpinning == false)
+            {
+                
+                // Set wheelPower var used when spin button is clicked.
+                wheelPower = powerLevel;
+                
+            }
+        }
+        
+        // -------------------------------------------------------
+        // Click handler for spin button.
+        // -------------------------------------------------------
+        function startSpin()
+        {
+            // Ensure that spinning can't be clicked again while already running.
+            if (wheelSpinning == false)
+            {
+                // Based on the power level selected adjust the number of spins for the wheel, the more times is has
+                // to rotate with the duration of the animation the quicker the wheel spins.
+                if (wheelPower == 1)
+                {
+                    theWheel.animation.spins = 3;
+                }
+                else if (wheelPower == 2)
+                {
+                    theWheel.animation.spins = 8;
+                }
+                else if (wheelPower == 3)
+                {
+                    theWheel.animation.spins = 15;
+                }
+                
+                // Disable the spin button so can't click again while wheel is spinning.
+                
+                
+                // Begin the spin animation by calling startAnimation on the wheel object.
+                theWheel.startAnimation();
+                
+                // Set to true so that power can't be changed and spin button re-enabled during
+                // the current animation. The user will have to reset before spinning again.
+                wheelSpinning = true;
+            }
+        }
+        
+        // -------------------------------------------------------
+        // Function for reset button.
+        // -------------------------------------------------------
+        function resetWheel()
+        {
+            theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+            theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+            theWheel.draw();                // Call draw to render changes to the wheel.
+            
+            
+            
+            wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+        }
+        
+        // -------------------------------------------------------
+        // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters.
+        // -------------------------------------------------------
+        function alertPrize()
+        {
+            // Get the segment indicated by the pointer on the wheel background which is at 0 degrees.
+            var winningSegment = theWheel.getIndicatedSegment();
+            
+            // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
+            alert("You have won " + winningSegment.text);
+        }
+
+    </script>
+
+	<style>
+	#container
+	{
+		text-align: center;
+		margin-top: -60px;
+		width: 80%;
+		margin-left: auto;
+		margin-right: auto;
+		border-radius: 0px 0px 20px 20px;
+		padding-bottom: 20px;
+		background-color: #DDDDDD;
+	}
+
+	#pointer
+	{
+		padding: 0px;
+		margin-top: -60px;
+	}
+	#logo
+	{
+
+	}
+	#text
+	{
+		text-align: center;
+		background-color: #19aad1;
+		color: #ffffff;
+		padding-top: 15px;
+		padding-bottom: 40px;
+		width: 80%;
+		margin-left: auto;
+		margin-right: auto;
+		border-radius: 20px 20px 0px 0px;
+
+
+	}
+	#header
+	{
+		font-family: Oswald-Regular;
+		font-size: 36px;
+		color: #ffffff;
+		margin-bottom: 0px;
+	}
+	#bodyText
+	{
+		font-family: Oswald-Light;
+		font-size: 16px;
+		margin-top: 0px;
+		padding-bottom: 25px;
+
+	}
+
+	</style>
+
+</html>
