@@ -10,12 +10,13 @@
 <!-- Header -->
 	<div id="max-width">
 		<div id="header">
-			<h1>
+			<h1 style="margin-top:10px; margin-bottom:10px;">
 				SAM BASKIN
 			</h1>
-		<div id="nav">
 
-		</div>
+			<div id="nav">
+				<a href="#aboutmetarget" id="aboutmetargetStyle">About Me</a>
+			</div>
 
 		</div>
 
@@ -77,18 +78,21 @@
 
 				</div>
 			</div>
-			<div class="role" style="color: white; padding-bottom: 15px; opacity: 50%;">
+			<div class="role" style="color: white; padding-bottom: 5px; opacity: 50%;">
 				Digital
 			</div>
+			<p style="color: white; margin-top: 0px;">
+				In addition to print articles, we also frequently post on our social media accounts. While the full length articles focus on long-term issues, our social media provides updates on shorter-term stories that relate to those larger issues. Our Instagram account usually posts an interesting image or graphic that we create as well as a short caption explaining an update on an issue. 
+			</p>
 			<div id="flex-gallery">
 				<div id="flex-gallery">
 
-					<a href="https://www.instagram.com/p/CDhMIAvg6Zd/" target="_blank"><img src="portfolioPics/Instagram/igbus.jpg" class="flexpic"></a>
-					<a href="https://www.instagram.com/p/CBd7KCUgbm_/" target="_blank" ><img src="portfolioPics/Instagram/igpolice.jpg" class="flexpic"></a>
-					<a href="https://www.instagram.com/p/B7GwjRng0C-/" target="_blank" ><img src="portfolioPics/Magazine2020/hottestYear.png" class="flexpic"></a>
-				   <a href="https://www.instagram.com/p/CBRK1KDgt4n/" target="_blank" ><img src="portfolioPics/Instagram/igvotersticker.jpg" class="flexpic" ></a>
-					<a href="https://www.instagram.com/p/CEk22waAKMn/" target="_blank" ><img src="portfolioPics/Instagram/igusps.jpg" class="flexpic"></a>
-					<a href="https://www.instagram.com/p/CBwpH5WANZ2/" target="_blank" ><img src="portfolioPics/Instagram/igstonemountain.jpg" class="flexpic"></a>
+					<img src="portfolioPics/Instagram/igbus.jpg" class="flexpic" onclick="openModal();currentSlide(7)">
+					<img src="portfolioPics/Instagram/igpolice.jpg" class="flexpic" onclick="openModal();currentSlide(8)">
+					<img src="portfolioPics/Magazine2020/hottestYear.png" class="flexpic" onclick="openModal();currentSlide(9)">
+				    <img src="portfolioPics/Instagram/igvotersticker.jpg" class="flexpic" onclick="openModal();currentSlide(10)">
+					<img src="portfolioPics/Instagram/igusps.jpg" class="flexpic" onclick="openModal();currentSlide(11)">
+					<img src="portfolioPics/Instagram/igstonemountain.jpg" class="flexpic" onclick="openModal();currentSlide(12)">
 
 					<img src="portfolioPics/Magazine2020/peachpromo.png" class="flexpic" onclick="openModal();currentSlide(35)">
 					<img src="portfolioPics/Magazine2020/skylinepromo.png" class="flexpic" onclick="openModal();currentSlide(13)">
@@ -125,7 +129,7 @@
 
 
 				</div>
-				<img src="portfolioPics/SAMLab/odmtssim.png" class="flexpic" style="height: 25%;" onclick="openModal();currentSlide(14)">>
+				<img src="portfolioPics/SAMLab/odmtssim.png" class="flexpic" style="height: 25%;" onclick="openModal();currentSlide(14)">
 				<img src="portfolioPics/SAMLab/multizoom.png" class="flexpic" style="height: 25%;" onclick="openModal();currentSlide(15)">
 				<img src="portfolioPics/SAMLab/carpoolthumbnail.png" class="flexpic"  style="height: 25%;" onclick="openModal();currentSlide(17)">
 				<img src="portfolioPics/SAMLab/odmtsanimation.png" class="flexpic" style="height: 25%;" onclick="openModal();currentSlide(16)">
@@ -172,7 +176,6 @@
 					<img src="VS/resetDevice.png" class="flexpic" onclick="openModal();currentSlide(24)">
 
 				
-					<!--<img src="VS/sensorSpecs.png" class="flexpic">-->
 
 				
 					<img src="VS/troubleShooting.png" class="flexpic" onclick="openModal();currentSlide(25)">
@@ -229,9 +232,11 @@
 <!-- About Me -->
 
 		<div id="about_me">
+			<a id="aboutmetarget">
 			<h2 id="aboutmeheader">
 				About Me
 			</h2>
+			</a>
 			<div id="headshotContainer">
 				<div id="hoverbox">
 					<img src="headshot.gif" id="headshotgif">
@@ -241,7 +246,7 @@
 					(Sam)
 				</div>
 				<div id="headshotPar">
-					I'm an industrial engineering student at Georgia Tech with experience in design, data visualization, UI/UX, marketing, and web development. 
+					I'm an industrial engineering student at Georgia Tech with experience in design, data visualization, UI/UX, and web development. 
 				</div>
 				<div id="iconsAboutMe">
 				<a href="https://www.linkedin.com/in/sam-baskin-06b59b53/">
@@ -350,33 +355,78 @@
 
 	   	<!-- 7 -->	    
 	    <div class="mySlides">
-	      <img src="portfolioPics/Instagram/igbus.jpg" style="height:80%">
+	    	<div class="leftSlide">
+	      	<img src="portfolioPics/Instagram/busig.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">Marta Map</h3>
+		    	<p class="slideHeader">
+				I created a map to show a bus rapid transit route in Atlanta. The paths were originally polyline files that I added to a map in Mapbox Studio, but I converted them to vectors and combined them with aerial imagery in the Adobe Suite. I wanted to use aerial imagery because our Instagram posts are usually pretty reliant on vector graphics, so I always try to add in actual photographs when I can. Sometimes aerial imagery can be confusing since most people don't use satellite maps in everyday life and aren't familiar with an overhead view of their city. However, this map worked out because of the number of distinct landmarks such as stadiums and Downtown Atlanta's unique grid. If I were to make this map again, I would either use a more contrasting color for the vectors or add a subtle shadow to help separate the vector graphics from the background map.    
+				<a href="https://www.instagram.com/3484mag/">Click here to see the full 3484 Instagram account</a>
+		    	</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 8  -->	    
 	    <div class="mySlides">
-	      <img src="portfolioPics/Instagram/igpolice.jpg" style="height:80%">
+	    	<div class="leftSlide">
+	      	<img src="portfolioPics/Instagram/policeig.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">APD Budget</h3>
+		    	<p class="slideHeader">I compiled the data and created a graph to present City of Atlanta budget information. This was created during the height of the Black Lives Matter protests in Atlanta in Summer 2020, as the city was focused on the police department’s budget. I wanted to make the graphic as clear and accurate as possible, as I had seen other graphs circulating on social media with incorrect numbers. <a href="https://www.instagram.com/3484mag/">Click here to see the full 3484 Instagram account</a>
+
+		    	</p>
+	    	</div>	    
 	    </div>
 
 	   	<!-- 9 -->	    
 	    <div class="mySlides">
-	      <img src="portfolioPics/Magazine2020/hottestYear.png" style="height:80%">
+	      	<div class="leftSlide">
+	      	<img src="portfolioPics/Instagram/climateig.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">Hottest Year on Record</h3>
+		    	<p class="slideHeader">I created this graphic in Adobe Illustrator for a post about 2019 being Atlanta’s hottest year on record. It features Atlanta’s iconic pencil building as the center of a flame. <a href="https://www.instagram.com/3484mag/">Click here to see the full 3484 Instagram account</a>
+		    	</p>
+	    	</div>
 	    </div>
 
 	    <!-- 10 -->	    
 	    <div class="mySlides">
-	     <img src="portfolioPics/Instagram/igvotersticker.jpg" style="height:80%">
+	     	<div class="leftSlide">
+	      	<img src="portfolioPics/Instagram/voteig.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">Voting Sticker</h3>
+		    	<p class="slideHeader">I created this graphic in Adobe Photoshop to bring up the failures of Georgia’s voting system in the 2020 primary elections. It features Georgia's iconic "I'm a Georgia Voter" sticker, but with a bite taken out of it. I had been working with variations of this graphic in the past, but had never actually used it until this post. I ended up using this same graphic on the cover of the Fall 2020 issue of 3484 Magazine. Fun fact: the bite is actually sourced from an apple. However, if anyone brings it up I like to say that it's a real photo and that this peach is just some kind of crazy hybrid fruit. Or maybe it's just a weirdly crisp peach. Who knows! <a href="https://www.instagram.com/3484mag/">Click here to see the full 3484 Instagram account</a>
+
+		    	</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 11 -->	    
 	    <div class="mySlides">
-	     <img src="portfolioPics/Instagram/igusps.jpg" style="height:80%">
+	    	<div class="leftSlide">
+		      	<img src="portfolioPics/Instagram/uspsig.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">USPS Graphic</h3>
+		    	<p class="slideHeader">I created this graphic when US mail was slowed down prior to the election, using Adobe Photoshop and XD to combine images and create quick vector graphics. <a href="https://www.instagram.com/3484mag/">Click here to see the full 3484 Instagram account</a>
+		    	</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 12 -->	    
 	    <div class="mySlides">
-	     <img src="portfolioPics/Instagram/igstonemountain.jpg" style="height:80%">
-
+	   	 	<div class="leftSlide">
+	      	<img src="portfolioPics/Instagram/stonemountainig.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">Stone Mountain</h3>
+		    	<p class="slideHeader">I created this graphic when calls to remove confederate monuments in Georgia began to gain more attention. I wanted to make the graphic reminiscent of someone removing graffiti. I used Photoshop to add the “paint” effect to the original Stone Mountain image and to adjust the color of the paint roller. <a href="https://www.instagram.com/3484mag/">Click here to see the full 3484 Instagram account</a>
+		    	</p>
+	    	</div>
 	    </div>
 
 	   	<!-- 13 TO HERE-->	    
@@ -649,7 +699,7 @@
 			<iframe width="720" height="360" src="https://www.youtube.com/embed/SJpQIONLsWI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>	 	    	</div>
 	    	<div class="rightSlide">
 	    	<h3 class="slideHeader">Fall 2020 Promo Video</h3>
-	    	<p class="slideHeader">The Fall 2020 promo video was created from original footage which I edited with Adobe Photoshop and After Effects. Originally, the lamp post in the video had a 3484 sticker and the number "43." I used photoshop to edit an in-focus frame, replacing the sticker with the Spring cover voter sticker and changing the 43 to 3484. Then I matched the movement and focus in After Effects.
+	    	<p class="slideHeader">The Fall 2020 promo video was created from original footage which I edited with Adobe Photoshop and After Effects. Originally, the lamp post in the video had a 3484 sticker and the number "43." I used photoshop to edit an in-focus frame, replacing the sticker with the Spring cover voter sticker and changing the 43 to 3484. Then I matched the movement and focus in After Effects. 
 	    </p>
 	    </div>
 		</div>
@@ -707,6 +757,16 @@
 	}
 
 
+	#aboutmetargetStyle
+	{
+		text-decoration: none;
+		color: #707070;
+	}
+	#aboutmetargetStyle:hover
+	{
+		text-decoration: none;
+		color: #909090;
+	}
 	#magazine
 	{
 		background-color: #114179;
@@ -754,6 +814,26 @@
 	#linkedin
 	{
 		width:7%;
+	}
+
+	#nav
+	{
+		text-align: right;
+		margin-left: auto;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		font-size: 16px;
+		font-family: 'Montserrat';
+		font-weight: 700;
+		color: #707070;
+		margin-right: 20px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+
+	}
+	#header
+	{
+		display: flex;
 	}
 
 	.logo
