@@ -30,9 +30,9 @@
 			<div id="featured_container">
 				<img src="portfolioPics/Magazine2020/3484fall2020cover.png" id="featuredImg" onclick="openModal();currentSlide(34)"style="height: 40%; padding-left:20px;padding-right:20px;"></a>
 
-				<img src="portfolioPics/SAMLab/odmtsanimation.png" id="featuredImg" style="height: 40%;" onclick="openModal();currentSlide(16)">
+				<img src="portfolioPics/AJC/climateIssue.png" id="featuredImg" style="height: 40%; border: .7px; border-style: solid; border-color: #cecccc;" onclick="openModal();currentSlide(42)">
 
-				<img src="refrigeratorRunning.png" id="featuredImg" onclick="openModal();currentSlide(3)">			
+				<img src="portfolioPics/AJC/tempIncrease.png" id="featuredImg" onclick="openModal();currentSlide(39)">			
 				
 			</div>
 			<div id="footer">
@@ -41,7 +41,30 @@
 			</div>
 		</div>
 
+<!-- AJC -->
+		<div id="ajc">
+			<div class="logo_container">
+				<img src="ajcLogoWhite.png" class="logo" style="width:25%; padding: 25px;" alt="Atlanta Journal-Constitution Logo">
+			</div>
+			<div class="role" style="color: white;">
+				Data Visualization and Presentations Intern
+			</div>
+			<p style="color: white;">
+				I worked with the digital storytelling team at The Atlanta Journal-Constitution. I created data visualizations, social media graphics and animations, and created a style guide and assets for a series of articles on climate change. 
+			</p>
+			<div id="flex-gallery">
+				<div id="flex-gallery">
+				<img src="portfolioPics/AJC/tempIncrease.png" class="flexpic" onclick="openModal();currentSlide(39)">
+					<img src="portfolioPics/AJC/freeMarta.jpg" class="flexpic" onclick="openModal();currentSlide(40)">
+					<img src="portfolioPics/AJC/locatorMap.png" class="flexpic" onclick="openModal();currentSlide(41)">
+					<img src="portfolioPics/AJC/gasPrices.png" class="flexpic" onclick="openModal();currentSlide(44)">
 
+
+				</div>
+
+			</div>
+
+		</div>
 <!-- Magazine -->
 
 		<div id="magazine">
@@ -248,7 +271,7 @@
 					(Sam)
 				</div>
 				<div id="headshotPar">
-					I'm computer science student at Georgia Tech with experience in design, data visualization, journalism, UI/UX, and web development. 
+					I'm computer science student at Georgia Tech with experience in design, data visualization, journalism, animation, and web development. 
 				</div>
 				<div id="iconsAboutMe">
 				<a href="https://www.linkedin.com/in/sam-baskin-06b59b53/">
@@ -279,7 +302,7 @@
 				</a>
 			</div>
 			<div id="copyright">  
-			 <!----> © Sam Baskin 2020
+			 <!----> © Sam Baskin 2022
 			</div>
 
 		</div>
@@ -288,7 +311,7 @@
 <!-- LIGHT BOX -->
 	
 	<div id="myModal" class="modal">
-	  <span class="close cursor" onclick="closeModal()">&times;</span>
+	  <span class="close cursor" onclick="closeModal();pauseVideo();">&times;</span>
 	  <div class="modal-content">
 		<!-- 1 -->
 	    <div class="mySlides">
@@ -748,8 +771,83 @@
 	    	</div>
 	    </div>
 
+	   	<!-- 39 -->	    
+
+        <div class="mySlides">
+	    	<div class="leftSlide">
+	      	<img src="portfolioPics/AJC/tempIncrease.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">Temperature Increase</h3>
+		    	<p class="slideHeader">
+				This graphic was adapted for the AJC's print, web and social channels. It visualizes temperature increase data from a report released in 2022. I used DataWrapper to visualize the data on a county map of Georgia and then heavily stylized and formatted it using Adobe Illustrator.   
+		    	</p>
+	    	</div>
+	    </div>
+
+	   	<!-- 40 -->	    
+
+        <div class="mySlides">
+	    	<div class="leftSlide">
+	      	<img src="portfolioPics/AJC/freeMarta.jpg" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">Breeze Card</h3>
+		    	<p class="slideHeader">
+				I created this graphic for the AJC instagram page. I edited an image of a Marta Breeze card using Adobe Photoshop to change the "Breeze" logo to say "Free?"  
+		    	</p>
+	    	</div>
+	    </div>
+
+	   	<!-- 41 -->	    
+
+        <div class="mySlides">
+	    	<div class="leftSlide">
+	      	<img src="portfolioPics/AJC/locatorMap.png" style="height:80%">
+	      	</div>
+	      	<div class="rightSlide" style="width: 30%;">
+	      		<h3 class="slideHeader">Locator Map</h3>
+		    	<p class="slideHeader">
+				One of my roles was to create locator maps for breaking news stories. Depending on the story I used Adobe Illustrator or DataWrapper. For this graphic I used Adobe Illustrator to add labels and styling to a blank Google Maps image. 
+		    	</p>
+	    	</div>
+	    </div>
 
 
+	   	<!-- 42 -->	
+	    <div class="mySlides">
+  			<div class="leftSlide">
+			<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" src="https://www.youtube.com/embed/Of_gjwlD4ME?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	    	</div> 
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Climate Issue Promo Video</h3>
+	    	<p class="slideHeader"> I created the climate issue promo video using Adobe After Effects and Photoshop. My goal was to create a short promotional video we could post on Instagram to get people excited about the upcoming issue. I animated the original cover Photoshop file in After Effects and then added sound effects. The tree ring animations also highlights the Atlanta skyline in the stump. 
+	    </p>
+	    </div>
+		</div>
+
+		<!-- 43 -->	
+	    <div class="mySlides">
+  			<div class="leftSlide">
+			<iframe width="720" height="360" src="https://www.youtube.com/embed/Sh6EL1XfYvc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>	 	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Connections Issue Promo Video</h3>
+	    	<p class="slideHeader"> I created the connections issue promo video using Adobe After Effects and Photoshop. My goal was to create a short promotional video we could post on Instagram to get people excited about the upcoming issue. I animated the original cover Photoshop file in After Effects and then added sound effects. The cover features an aerial cutout of Georgia Tech's campus, surrounded by the Atlanta skyline.
+	    </p>
+	    </div>
+		</div>
+
+		<!-- 44 -->	
+	    <div class="mySlides">
+  			<div class="leftSlide">
+			<iframe id="youtube_player" class="yt_player_iframe" src="https://drive.google.com/file/d/1oVdOV9NUlT7isccajPrzGlWk3E6MrdAU/preview" width="640" height="480" allowscriptaccess="always" allow="autoplay"></iframe> 	    	</div>
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">AJC Gas Prices Animation</h3>
+	    	<p class="slideHeader"> I created this animation as a promotional post for an article on gas prices. I used Adobe Photoshop and Illustrator. I used heavily-edited photos I took at gas stations around Atlanta to create the board, and then animated the moving numbers and zoom in After Effects. 
+	    </p>
+	    </div>
+		</div>
+
+		
 
 	    <!-- Next/previous controls -->
 	    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
@@ -805,6 +903,10 @@
 		background-color: #114179;
 		padding-top: 5%;
 		padding-bottom: 5%;
+	}
+
+	#ajc {
+		background-color: #212126;
 	}
 	
 	#footerImg
@@ -959,7 +1061,7 @@
 		font-style: italic;
 		font-size:16px;
 		color:#707070;
-		padding-top:2px;
+		padding-top:7px;
 		position: relative;
 		bottom:20px;
 	}
@@ -1198,10 +1300,17 @@
 	function closeModal() {
 	  document.getElementById("myModal").style.display = "none";
 	  document.getElementById("iframe").style.display = "none"
-	  player.stopVideo()
-	  $('myModal').on('hidden.bs.modal', function () {
-        callPlayer('yt-player', 'stopVideo');
-   	  });
+	}
+
+	$(document).ready(function(){
+		$('.yt_player_iframe').each(function(){
+		  this.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*')
+		});
+		});
+
+
+	function pauseVideo() {
+		$.function();
 
 	}
 
@@ -1312,6 +1421,7 @@
 	            (add ? window.attachEvent : window.detachEvent)('onmessage', listener);
 	    }
 		}
+
 
 
 
