@@ -160,6 +160,9 @@
 		padding-bottom: 5%;
 	}
 
+	th img:hover {
+		opacity: 80%;
+	}
 
 	#xpouter 
 	{
