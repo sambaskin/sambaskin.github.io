@@ -421,8 +421,7 @@
 					<img src="portfolioPics/AJC/supremeCourtConceptThumb.webp" id="featuredImg" onclick="openModal();currentSlide(61)">
 
 
-<!-- 					<img src="portfolioPics/tribeSpinner/tribeSpinner.png" id="featuredImg" onclick="openModal();currentSlide(36)">
- -->					<img src="portfolioPics/Other/fridgetown.webp" id="featuredImg" onclick="openModal();currentSlide(58)">
+					<img src="portfolioPics/Other/fridgetown.webp" id="featuredImg" onclick="openModal();currentSlide(58)">
 
 					<img src="thiswebsite.webp" class="flexpic">
 
@@ -454,7 +453,7 @@
 				</a>
 			</div>
 			<div id="copyright">  
-			 <!----> © Sam Baskin 2022
+			 <!----> © Sam Baskin 2023
 			</div>
 
 		</div>
@@ -1247,20 +1246,15 @@
 
 	function closeModal() {
 	  document.getElementById("myModal").style.display = "none";
-	  document.getElementById("iframe").style.display = "none"
-	}
-
-	$(document).ready(function(){
-		$('.yt_player_iframe').each(function(){
-		  this.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*')
-		});
-		});
+	  //document.getElementById("iframe").style.display = "none";
 
 
-	function pauseVideo() {
-		$.function();
 
 	}
+
+
+
+
 
 	var slideIndex = 1;
 	showSlides(slideIndex);
@@ -1369,6 +1363,10 @@
 	            (add ? window.attachEvent : window.detachEvent)('onmessage', listener);
 	    }
 		}
+
+
+
+
 
 
 
