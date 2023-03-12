@@ -693,7 +693,7 @@
 	   	<!-- 20 -->	    
 	    <div class="mySlides">
  	       	<div class="leftSlide">
-	     		<img src="VS/dashboard.webp" id="leftImg" style="width:50%;">
+	     		<img src="VS/dashboard.webp" id="leftImg">
     		</div>
 	    	<div class="rightSlide">
 	    		<h3 class="slideHeader">Analytics Dashboard Mockup</h3>
@@ -706,7 +706,7 @@
 	    <!-- 21 -->	    
 	    <div class="mySlides">
 	       	<div class="leftSlide">
-	     		<img src="VS/refrigeratorRunning.webp" id="leftImg" style="width:50%;">
+	     		<img src="VS/refrigeratorRunning.webp" id="leftImg">
     		</div>
 	    	<div class="rightSlide">
 	    		<h3 class="slideHeader">Refrigerator Running?</h3>
@@ -719,7 +719,7 @@
 	   	<!-- 22 -->	    
 	    <div class="mySlides">
   	    	<div class="leftSlide">
-	   		     <img src="VS/gatewaySpecs.webp" id="leftImg" style="width:50%;">
+	   		     <img src="VS/gatewaySpecs.webp" id="leftImg">
     		</div>
 	    	<div class="rightSlide">
 	    		<h3 class="slideHeader">Gateway Spec Sheet</h3>
@@ -732,7 +732,7 @@
 	    <!-- 23 -->	    
 	    <div class="mySlides">
   	    	<div class="leftSlide">
-			   	<img src="VS/installGuide.webp" id="leftImg" style="width:50%;">
+			   	<img src="VS/installGuide.webp" id="leftImg">
     		</div>
 	    	<div class="rightSlide">
 	    		<h3 class="slideHeader">Installation Guide</h3>
@@ -744,7 +744,7 @@
 	    <!-- 24 -->	    
 	    <div class="mySlides">
  	    	<div class="leftSlide">
-			   	<img src="VS/resetDevice.webp" id="leftImg" style="width:50%;">
+			   	<img src="VS/resetDevice.webp" id="leftImg">
     		</div>
 	    	<div class="rightSlide">
 	    		<h3 class="slideHeader">Troubleshooting Guide</h3>
@@ -756,7 +756,7 @@
 	    <!-- 25 -->	    
 	    <div class="mySlides">
 	    	<div class="leftSlide">
-			    <img src="VS/troubleShooting.webp" id="leftImg" style="width:50%;">
+			    <img src="VS/troubleShooting.webp" id="leftImg">
 		
     		</div>
 	    	<div class="rightSlide">
@@ -1085,6 +1085,7 @@
 	    	</div>
 	    	<div class="rightSlide">
 	    	<h3 class="slideHeader">Climate Style Guide</h3>
+
 	    	<p class="slideHeader"> I developed a style for a series of evergreen articles on climate change for the AJC. Some of the articles were to be written and published after I finished my internship, so I created a brief style guide to help the digital storytelling team create new content that matched the graphics I had already created. The style uses image cutouts, vectors, and a custom highlighter effect I created.    
 	    	 </p>
 	    	</div>
@@ -1296,7 +1297,8 @@
 	  for (i = 0; i < dots.length; i++) {
 	      dots[i].className = dots[i].className.replace(" active", "");
 	  }
-	  slides[slideIndex-1].style.display = "flex";
+	  slides[slideIndex-1].style.display = "block";
+
 	  dots[slideIndex-1].className += " active";
 	  captionText.innerHTML = dots[slideIndex-1].alt;
 	}
