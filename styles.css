@@ -429,6 +429,11 @@
 		margin: auto;
 	}
 
+	.instagram-media {
+		margin-left: auto!important;
+		margin-right: auto!important;
+	}
+
 	#leftImg {
 		height: 100%;
 	}
