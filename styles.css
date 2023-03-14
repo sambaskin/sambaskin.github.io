@@ -299,7 +299,7 @@
 	}
 	a:visited
 	{
-		color:white;
+		color:#707070;
 	}
 	#copyright
 	{
@@ -352,6 +352,16 @@
 	#flex-gallery img:hover
 	{
 		opacity: 75%;
+		cursor: pointer;
+
+	}
+	.pdfLink:hover {
+		opacity: 75%;
+		cursor: pointer!important;
+
+	}
+	.pdfLink {
+		opacity: 100%;
 		cursor: pointer;
 
 	}
