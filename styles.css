@@ -355,16 +355,40 @@
 		cursor: pointer;
 
 	}
+
+	.pdfText {
+	  color: black;
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  -webkit-transform: translate(-50%, -50%);
+	  -ms-transform: translate(-50%, -50%);
+	  transform: translate(-50%, -50%);
+	  text-align: center;
+	  opacity: 0;
+		font-family: 'Montserrat';
+    	color: #000000;
+    	text-align: center;
+
+	}
+ 
+	.pdfLink:hover .pdfText {
+		opacity: 1;
+		
+	}
 	.pdfLink:hover {
 		opacity: 75%;
 		cursor: pointer!important;
 
 	}
+
 	.pdfLink {
 		opacity: 100%;
 		cursor: pointer;
 
 	}
+
+	
 
 	#samsneatprojects
 	{
