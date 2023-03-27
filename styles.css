@@ -101,6 +101,41 @@
 		display: flex;
 	}
 
+	#hoverBoxCow {
+	position: absolute;
+    width: 23%;
+    height: 10%;
+    left: 37%;
+    top: 9%;		
+    background:white;
+		opacity:0;
+	}
+
+
+	#normalImg {
+		display: block;
+		margin: auto;
+		margin-bottom: 20px;
+		width: 50%;
+	}
+	#cowImg {
+		display: none;
+		margin: auto;
+		margin-bottom: 20px;
+		width: 50%;	
+
+	}
+	#header:hover #normalImg
+	{
+		display: none;
+	}
+	#header:hover #cowImg
+	{
+		display: block;
+	}
+
+
+
 	.logo
 	{
 		width: 15%;
