@@ -102,11 +102,11 @@
 	}
 
 	#hoverBoxCow {
-	position: absolute;
-    width: 23%;
-    height: 10%;
-    left: 37%;
-    top: 9%;		
+    position: absolute;
+    width: 7%;
+    height: 8%;
+    left: 46%;
+    top: 11%;
     background:white;
 		opacity:0;
 	}
@@ -125,14 +125,14 @@
 		width: 50%;	
 
 	}
-	#header:hover #normalImg
+/*	#header:hover #normalImg
 	{
 		display: none;
 	}
 	#header:hover #cowImg
 	{
 		display: block;
-	}
+	}*/
 
 
 
