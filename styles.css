@@ -379,7 +379,8 @@
 	#flex-gallery img
 	{
 		height: 35%;	
-		padding: 5px;
+		//padding: 5px;
+		margin: 5px;
 		box-sizing: border-box;
 		overflow-y: auto;
 
