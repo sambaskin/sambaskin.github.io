@@ -36,6 +36,7 @@
 </html>
 
 <script>
+
 function addText() {
         // Get the input box and output paragraph element
         const inputBox = document.getElementById("input-box");
@@ -47,14 +48,29 @@ function addText() {
         // Add the text to the output paragraph element
 
          outputParagraph.innerHTML += "<br>" + text;
-        
+        const inputBoxLower = inputBox.value.toLowerCase();
+        console.log(inputBoxLower);
+
+        if (inputBoxLower == "fuck you" || inputBoxLower == "no you're not" || inputBoxLower == "you suck" ||  inputBoxLower == "fuck u" || inputBoxLower == "you're not sam baskin") {
+                  console.log("IP PULL");
+
+                  // Clear the input box
+            inputBox.value = "";
+            setTimeout(function() {
+                    addSamTextIP();
+            }, 1000); // 1000 milliseconds = 1 second
+
+        }
+        else {
+
+
         // Clear the input box
         inputBox.value = "";
         setTimeout(function() {
           addSamText();
 
         }, 1000); // 1000 milliseconds = 1 second
-
+      }
 
       }
 function addSamText() {
@@ -84,10 +100,45 @@ function addSamText() {
 
       }
 
-function muteSound() {
-  const myAudio = document.getElementById("my-audio");
-  myAudio.muted = !myAudio.muted;
-}
+    function addSamTextIP() {
+        // Get the input box and output paragraph element
+
+        const outputParagraph = document.getElementById("output");
+        
+        // Get the text from the input box
+        const text = "";
+
+          fetch('https://api.ipify.org?format=json')
+          .then(response => response.json())
+          .then(data => {
+            const ipAddress = data.ip;
+            outputParagraph.innerHTML += `<br> > SAM BOT: Whoops just pulled your IP: ${ipAddress}`;
+          })
+          .catch(error => console.error(error));
+        
+        // Add the text to the output paragraph element
+
+        
+        // Clear the input box
+            document.getElementById("static").style.display = "none";
+          document.getElementById("gif").style.display = "block";
+
+          setTimeout(function() {
+
+          document.getElementById("static").style.display = "block";
+          document.getElementById("gif").style.display = "none";
+
+        }, 500); // 1000 milliseconds = 1 second
+
+
+      }
+
+    function muteSound() {
+      const myAudio = document.getElementById("my-audio");
+      myAudio.muted = !myAudio.muted;
+    }
+
+
 </script>
 
 <style>
