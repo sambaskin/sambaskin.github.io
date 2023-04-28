@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sam Baskin (Automated)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div class='wrapper'>
+    <h1> > Sam Baskin Bot</h1>
+    <h2> > Ask him anything! He's programmed to respond just like Sam Baskin </h2>
+
+
+
+    <label for="input-box">Enter some text:</label>
+    <input type="text" id="input-box">
+    <button onclick="addText()">Add Text</button>
+
+    <img src="bot/robotSam.png" id="static">
+    <img src="bot/robotSam.gif" id="gif">
+    <button onclick="muteSound()">Mute</button>
+
+    <p id="output"><p>
+
+     <audio id="my-audio">
+      <source src="bot/robot.wav" type="audio/wav">
+    </audio>
+
+  </div>
+
+
+</body>
+
+</html>
+
+<script>
+function addText() {
+        // Get the input box and output paragraph element
+        const inputBox = document.getElementById("input-box");
+        const outputParagraph = document.getElementById("output");
+        
+        // Get the text from the input box
+        const text = "> YOU: " + inputBox.value;
+        
+        // Add the text to the output paragraph element
+
+         outputParagraph.innerHTML += "<br>" + text;
+        
+        // Clear the input box
+        inputBox.value = "";
+        setTimeout(function() {
+          addSamText();
+
+        }, 1000); // 1000 milliseconds = 1 second
+
+
+      }
+function addSamText() {
+        // Get the input box and output paragraph element
+
+        const outputParagraph = document.getElementById("output");
+        
+        // Get the text from the input box
+        const text = "> SAM BOT: " + "I'm Sam Baskin!";
+        
+        // Add the text to the output paragraph element
+
+         outputParagraph.innerHTML += "<br>" + text;
+        
+        // Clear the input box
+            document.getElementById("static").style.display = "none";
+          document.getElementById("gif").style.display = "block";
+          const myAudio = document.getElementById("my-audio");
+          myAudio.play();
+          setTimeout(function() {
+
+          document.getElementById("static").style.display = "block";
+          document.getElementById("gif").style.display = "none";
+
+        }, 1700); // 1000 milliseconds = 1 second
+
+
+      }
+
+function muteSound() {
+  const myAudio = document.getElementById("my-audio");
+  myAudio.muted = !myAudio.muted;
+}
+</script>
+
+<style>
+  body {
+        background-color: #000000;
+    color: rgb(0,200,0);
+    font-family: courier;
+    font-weight: 100;
+  }
+
+
+
+
+  #static {
+    display: block;
+  }
+  #gif {
+    display: none;
+  }
+
+
+</style>

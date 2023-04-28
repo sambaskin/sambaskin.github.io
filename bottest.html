@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Adding text to a paragraph element</title>
+  </head>
+  <body>
+    <label for="input-box">Enter some text:</label>
+    <input type="text" id="input-box">
+    <button onclick="addText()">Add Text</button>
+    <p id="output"></p>
+    
+    <script>
+      function addText() {
+        // Get the input box and output paragraph element
+        const inputBox = document.getElementById("input-box");
+        const outputParagraph = document.getElementById("output");
+        
+        // Get the text from the input box
+        const text = "> " + inputBox.value;
+        
+        // Add the text to the output paragraph element
+
+         outputParagraph.innerHTML += "<br>" + text;
+        
+        // Clear the input box
+        inputBox.value = "";
+
+      }
+    </script>
+  </body>
+</html>
