@@ -525,7 +525,7 @@
 	/* Next & previous buttons */
 	.prev,
 	.next {
-		display:none;
+		display:block;
 	  cursor: pointer;
 	  position: absolute;
 	  top: 50%;
