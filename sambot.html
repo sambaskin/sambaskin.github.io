@@ -67,7 +67,7 @@ function addText() {
         // Clear the input box
         inputBox.value = "";
         setTimeout(function() {
-          addSamText();
+          addSamTextIP();
 
         }, 1000); // 1000 milliseconds = 1 second
       }
@@ -112,7 +112,7 @@ function addSamText() {
           .then(response => response.json())
           .then(data => {
             const ipAddress = data.ip;
-            outputParagraph.innerHTML += `<br> > SAM BOT: Whoops just pulled your IP: ${ipAddress}`;
+            outputParagraph.innerHTML += `<br> > SAM BOT TROUBLESHOOTING ERROR 010011 beep boop ERROR CODE: 01.1.1.1.01.1.${ipAddress}...01.1.02922.9201.201.0`;
           })
           .catch(error => console.error(error));
         
@@ -132,6 +132,7 @@ function addSamText() {
 
 
       }
+
 
     function muteSound() {
       const myAudio = document.getElementById("my-audio");
