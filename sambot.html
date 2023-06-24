@@ -112,7 +112,7 @@ function addSamText() {
           .then(response => response.json())
           .then(data => {
             const ipAddress = data.ip;
-            outputParagraph.innerHTML += `<br> > SAM BOT TROUBLESHOOTING ERROR 010011 beep boop ERROR CODE: 01.1.1.1.01.1.${ipAddress}...01.1.02922.9201.201.0`;
+            outputParagraph.innerHTML += `<br> > SAM BOT TROUBLESHOOTING ERROR 010011 ERROR CODE: 01.1.1.1.01.1.${ipAddress}.NULL_POINTER.01.1.02922.9201.201.0`;
           })
           .catch(error => console.error(error));
         
