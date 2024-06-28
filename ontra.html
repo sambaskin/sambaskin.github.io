@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+
+<!-- Header -->
+<header>
+<div id="max-width">
+    <div id="header">
+                <img src="portfolioPics/headerFinal.webp" id="normalImg">
+    </div>
+</header>
+
+
+<main>
+
+
+    <div class="pageContainer"> 
+        <img src="portfolioPics/Ontra/ontra.gif" class="sideImg">
+        <div> 
+            <h2>Ontra Mobility</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus ornare euismod. Suspendisse fringilla augue sed accumsan consectetur. Duis finibus sed nisl nec mollis. Phasellus sollicitudin augue lorem, vel placerat ligula mollis a. Suspendisse urna neque, pretium interdum laoreet vestibulum, laoreet in diam. Proin vitae pulvinar ipsum. Sed fringilla massa sit amet odio consequat lacinia. Quisque maximus porta arcu. Sed tincidunt porta felis, vel dignissim mauris semper sit amet. Nam sed efficitur sapien.
+
+            </p>
+        </div>
+    </div>
+    <div id="SAMLab">
+    <div id="flex-gallery">
+
+        <img src="portfolioPics/Ontra/ontraMap.webp" class="flexpic" style="height: 25%; border: 0.7px; border-style: solid; border-color: #cecccc;" onclick="openModal();currentSlide(34)">
+         <img src="portfolioPics/Ontra/landingPage.png" class="flexpic" style="height: 25%; border: 0.7px; border-style: solid; border-color: #cecccc;" onclick="openModal();currentSlide(34)">
+        
+
+
+    </div>
+    <div id="SAMFooter">
+    </div>
+</div>
+
+
+
+    <div id="myModal" class="modal">
+      <span class="close cursor" onclick="closeModal();pauseAllYouTubeVideos();">&times;</span>
+      <div class="modal-content">
+
+        <div class="mySlides">
+            <div class="leftSlide">
+            <img src="portfolioPics/Other/fridgetown.gif" id="leftImg" width>
+            </div>
+            <div class="rightSlide">
+            <h3 class="slideHeader">Fridge Town</h3>
+            <p class="slideHeader"> This is a fun personal project I started in my apartment. I don't think it's applicable to any jobs (even though I did once work at a refrigerator startup), but I had a lot of fun with it and wanted to share. I drew buildings and roads onto isometric patterns that I printed onto magnet sheets, which allowed all the buildings to be easily connected with the same scale and perspective. After drawing a building I would cut it out and put it on our fridge. I documented each new addition, and even got friends and roommates to add to it too. Once I had enough pictures I turned it into a gif to show its progress over time. I documented the process in a <a href="https://twitter.com/samebasket/status/1520910260483022848"> thread on Twitter.</a>
+             </p>
+            </div>
+        </div>
+
+
+        <!-- Next/previous controls -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+        <!-- Caption text -->
+        <div class="caption-container">
+          <p id="caption"></p>
+        </div>
+
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+</main>
+
+
+
+    
+
+
+    <footer>
+        <div id="footer">
+            <div id="footerText">
+                SAM BASKIN
+            </div>
+            <div id="icons">
+                <a href="https://www.linkedin.com/in/sam-baskin-06b59b53/" style="color:white;">
+                    <img src="linkedin.png" id="linkedin">
+                </a>
+                <a href="mailto:samsonbaskin@gmail.com"> <!--ADD CAPTCHA TO AVOID SPAM-->
+                    <img src="email.png" id="email">
+                </a>
+            </div>
+            <div id="copyright">  
+             <!----> © Sam Baskin 2024
+            </div>
+
+        </div>
+        
+    </footer>
+
+    <script>
+
+//LAZY LOADING FOR YOUTUBE SPEED UP
+    window.lazyLoadOptions = {
+        // Your custom settings go here
+    };
+
+    // Listen to the initialization event
+    // and get the instance of LazyLoad
+    window.addEventListener("LazyLoad::Initialized", function (event) {
+        window.lazyLoadInstance = event.detail.instance;
+    }, false);
+
+    function pauseAllYouTubeVideos() {
+        // Get all embedded YouTube videos on the page
+        var videos = document.getElementsByTagName("iframe");
+
+      // Iterate through each video and pause it
+      for (var i = 0; i < videos.length; i++) {
+        var video = videos[i].contentWindow;
+         console.log("Pausing video", i);
+         var videoUrl = videos[i].src; // Extract the video URL from the iframe
+        console.log("Video URL:", videoUrl);
+        video.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      }
+}
+
+//LIGHTBOX CONTROLS
+    function openModal() {
+      document.getElementById("myModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("myModal").style.display = "none";
+      pauseAllYouTubeVideos();
+
+      //document.getElementById("iframe").style.display = "none";
+
+
+
+    }
+    
+    document.addEventListener('keydown', handleKeyPress);
+
+    function handleKeyPress(event) {
+        if (event.key === 'Escape') {
+            // Call the close button click handler
+            closeModal();
+        }
+        if (event.key === 'ArrowLeft') {
+            // Call the close button click handler
+            plusSlides(-1);
+        }
+        if (event.key === 'ArrowRight') {
+            // Call the close button click handler
+            plusSlides(1);
+        }
+    }
+
+
+
+
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+    pauseAllYouTubeVideos();
+      showSlides(slideIndex += n);
+
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+      var i;
+      var slides = document.getElementsByClassName("mySlides");
+      var dots = document.getElementsByClassName("demo");
+      var captionText = document.getElementById("caption");
+      if (n > slides.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+      }
+      for (i = 0; i < dots.length; i++) {
+          dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";
+
+      dots[slideIndex-1].className += " active";
+      captionText.innerHTML = dots[slideIndex-1].alt;
+    }
+    function callPlayer(frame_id, func, args) {
+        if (window.jQuery && frame_id instanceof jQuery) frame_id = frame_id.get(0).id;
+        var iframe = document.getElementById(frame_id);
+        if (iframe && iframe.tagName.toUpperCase() != 'IFRAME') {
+            iframe = iframe.getElementsByTagName('iframe')[0];
+        }
+
+        // When the player is not ready yet, add the event to a queue
+        // Each frame_id is associated with an own queue.
+        // Each queue has three possible states:
+        //  undefined = uninitialised / array = queue / .ready=true = ready
+        if (!callPlayer.queue) callPlayer.queue = {};
+        var queue = callPlayer.queue[frame_id],
+            domReady = document.readyState == 'complete';
+
+        if (domReady && !iframe) {
+            // DOM is ready and iframe does not exist. Log a message
+            window.console && console.log('callPlayer: Frame not found; id=' + frame_id);
+            if (queue) clearInterval(queue.poller);
+        } else if (func === 'listening') {
+            // Sending the "listener" message to the frame, to request status updates
+            if (iframe && iframe.contentWindow) {
+                func = '{"event":"listening","id":' + JSON.stringify(''+frame_id) + '}';
+                iframe.contentWindow.postMessage(func, '*');
+            }
+        } else if ((!queue || !queue.ready) && (
+                   !domReady ||
+                   iframe && !iframe.contentWindow ||
+                   typeof func === 'function')) {
+            if (!queue) queue = callPlayer.queue[frame_id] = [];
+            queue.push([func, args]);
+            if (!('poller' in queue)) {
+                // keep polling until the document and frame is ready
+                queue.poller = setInterval(function() {
+                    callPlayer(frame_id, 'listening');
+                }, 250);
+                // Add a global "message" event listener, to catch status updates:
+                messageEvent(1, function runOnceReady(e) {
+                    if (!iframe) {
+                        iframe = document.getElementById(frame_id);
+                        if (!iframe) return;
+                        if (iframe.tagName.toUpperCase() != 'IFRAME') {
+                            iframe = iframe.getElementsByTagName('iframe')[0];
+                            if (!iframe) return;
+                        }
+                    }
+                    if (e.source === iframe.contentWindow) {
+                        // Assume that the player is ready if we receive a
+                        // message from the iframe
+                        clearInterval(queue.poller);
+                        queue.ready = true;
+                        messageEvent(0, runOnceReady);
+                        // .. and release the queue:
+                        while (tmp = queue.shift()) {
+                            callPlayer(frame_id, tmp[0], tmp[1]);
+                        }
+                    }
+                }, false);
+            }
+        } else if (iframe && iframe.contentWindow) {
+            // When a function is supplied, just call it (like "onYouTubePlayerReady")
+            if (func.call) return func();
+            // Frame exists, send message
+            iframe.contentWindow.postMessage(JSON.stringify({
+                "event": "command",
+                "func": func,
+                "args": args || [],
+                "id": frame_id
+            }), "*");
+        }
+        /* IE8 does not support addEventListener... */
+        function messageEvent(add, listener) {
+            var w3 = add ? window.addEventListener : window.removeEventListener;
+            w3 ?
+                w3('message', listener, !1)
+            :
+                (add ? window.attachEvent : window.detachEvent)('onmessage', listener);
+        }
+        }
+
+
+
+
+
+</script>
+</body>
+</html>

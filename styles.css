@@ -1,5 +1,41 @@
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Black.otf') format('opentype');
+	    font-weight: 900; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-ExtraBold.otf') format('opentype');
+	    font-weight: 800; /* Use appropriate font weight for Bold */
+	}
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Bold.otf') format('opentype');
+	    font-weight: 700; 
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-SemiBold.otf') format('opentype');
+	    font-weight: 600; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Medium.otf') format('opentype');
+	    font-weight: 500; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Regular.otf') format('opentype');
+	    font-weight: 400; 
+	}
+
 	h1{
-		font-family: 'Montserrat';
+		font-family: 'POIOrbiter', sans-serif;
 		font-weight: 900;
 		color: #707070;
 		font-size: 48px;
@@ -15,6 +51,20 @@
 		margin-bottom: 10px;
 	}
 
+
+
+	#aboutContainer
+	{
+		display:flex; 
+		padding-bottom:200px; 
+		margin-left: 20%; 
+		margin-right: 20%;
+	}
+
+	#headshotContainer
+	{
+		margin-right: 5%;
+	}
 
 	#aboutmetargetStyle
 	{
@@ -49,9 +99,9 @@
 
 	#footerText
 	{
-		font-family: 'Montserrat';
+		font-family: 'POIOrbiter';
 		font-weight: 800;
-		color: #707070;
+		color: #e6e6e6;
 		font-size: 48px;
 		position: absolute;
 		bottom: 50px;
@@ -88,7 +138,7 @@
 		margin-top: 20px;
 		margin-bottom: 20px;
 		font-size: 16px;
-		font-family: 'Montserrat';
+		font-family: 'POIOrbiter';
 		font-weight: 700;
 		color: #707070;
 		margin-right: 20px;
@@ -96,10 +146,66 @@
 		padding-bottom: 10px;
 
 	}
-	#header
-	{
-		display: flex;
+
+
+	.header {
+	  overflow: hidden;
+	  padding: 20px 5%;
+	  margin-bottom: 3%;
 	}
+	.header a
+	{
+	  float: left;
+	  text-align: center;
+	  text-decoration: none;
+
+
+  	}
+
+  	.header-right a, .header-right a:visited {
+  		margin: auto;
+  		font-family: 'POIOrbiter';
+  		font-size: 16px;
+  		font-weight: 500;
+  		padding-left: 15px;
+  		color: #373737;
+  		text-decoration: none;
+  		letter-spacing: 0.5px;
+
+
+  	}
+
+
+  	.header h1 {
+  		text-align: left;
+  		margin: 0px;
+  		color: #373737;
+
+  	}
+  	.header h3 {
+  		text-align: left;
+  		font-family: 'POIOrbiter';
+  		font-size: 16px;
+  		font-weight: 300;
+  		color: #373737;
+  		margin: 0px;
+  	}
+  	.headerLink h1:hover {
+	  opacity: 50%;
+	}
+	.headerLink h1:hover {
+	  opacity: 100%;
+	}
+
+	.header-right {
+	  float: right;
+	}
+
+
+
+
+
+
 
 	#hoverBoxCow {
     position: absolute;
@@ -135,6 +241,52 @@
 	}*/
 
 
+	.headerLink
+	{
+
+	}
+
+
+	.sideImg
+	{
+		width: 50%;
+		max-width: 500px;
+	}
+
+	.pageContainer
+	{
+		display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    padding-left: 10%;
+	    padding-right: 10%;
+	}
+
+	.pageContainer p
+	{
+		margin-left: 0px;
+		margin-right: 0px;
+		text-align: left;
+	}
+	.pageContainer h3
+	{
+		text-align: left;
+		font-size: 18px;
+		font-family: "POIOrbiter";
+		font-weight: 500;
+	}
+	.pageContainer h2
+	{
+		text-align: left;
+
+	}
+	.mediaText
+	{
+		width: 50%;
+	    padding-left: 5%;
+	    padding-right: 5%;
+	}
+
 
 	.logo
 	{
@@ -151,13 +303,13 @@
 	.role
 	{
 		font-size: 18px;
-		font-family: "Montserrat";
+		font-family: "POIOrbiter";
 		font-weight: 500;
 		text-align:center;
 	}
 	p
 	{
-		font-family: "Montserrat";
+		font-family: "POIOrbiter";
 		font-weight: 300;
 		text-align: center;
 		margin-left: 35%;
@@ -227,12 +379,12 @@
 	{
 	}
 	#experience h3 {
-		font-family: "Montserrat";
+		font-family: "POIOrbiter";
 		text-align: center;
 		font-size: 16px;
 	}
 	#experience h4 {
-		font-family: "Montserrat";
+		font-family: "POIOrbiter";
 		font-weight: 500;
 		text-align: center;
 		font-size: 16px;
@@ -265,10 +417,7 @@
 		background-color: #404040;
 
 	}
-	#headshotContainer
-	{
-		text-align: center;
-	}
+
 
 	#headshot
 	{
@@ -317,11 +466,11 @@
 	}
 	#headshotPar
 	{
-		text-align: center;
-		font-family: "Montserrat";
+		text-align: left;
+		font-family: "POIOrbiter";
 		font-weight: 300;
-		margin-left:35%;
-		margin-right: 35%;
+/*		margin-left:35%;
+		margin-right: 35%;*/
 		color: #707070;
 		font-size: 18;
 	}
@@ -338,9 +487,9 @@
 	}
 	#copyright
 	{
-		font-family: "Montserrat";
+		font-family: "POIOrbiter";
 		font-weight: 300;
-		color: #707070;
+		color: #e6e6e6;
 		position: absolute;
 		bottom: 70px;
 		right: 15%;
@@ -402,7 +551,7 @@
 	  transform: translate(-50%, -50%);
 	  text-align: center;
 	  opacity: 0;
-	  font-family: 'Montserrat';
+	  font-family: 'POIOrbiter';
       color: #000000;
       text-align: center;
 
@@ -510,7 +659,7 @@
 
 	h3.slideHeader
 	{
-		font-family: 'Montserrat';
+		font-family: 'POIOrbiter';
 		color: #ffffff;
 		text-align: center; 
 
