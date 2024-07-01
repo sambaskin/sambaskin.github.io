@@ -51,7 +51,52 @@
 		margin-bottom: 10px;
 	}
 
+	#flex-gallery .flexpicStat
+	{
+		border-radius: 15px;
+	}
+/*	.gifContainer
+	{
+		 max-width: fit-content;
+ 		 max-height: fit-content;
+	}
 
+	.gifContainer:hover .flexpic
+	{
+		display: block;
+	}
+	.gifContainer:hover .flexpicStat
+	{
+		display: none;
+	}
+
+	.gifContainer .flexpic
+	{
+		display: none;
+	}
+	.gifContainer .flexpicStat
+	{
+		display: block;
+	}*/
+
+/*	#header:hover #normalImg
+	{
+		display: none;
+	}
+	#header:hover #cowImg
+	{
+		display: block;
+	}*/
+
+
+/*	.flexpic:hover
+	{
+		display: none;
+	}
+	.flexpic:hover
+	{
+		display: block;
+	}*/
 	#aboutContainer
 	{
 		display:flex; 
@@ -669,6 +714,7 @@
 		color: #ffffff;
 		margin: 0px;
 		text-align: left;
+		line-height: 1.1;
 	}
 
 	/* Next & previous buttons */

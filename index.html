@@ -47,22 +47,31 @@
 
 	<div id="flex-gallery">
 		
-		<img src="portfolioPics/frontPage/ontraAnimation.gif" class="flexpic" onclick="openModal();currentSlide(1)">
+		<img src="portfolioPics/frontPage/static/ontraAnimation.gif" class="flexpicStat" id="hoverImg" onclick="openModal();currentSlide(1)"
+			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')"
+			style="border: 1.5px solid #f1f1f1f1">
 
-		<img src="portfolioPics/frontPage/subway.gif" class="flexpic" onclick="openModal();currentSlide(2)">
-
-		<img src="portfolioPics/frontPage/gasPriceGif.gif" class="flexpic" onclick="openModal();currentSlide(3)">
-
-		<img src="portfolioPics/frontPage/climateCover.gif" class="flexpic" onclick="openModal();currentSlide(4)">
-
-
-		<img src="portfolioPics/frontPage/3484fall2020cover.webp" class="flexpic" onclick="openModal();currentSlide(5)">
+		<img src="portfolioPics/frontPage/static/subway.gif" class="flexpicStat" id="hoverImg" onclick="openModal();currentSlide(2)" 
+			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')">
 		
-		<img src="portfolioPics/frontPage/kontinuaCover.webp" class="flexpic" onclick="openModal();currentSlide(6)">
-						
-		<img src="portfolioPics/frontPage/martaReachUX.webp" class="flexpic" onclick="openModal();currentSlide(7)">
 
-		<img src="portfolioPics/frontPage/renuVid.gif" id="featuredIm" onclick="openModal();currentSlide(8)">	
+		<img src="portfolioPics/frontPage/static/gasPriceGif.gif" class="flexpicStat" onclick="openModal();currentSlide(3)"
+			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')">
+
+		<img src="portfolioPics/frontPage/static/renuVid.gif" class="flexpicStat" onclick="openModal();currentSlide(4)"
+			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')"
+			style="border: 1.5px solid #f1f1f1f1">	
+
+
+		<img src="portfolioPics/frontPage/static/climateCover.gif" class="flexpicStat" onclick="openModal();currentSlide(5)"
+			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')"
+			style="border: 1.5px solid #f1f1f1f1">
+
+		<img src="portfolioPics/frontPage/3484fall2020cover.webp" class="flexpicNorm" onclick="openModal();currentSlide(6)">
+
+		<img src="portfolioPics/frontPage/kontinuaCover.webp" class="flexpicNorm" onclick="openModal();currentSlide(7)">
+
+		<img src="portfolioPics/frontPage/martaReachUX.webp" class="flexpicNorm" onclick="openModal();currentSlide(8)">
 
 
 	</div>
@@ -133,7 +142,7 @@
 		<!-- 1 Ontra Logo -->
 		<div class="mySlides">
 	    	<div class="leftSlide">
-	      	<img src="portfolioPics/frontPage/ontraAnimation.gif" id="leftImg">
+	      	<img src="portfolioPics/frontPage/animated/ontraAnimation.gif" id="leftImg">
 	      	</div>
 	      	<div class="rightSlide">
 	      		<h3 class="slideHeader">Ontra Animated Logo</h3>
@@ -152,7 +161,7 @@
 			</div> 
 	    	<div class="rightSlide">
 	    	<h3 class="slideHeader">City Animations</h3>
-	    	<p class="slideHeader"> I created this series of animations to brush up on After Effects while I had been primarily working in Illustrator. I used Photoshop and After Effects for most of these. I shot all the footage on my phone to give it an everyday look, while also making it very to collect footage whenever inspiration struck. In all of these projects I used motion tracking since I filmed the source footage with no tripod. I also added sound effects to make these clips seem more realistic. 
+	    	<p class="slideHeader"> I created this series of animations to brush up on After Effects while I had been primarily working in Illustrator. I used Photoshop and After Effects for most of these. I shot all the footage on my phone to give it an everyday look, while also making it easy to collect footage whenever inspiration struck. In all of these projects I used motion tracking since I filmed the source footage with no tripod. I also added sound effects to make these clips seem more realistic. 
 	    	</p>
 	    	</div>
 		</div>
@@ -170,21 +179,33 @@
 	    </div>
 		</div>
 
+		<!-- 4 Renu -->
+		<div class="mySlides">
+  			<div class="leftSlide">
+				<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/aG0hizi383s?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	 	    	
+			</div> 
+	    	<div class="rightSlide">
+	    	<h3 class="slideHeader">Re-Nuble Amazon Video</h3>
+	    	<p class="slideHeader"> I created two videos for Re-Nuble’s Amazon page on a tight turnaround. I used textured elements with crisp edges to represent Re-Nuble’s modern approach to agriculture. 
+	    	</p>
+	    	</div>
+		</div>
 
-		<!-- 4  Climate Promo -->
+
+		<!-- 5  Climate Promo -->
 		<div class="mySlides">
   			<div class="leftSlide">
 			<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/Of_gjwlD4ME?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	    	</div> 
 	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">Climate Issue Promo Video</h3>
-	    	<p class="slideHeader"> I created the climate issue promo video using Adobe After Effects and Photoshop. My goal was to create a short promotional video we could post on Instagram to get people excited about the upcoming issue. I animated the original cover Photoshop file in After Effects and then added sound effects. The tree ring animation also highlights the Atlanta skyline in the stump. 
+	    	<h3 class="slideHeader">3484 Magazine Climate Issue Promo Video</h3>
+	    	<p class="slideHeader"> I created the climate issue promo video for 3484 Magazine using Adobe After Effects and Photoshop. My goal was to create a short promotional video we could post on Instagram to get people excited about the upcoming issue. I animated the original cover Photoshop file in After Effects and then added sound effects. The tree ring animation also highlights the Atlanta skyline in the stump. 
 	    	</p>
 	    	</div>
 		</div>
 
 
 
-		<!-- 4  Fall 2021 -->
+		<!-- 6  Fall 2021 -->
 		<div class="mySlides">
   			<div class="leftSlidePdf">
 			<a href="portfolioPics/Magazine2020/3484fall2020.pdf" target="_blank" ><img class="pdfLink" src="portfolioPics/Magazine2020/3484fall2020cover.webp" id="leftImg"></a>
@@ -197,7 +218,7 @@
 	    </div>
 
 
-		<!-- 5 Kontinua -->
+		<!-- 7 Kontinua -->
 		<div class="mySlides">
 	    	<div class="leftSlide">
 	      	<img src="portfolioPics/frontPage/kontinuaCover.webp" id="leftImg">
@@ -218,7 +239,7 @@
 
 
 
-	    <!-- 7 Marta Reach -->
+	    <!-- 8 Marta Reach -->
 		<div class="mySlides">
   			<div class="leftSlide">
 			<iframe id="youtube_player" class="lazy" data-class="yt_player_iframe" src="https://www.youtube.com/embed/GZF-ftX4PJY?enablejsapi=1" width="720" height="360" allowscriptaccess="always" allow="fullscreen"></iframe> 	    	
@@ -233,17 +254,7 @@
 
 
 
-		<!-- 8 Renu -->
-		<div class="mySlides">
-  			<div class="leftSlide">
-				<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/aG0hizi383s?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	 	    	
-			</div> 
-	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">Re-Nuble Amazon Video</h3>
-	    	<p class="slideHeader"> I created two videos for Re-Nuble’s Amazon page on a tight turnaround of less than a week. I used textured elements with crisp edges to represent Re-Nuble’s modern approach to agriculture. 
-	    	</p>
-	    	</div>
-		</div>
+
 
 
 
@@ -446,10 +457,12 @@
 	    }
 		}
 
-
-
-
-
+        function changeImageSrc(img, folder) {
+            const originalSrc = img.src;
+            const parts = originalSrc.split('/');
+            parts[parts.length - 2] = folder;
+            img.src = parts.join('/');
+        }
 
 
 
