@@ -1,4 +1,6 @@
 
+	/* TEXT */
+
 	@font-face {
 	    font-family: 'POIOrbiter';
 	    src: url('Orbiter/POIOrbiter-Black.otf') format('opentype');
@@ -34,14 +36,15 @@
 	    font-weight: 400; 
 	}
 
-	h1{
+
+	h1 {
 		font-family: 'POIOrbiter', sans-serif;
 		font-weight: 900;
 		color: #707070;
 		font-size: 48px;
 	}
 
-	h2{
+	h2 {
 		font-family: 'Crimson Text', serif;
 		font-size: 36px;
 		font-style: italic;
@@ -51,159 +54,30 @@
 		margin-bottom: 10px;
 	}
 
-	#flex-gallery .flexpicStat
-	{
-		border-radius: 15px;
-	}
-/*	.gifContainer
-	{
-		 max-width: fit-content;
- 		 max-height: fit-content;
+
+	p {
+		font-family: "POIOrbiter";
+		font-weight: 300;
+		text-align: center;
+		margin-left: 35%;
+		margin-right: 35%;
+
 	}
 
-	.gifContainer:hover .flexpic
-	{
-		display: block;
-	}
-	.gifContainer:hover .flexpicStat
-	{
-		display: none;
-	}
 
-	.gifContainer .flexpic
-	{
-		display: none;
-	}
-	.gifContainer .flexpicStat
-	{
-		display: block;
-	}*/
-
-/*	#header:hover #normalImg
-	{
-		display: none;
-	}
-	#header:hover #cowImg
-	{
-		display: block;
-	}*/
-
-
-/*	.flexpic:hover
-	{
-		display: none;
-	}
-	.flexpic:hover
-	{
-		display: block;
-	}*/
-	#aboutContainer
-	{
-		display:flex; 
-		padding-bottom:200px; 
-		margin-left: 20%; 
-		margin-right: 20%;
-	}
-
-	#headshotContainer
-	{
-		margin-right: 5%;
-	}
-
-	#aboutmetargetStyle
-	{
-		text-decoration: none;
-		color: #707070;
-	}
-	#aboutmetargetStyle:hover
-	{
-		text-decoration: none;
-		color: #909090;
-	}
-	#magazine
-	{
-		background-color: #114179;
-		padding-top: 5%;
-		padding-bottom: 5%;
-	}
-
-	#ajc {
-		background-color: #212126;
-	}
 	
-	#footerImg
-	{
-		width:100%;
-	}
-
-	#footer
-	{
-	  position: relative;
-	}
-
-	#footerText
-	{
-		font-family: 'POIOrbiter';
-		font-weight: 800;
-		color: #e6e6e6;
-		font-size: 48px;
-		position: absolute;
-		bottom: 50px;
-		left: 50%;
-		transform: translate(-50%, 0%);
-		margin-left: 20px;
-		margin-right: 20px;
-
-
-	}
-	#icons
-	{
-		position: absolute;
-		bottom: 56px;
-		left: 20%;
-	}
-	#email
-	{
-		width:7%;
-		margin-left: 10px;
-		margin-right: 10px;
-
-
-	}
-	#linkedin
-	{
-		width:7%;
-	}
-
-	#nav
-	{
-		text-align: right;
-		margin-left: auto;
-		margin-top: 20px;
-		margin-bottom: 20px;
-		font-size: 16px;
-		font-family: 'POIOrbiter';
-		font-weight: 700;
-		color: #707070;
-		margin-right: 20px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-
-	}
-
-
+	/* HEADER */
 	.header {
 	  overflow: hidden;
 	  padding: 20px 5%;
 	  margin-bottom: 3%;
 	}
+
 	.header a
 	{
 	  float: left;
 	  text-align: center;
 	  text-decoration: none;
-
-
   	}
 
   	.header-right a, .header-right a:visited {
@@ -218,7 +92,6 @@
 
 
   	}
-
 
   	.header h1 {
   		text-align: left;
@@ -246,245 +119,60 @@
 	}
 
 
-
-
-
-
-
-	#hoverBoxCow {
-    position: absolute;
-    width: 7%;
-    height: 8%;
-    left: 46%;
-    top: 11%;
-    background:white;
-		opacity:0;
-	}
-
-
-	#normalImg {
-		display: block;
-		margin: auto;
-		margin-bottom: 20px;
-		width: 50%;
-	}
-	#cowImg {
-		display: none;
-		margin: auto;
-		margin-bottom: 20px;
-		width: 50%;	
+	.max-width {
 
 	}
-/*	#header:hover #normalImg
+
+
+
+	/*FLEX GALLERY*/
+
+
+	#flex-gallery .flexpicStat
 	{
-		display: none;
+		border-radius: 15px;
 	}
-	#header:hover #cowImg
+
+	#flex-gallery img
 	{
-		display: block;
-	}*/
+    height: 200px; /* Set the desired fixed height */
+    width: auto; /* Keeps the width proportional */
+    margin: 5px;
+    object-fit: cover; /* Optional: This centers and crops images if needed */
+    box-sizing: border-box;
+	}
 
 
-	.headerLink
+	#headshotgif2
+	{
+		width: 100%;	
+	}
+
+	#headshotContainer 
 	{
 
+		
 	}
 
 
-	.sideImg
+
+	#aboutContainer
 	{
-		width: 50%;
-		max-width: 500px;
+		display:flex;
+		flex-direction: row; 
+		padding-bottom:200px; 
+		margin-left: 20%; 
+		margin-right: 20%;
 	}
 
-	.pageContainer
-	{
-		display: flex;
-	    align-items: center;
-	    justify-content: center;
-	    padding-left: 10%;
-	    padding-right: 10%;
-	}
+	
 
-	.pageContainer p
-	{
-		margin-left: 0px;
-		margin-right: 0px;
-		text-align: left;
-	}
-	.pageContainer h3
-	{
-		text-align: left;
-		font-size: 18px;
-		font-family: "POIOrbiter";
-		font-weight: 500;
-	}
-	.pageContainer h2
-	{
-		text-align: left;
-
-	}
 	.mediaText
 	{
 		width: 50%;
 	    padding-left: 5%;
 	    padding-right: 5%;
 	}
-
-
-	.logo
-	{
-		width: 15%;
-		margin-top: 3%;
-		margin-bottom: 0px;
-		min-width: 50px;
-	
-	}
-	.logo_container
-	{
-		text-align: center;
-	}
-	.role
-	{
-		font-size: 18px;
-		font-family: "POIOrbiter";
-		font-weight: 500;
-		text-align:center;
-	}
-	p
-	{
-		font-family: "POIOrbiter";
-		font-weight: 300;
-		text-align: center;
-		margin-left: 35%;
-		margin-right: 35%;
-
-	}
-
-	table {
-		border: 0px;
-		width: 100%;
-		text-align: center;
-		color: #707070;
-	}
-
-	th {
-		width: 18%;
-		vertical-align: top;
-
-
-	}
-
-	th h3 {
-		margin-top: 2%;
-		margin-bottom: 0px;
-	}
-
-	th h4 {
-		margin-top: 2%;
-		margin-bottom: 0px;
-		padding-left: 2px;
-		padding-right: 2px;
-
-	}
-
-	th img {
-		width: 60%;
-		padding-bottom: 5%;
-	}
-
-	th img:hover {
-		opacity: 50%;
-	}
-
-	#xpouter 
-	{
-		margin-top: 5%;
-	}
-	#experience
-	{
-		display: flex;
-		padding-left: 5%;
-		padding-right: 5%;
-		margin-top: 5%;
-		margin-bottom: 5%;
-		color: #707070;
-	}
-	#experienceBox
-	{
-		flex: 18%;
-		text-align: center;
-	}
-	#experienceBox img
-	{
-		width: 50%;
-	}
-	#xpText 
-	{
-	}
-	#experience h3 {
-		font-family: "POIOrbiter";
-		text-align: center;
-		font-size: 16px;
-	}
-	#experience h4 {
-		font-family: "POIOrbiter";
-		font-weight: 500;
-		text-align: center;
-		font-size: 16px;
-	}
-
-
-
-	#pdfframe
-	{
-		width: 100%;
-		height: 80%;
-	}
-	#misc
-	{
-		padding-bottom: 150px;
-	}
-
-
-	#SAMLab
-	{
-
-	}
-	#SAMLab #flex-gallery
-	{
-		padding-bottom: 100px;
-	}
-
-	#verisolutions
-	{
-		background-color: #404040;
-
-	}
-
-
-	#headshot
-	{
-		width:20%;
-		padding-left:.75%;
-		display:none;
-	}
-
-	#headshotgif
-	{
-		width:20%;
-	}
-
-
-	#hoverbox:hover #headshotgif
-	{
-		display: none;
-	}
-	#hoverbox:hover #headshot
-	{
-		<!--display: inline-block;--!>
-	}
-
 
 	#headshotCapt
 	{
@@ -499,15 +187,13 @@
 		bottom:20px;
 		z-index: -1;
 	}
+
+
 	#about_me 
 	{
 		padding-bottom: 5%;
 	}
-	#aboutmeheader
-	{
-		margin-bottom: -2%;
-		margin-top: 5%;
-	}
+
 	#headshotPar
 	{
 		text-align: left;
@@ -518,18 +204,18 @@
 		color: #707070;
 		font-size: 18;
 		line-height: 1.2;
-	}
-	#iconsAboutMe
-	{
-		margin-left:30%;
-		margin-right:30%;
-		padding-top: 20px;
 
+		width:50%; 
+		padding-top:20%; 
+		padding-bottom:10%; 
+		margin-left: 5%;
 	}
+
 	a:visited
 	{
 		color:#999999;
 	}
+
 	#copyright
 	{
 		font-family: "POIOrbiter";
@@ -540,45 +226,29 @@
 		right: 15%;
 
 	}
-	#featured_container
-	{
-		text-align: center;
-		padding-top: 40px;
-		padding-bottom: 40px;
-	}
-	#featuredImg
-	{
-		height: 40%;
-		margin-left: 20px;
-		margin-right: 20px;
-	}
-	#featuredImg:hover
-	{
-		opacity: 0.75;
-		cursor: pointer;
-	}
+
 
 	#flex-gallery 
 	{
-		margin-left: 5%;
-		margin-right:5%;
-		flex-wrap: wrap;
-		text-align: center;
-		overflow:  hidden;
-		height: auto;
-		padding-bottom: 50px;
+	    display: flex;
+	    flex-wrap: wrap;
+	    gap: 10px; /* Adjust spacing between images */
+	    justify-content: center;
 
 	}
 
 	#flex-gallery img
 	{
-		height: 35%;	
-		//padding: 5px;
-		margin: 5px;
-		box-sizing: border-box;
-		overflow-y: auto;
+    height: clamp(200px, 18vw, 300px);/*clamp(150px, 20vw, 300px); /* Sets a uniform height */
+    width: auto; /* Maintains the aspect ratio */
+    object-fit: cover; /* Ensures each image covers the height without distortion */
+    max-width: 100%; /* Makes images responsive */
+    border-radius: 5px; /* Optional: Rounded corners */
 
 	}
+
+
+
 	#flex-gallery img:hover
 	{
 		opacity: 75%;
@@ -586,44 +256,48 @@
 
 	}
 
-	.pdfText {
-	  color: black;
-	  position: absolute;
-	  top: 50%;
-	  left: 50%;
-	  -webkit-transform: translate(-50%, -50%);
-	  -ms-transform: translate(-50%, -50%);
-	  transform: translate(-50%, -50%);
-	  text-align: center;
-	  opacity: 0;
-	  font-family: 'POIOrbiter';
-      color: #000000;
-      text-align: center;
 
-	}
- 
-	.pdfLink:hover .pdfText {
-		opacity: 1;
-		
-	}
-	.pdfLink:hover {
-		opacity: 75%;
-		cursor: pointer!important;
 
-	}
+	/*FOOTER*/
 
-	.pdfLink {
-		opacity: 100%;
-		cursor: pointer;
-
-	}
-
-	
-
-	#samsneatprojects
+	#footer
 	{
-		background-image: url(SNPbg.webp)
+	  position: relative;
 	}
+
+	#footerText
+	{
+		font-family: 'POIOrbiter';
+		font-weight: 800;
+		color: #e6e6e6;
+		font-size: 48px;
+		position: absolute;
+		bottom: 50px;
+		left: 50%;
+		transform: translate(-50%, 0%);
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+
+	#icons
+	{
+		position: absolute;
+		bottom: 56px;
+		left: 20%;
+	}
+
+	#email
+	{
+		width:7%;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	#linkedin
+	{
+		width:7%;
+	}
+
 
 
 
@@ -748,14 +422,6 @@
 	  background-color: rgba(0, 0, 0, 0.8);
 	}
 
-	/* Number text (1/3 etc) */
-	.numbertext {
-	  color: #f2f2f2;
-	  font-size: 12px;
-	  padding: 8px 12px;
-	  position: absolute;
-	  top: 0;
-	}
 
 	/* Caption text */
 	.caption-container {
@@ -765,30 +431,72 @@
 	  color: white;
 	}
 
-	img.demo {
-	  opacity: 0.6;
-	}
-
-	.active,
-	.demo:hover {
-	  opacity: 1;
-	}
-
-	img.hover-shadow {
-	  transition: 0.3s;
-	}
-
-	.hover-shadow:hover {
-	  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	}
 
 	@media only screen and (max-width: 800px){
-		#aboutContainer
-		{
-			flex-direction: column;
-		}
 		#headshotPar
 		{
+			text-align: center;
+			margin-left: auto;
+			margin-right: auto;
 			width: 100%;
 		}
+		#aboutContainer {
+			flex-direction: column;
+		}
+	}
+
+	@media only screen and (max-width: 425px){
+	  #flex-gallery {
+		flex-direction: column; /* Stack images vertically on smaller screens */
+		align-items: center; /* Center images */
+	} 
+	.header-right {
+		display:none;
+	}
+
+	h1 {
+	  font-family: 'POIOrbiter', sans-serif;
+	  font-weight: 900;
+	  color: #707070;
+	  font-size: clamp(32px, 12vw, 82px); /* Responsive and controlled */
+	}
+
+	h2 {
+	  font-family: 'Crimson Text', serif;
+	  font-size: clamp(18px, 4vw, 36px);
+	  font-style: italic;
+	  text-align: center;
+	  color: #707070;
+	  margin-top: 10px;
+	  margin-bottom: 10px;
+	}
+
+	
+
+	#headshotContainer 
+	{
+
+	}
+	#headshotPar
+	{
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#aboutContainer {
+		flex-direction: column;
+	}
+
+	#headshotgif2 {
+		width: 300px;
+	}
+
+	#headshotPar {
+		width: 100%;
+	}
+	#footerText {
+		display:none;
+	}
+
+
 	}
