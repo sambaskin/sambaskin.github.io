@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html>
+	<head charset="utf-8";>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+		 <script>
+		 	async
+  			src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@latest/dist/lazyload.min.js"
+		 </script>
+
+ 		 <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@1,700&display=swap" rel="stylesheet">
+
+ 		 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+	</head>
+
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-NTYRJQTJ4G"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-NTYRJQTJ4G');
+	</script>
+
+<!-- Header -->
+<body>
+	<div class="header">  <!-- style="position:fixed; background-color: #ffffff; width: 100%; -->
+		<a href="#default" class="headerLink">
+			<h1>SAM BASKIN</h1> 						
+			<h3>Digital media designer based in Brooklyn</h3>
+		</a>
+		<div class="header-right">
+			<a href=index.html>WORK</a>
+			<a href=reel.html>REEL</a>
+
+			<a href="index.html">ABOUT</a>
+			<a href="index.html">CONTACT</a>
+		</div>
+
+	</div>
+
+
+
+
+
+	<div id="reelFrame">
+
+		<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/tjZHZnRvOgw?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>
+	</div>
+
+
+
+
+<!-- Footer -->
+
+		<footer>
+
+			<div id="icons">
+				<a href="https://www.linkedin.com/in/sam-baskin-06b59b53/" style="color:white;">
+					<img src="linkedin.png" id="linkedin">
+				</a>
+				<a href="mailto:samsonbaskin@gmail.com"> <!--ADD CAPTCHA TO AVOID SPAM-->
+					<img src="email.png" id="email">
+				</a>
+			</div>
+			 			<div id="footerText" style="color:#d9d9d9;">
+				SAM BASKIN
+			</div>
+			<div id="copyright" style="color:#d9d9d9;">  
+			 <!----> © Sam Baskin 2024
+			</div>
+
+		</footer>
+		
+</body>
+
+
+
+ <style>
+ 	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Black.otf') format('opentype');
+	    font-weight: 900; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-ExtraBold.otf') format('opentype');
+	    font-weight: 800; /* Use appropriate font weight for Bold */
+	}
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Bold.otf') format('opentype');
+	    font-weight: 700; 
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-SemiBold.otf') format('opentype');
+	    font-weight: 600; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Medium.otf') format('opentype');
+	    font-weight: 500; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Regular.otf') format('opentype');
+	    font-weight: 400; 
+	}
+
+
+	h1 {
+		font-family: 'POIOrbiter', sans-serif;
+		font-weight: 900;
+		color: #707070;
+		font-size: 48px;
+	}
+
+	h2 {
+		font-family: 'Crimson Text', serif;
+		font-size: 36px;
+		font-style: italic;
+		text-align: center;
+		color: #707070;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+
+
+	p {
+		font-family: "POIOrbiter";
+		font-weight: 300;
+		text-align: center;
+		margin-left: 35%;
+		margin-right: 35%;
+
+	}
+
+ 		#footerText
+	{
+		font-family: 'POIOrbiter';
+		font-weight: 800;
+		color: #e6e6e6;
+		font-size: 48px;
+
+		margin-left: 20px;
+		margin-right: 20px;
+				width: 33%;
+
+	}
+	#icons
+	{
+		width: 33%;
+	}
+
+	#email
+	{
+		width:7%;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	#linkedin
+	{
+		width:7%;
+	}
+
+	#copyright
+	{
+		font-family: "POIOrbiter";
+		font-weight: 300;
+		color: #e6e6e6;
+		width: 33%;
+
+
+	}
+
+	#reelFrame
+	{
+		display: flex;
+		text-align: center;
+		padding-bottom: 50px;
+
+	}
+
+	#reelFrame iframe
+	{
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 800px;
+		width: 50%;
+	}
+
+	.header {
+	  overflow: hidden;
+	  padding: 20px 5%;
+	  margin-bottom: 3%;
+	}
+
+	.header a
+	{
+	  float: left;
+	  text-align: center;
+	  text-decoration: none;
+  	}
+
+  	.header-right a, .header-right a:visited {
+  		margin: auto;
+  		font-family: 'POIOrbiter';
+  		font-size: 16px;
+  		font-weight: 500;
+  		padding-left: 15px;
+  		color: #373737;
+  		text-decoration: none;
+  		letter-spacing: 0.5px;
+
+
+  	}
+
+  	.header h1 {
+  		text-align: left;
+  		margin: 0px;
+  		color: #373737;
+
+  	}
+  	.header h3 {
+  		text-align: left;
+  		font-family: 'POIOrbiter';
+  		font-size: 16px;
+  		font-weight: 300;
+  		color: #373737;
+  		margin: 0px;
+  	}
+  	.headerLink h1:hover {
+	  opacity: 50%;
+	}
+	.headerLink h1:hover {
+	  opacity: 100%;
+	}
+
+	.header-right {
+	  float: right;
+	}
+
+	footer{
+		display:flex;
+		text-align: center;
+		align-items: center;
+		margin-top: auto;
+
+	}
+
+	body {
+		display: flex;
+		min-height: 100vh;
+		flex-direction:column;
+	}
+
+
+ </style>
+
+
+
+
+
+</html>
+
+
