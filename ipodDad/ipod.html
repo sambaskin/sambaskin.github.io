@@ -104,32 +104,18 @@
         }
 
         .menu-container::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
+            background: linear-gradient(to right, #d0d0d0, #a8a8a8, #d0d0d0);
+            box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2);
             margin: 8px 0;
         }
 
         .menu-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg,
-                #3d7eb8 0%,
-                #5b9dd9 15%,
-                #6db3f2 35%,
-                #7fc2ff 50%,
-                #6db3f2 65%,
-                #5b9dd9 85%,
-                #3d7eb8 100%);
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: linear-gradient(to right, #7fc2ff, #5b9dd9, #4a8cc8, #5b9dd9, #7fc2ff);
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3);
         }
 
         .menu-container::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg,
-                #2d6ea8 0%,
-                #4a8cc8 15%,
-                #5ca2e1 35%,
-                #6eb1f0 50%,
-                #5ca2e1 65%,
-                #4a8cc8 85%,
-                #2d6ea8 100%);
+            background: linear-gradient(to right, #8fccff, #6baee9, #5a86d8, #6baee9, #8fccff);
         }
 
         /* Hide scrollbar when content fits */
@@ -214,7 +200,6 @@
         }
 
         .center-button:active {
-            transform: translate(-50%, -50%) scale(0.95);
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
@@ -235,7 +220,6 @@
 
         .wheel-button:active {
             color: #000;
-            transform: scale(0.95);
         }
 
         .menu-btn {
@@ -439,32 +423,18 @@
         }
 
         .photo-view::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
+            background: linear-gradient(to right, #d0d0d0, #a8a8a8, #d0d0d0);
+            box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2);
             margin: 8px 0;
         }
 
         .photo-view::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg,
-                #3d7eb8 0%,
-                #5b9dd9 15%,
-                #6db3f2 35%,
-                #7fc2ff 50%,
-                #6db3f2 65%,
-                #5b9dd9 85%,
-                #3d7eb8 100%);
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: linear-gradient(to right, #7fc2ff, #5b9dd9, #4a8cc8, #5b9dd9, #7fc2ff);
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3);
         }
 
         .photo-view::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg,
-                #2d6ea8 0%,
-                #4a8cc8 15%,
-                #5ca2e1 35%,
-                #6eb1f0 50%,
-                #5ca2e1 65%,
-                #4a8cc8 85%,
-                #2d6ea8 100%);
+            background: linear-gradient(to right, #8fccff, #6baee9, #5a86d8, #6baee9, #8fccff);
         }
 
         .photo-view img {
@@ -748,6 +718,24 @@
                 };
                 container.appendChild(menuItem);
             });
+
+            // Auto-scroll selected item into view
+            setTimeout(() => {
+                const selectedItem = container.querySelector('.menu-item.selected');
+                if (selectedItem) {
+                    selectedItem.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+
+                // Show scrollbar if content is taller than container
+                if (container.scrollHeight > container.clientHeight) {
+                    container.classList.remove('no-scroll');
+                } else {
+                    container.classList.add('no-scroll');
+                }
+            }, 0);
         }
 
         function renderNoteView(noteIndex) {
@@ -801,6 +789,24 @@
                 };
                 container.appendChild(menuItem);
             });
+
+            // Auto-scroll selected item into view and check if scrollbar is needed
+            setTimeout(() => {
+                const selectedItem = container.querySelector('.menu-item.selected');
+                if (selectedItem) {
+                    selectedItem.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+
+                // Show scrollbar if content is taller than container
+                if (container.scrollHeight > container.clientHeight) {
+                    container.classList.remove('no-scroll');
+                } else {
+                    container.classList.add('no-scroll');
+                }
+            }, 0);
         }
 
         function renderPhotoView(photoIndex) {
@@ -1170,7 +1176,7 @@
         let wheelElement = document.querySelector('.click-wheel');
         let isDragging = false;
         let lastAngle = null;
-        let scrollThreshold = 0.08; // More sensitive scrolling
+        let scrollThreshold = 0.15; // Scroll sensitivity (higher = less sensitive)
 
         function getAngle(x, y, rect) {
             const centerX = rect.left + rect.width / 2;
