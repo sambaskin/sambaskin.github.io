@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPod Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #020e18;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .ipod {
+            width: 340px;
+            height: 600px;
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            position: relative;
+        }
+
+        .screen {
+            width: 100%;
+            height: 240px;
+            background: #e8eaed;
+            border-radius: 12px;
+            border: 3px solid #333;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .screen-header {
+            background: linear-gradient(180deg, #d8dce0 0%, #c8ccd0 100%);
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #999;
+            position: relative;
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .play-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #4a90d9;
+        }
+
+        .battery {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 14px;
+            width: auto;
+        }
+
+        .menu-container {
+            padding: 8px 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: calc(100% - 35px);
+        }
+
+        .menu-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .menu-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+            margin: 8px 0;
+        }
+
+        .menu-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg,
+                #3d7eb8 0%,
+                #5b9dd9 15%,
+                #6db3f2 35%,
+                #7fc2ff 50%,
+                #6db3f2 65%,
+                #5b9dd9 85%,
+                #3d7eb8 100%);
+            border-radius: 5px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .menu-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg,
+                #2d6ea8 0%,
+                #4a8cc8 15%,
+                #5ca2e1 35%,
+                #6eb1f0 50%,
+                #5ca2e1 65%,
+                #4a8cc8 85%,
+                #2d6ea8 100%);
+        }
+
+        /* Hide scrollbar when content fits */
+        .menu-container.no-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .menu-item {
+            padding: 8px 16px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: transparent;
+        }
+
+        .menu-item.selected {
+            background: linear-gradient(90deg, #5b9dd9 0%, #6db3f2 100%);
+            color: #fff;
+        }
+
+        .menu-item:not(.selected):hover {
+            background: rgba(74, 144, 217, 0.1);
+        }
+
+        .menu-item-text {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item-arrow {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .menu-item.selected .menu-item-arrow {
+            color: #fff;
+        }
+
+        .controls {
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .click-wheel {
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(145deg, #e8e8e8, #ffffff);
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .click-wheel-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 90px;
+            background: #ddd;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .center-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.1s;
+        }
+
+        .center-button:active {
+            transform: translate(-50%, -50%) scale(0.95);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .wheel-button {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-weight: 600;
+            font-size: 12px;
+            user-select: none;
+            transition: all 0.1s;
+        }
+
+        .wheel-button:active {
+            color: #000;
+            transform: scale(0.95);
+        }
+
+        .menu-btn {
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .forward-btn {
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .play-btn {
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .back-btn {
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .wheel-button::before {
+            font-size: 20px;
+        }
+
+        .menu-btn::before {
+            content: 'MENU';
+            font-size: 10px;
+        }
+
+        .forward-btn::before {
+            content: '⏭';
+        }
+
+        .play-btn::before {
+            content: '⏯';
+        }
+
+        .back-btn::before {
+            content: '⏮';
+        }
+
+        .submenu-title {
+            font-size: 16px;
+            font-weight: 700;
+            padding: 15px 20px 10px;
+            color: #000;
+            border-bottom: 1px solid #6a8a9a;
+        }
+
+        .back-link {
+            font-size: 14px;
+            padding: 8px 20px;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            background: rgba(74, 124, 158, 0.2);
+        }
+
+        .now-playing {
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 35px);
+            overflow: hidden;
+        }
+
+        .track-number {
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .now-playing-content {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .album-art-container {
+            flex-shrink: 0;
+        }
+
+        .track-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .now-playing-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 4px;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .now-playing-artist {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .now-playing-album {
+            font-size: 10px;
+            font-weight: 500;
+            color: #555;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 16px;
+            background: linear-gradient(180deg, #d0d0d0 0%, #a8a8a8 50%, #d0d0d0 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 0 6px;
+            border: 2px solid #888;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(180deg,
+                #a8d5ff 0%,
+                #7fc2ff 10%,
+                #6db3f2 25%,
+                #5b9dd9 40%,
+                #4a8cc8 50%,
+                #5b9dd9 60%,
+                #6db3f2 75%,
+                #7fc2ff 90%,
+                #a8d5ff 100%);
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #000;
+            font-weight: 700;
+            padding: 0 2px;
+        }
+
+        .note-view {
+            padding: 12px;
+            height: calc(100% - 35px);
+            overflow-y: auto;
+        }
+
+        .note-content {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .photo-view {
+            height: calc(100% - 35px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background: #000;
+        }
+
+        .photo-view img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .photo-counter {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="ipod">
+        <div class="screen">
+            <div class="screen-header">
+                <div class="title" id="screenTitle">iPod</div>
+                <img src="battery.png" alt="Battery" class="battery">
+            </div>
+            <div class="menu-container" id="menuContainer">
+                <!-- Menu items will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="click-wheel">
+                <div class="wheel-button menu-btn" id="menuBtn"></div>
+                <div class="wheel-button forward-btn" id="forwardBtn"></div>
+                <div class="wheel-button play-btn" id="playBtn"></div>
+                <div class="wheel-button back-btn" id="backBtn"></div>
+                <div class="click-wheel-inner">
+                    <div class="center-button" id="centerBtn"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Song data
+        const songs = [
+            { name: 'How I Feel', file: '01 - How I Feel.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'Where You Are', file: '02 - Where You Are.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: "I Don't Know Nothing (Love Song)", file: "03 - I Don't Know Nothing (Love Song).wav", artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'Trip Begin', file: '04 - Trip Begin.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'Beside You', file: '05 - Beside You.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'Better', file: '06 - Better.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'A Hard Days Night', file: '07 - A Hard Days Night.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'Lucy', file: '08 - Lucy.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'Bad Idea', file: '09 - Bad Idea.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' },
+            { name: 'I Sometimes Think', file: '10 - I Sometimes Think.wav', artist: 'Steve Baskin and the Fourteens', album: 'I Sometimes Think' }
+        ];
+
+        // Notes data
+        const notes = [
+            {
+                title: 'Song Idea',
+                content: 'Song Idea: something about how pigs do not have butt cheeks. This has not been touched on enough in the americana genre I think if we move quickly we could be the first to market.'
+            }
+        ];
+
+        // Photos data
+        const photos = [
+            { name: 'ahhhh', file: 'photos/ahhhh.png' },
+            { name: 'hahira', file: 'photos/hahira.jpg' },
+            { name: 'hello', file: 'photos/hello.png' },
+            { name: 'nothing', file: 'photos/nothing.jpg' },
+            { name: 'o', file: 'photos/o.png' },
+            { name: 'piano', file: 'photos/piano.png' },
+            { name: 'railroad', file: 'photos/railroad.jpg' }
+        ];
+
+        const mainMenu = [
+            { name: 'Music' },
+            { name: 'Photos' },
+            { name: 'Extras' },
+            { name: 'Settings' },
+            { name: 'Shuffle Songs' }
+        ];
+
+        const subMenus = {
+            'Music': [
+                { name: 'Playlists' },
+                { name: 'Artists' },
+                { name: 'Albums' },
+                { name: 'Songs' },
+                { name: 'Genres' }
+            ],
+            'Playlists': [
+                { name: 'c00l songz' }
+            ],
+            'Albums': [
+                { name: 'I Sometimes Think' }
+            ],
+            'Artists': [
+                { name: 'Steve Baskin and the Fourteens' }
+            ],
+            'Genres': [
+                { name: 'Americana' }
+            ],
+            'Photos': [
+                { name: 'Photo Library' }
+            ],
+            'Extras': [
+                { name: 'Clock' },
+                { name: 'Contacts' },
+                { name: 'Calendar' },
+                { name: 'Notes' },
+                { name: 'Games' }
+            ],
+            'Settings': [
+                { name: 'About' },
+                { name: 'Main Menu' },
+                { name: 'Backlight' },
+                { name: 'Brightness' },
+                { name: 'Date & Time' }
+            ]
+        };
+
+        let currentMenu = 'main';
+        let selectedIndex = 0;
+        let menuHistory = [];
+        let audioPlayer = new Audio();
+        let clickSound = new Audio('click.wav');
+        let currentSongIndex = -1;
+        let isPlaying = false;
+        let viewMode = 'menu'; // 'menu', 'nowplaying', 'noteview', 'notelist', 'photoview', 'photolist'
+        let currentNoteIndex = -1;
+        let currentPhotoIndex = -1;
+
+        // Play click sound
+        function playClick() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => console.log('Click sound failed:', e));
+        }
+
+        function renderMenu(items, title = 'iPod') {
+            viewMode = 'menu';
+            const container = document.getElementById('menuContainer');
+            const screenTitle = document.getElementById('screenTitle');
+            const screenHeader = document.querySelector('.screen-header');
+
+            // Remove play icon if it exists
+            const playIcon = screenHeader.querySelector('.play-icon');
+            if (playIcon) {
+                playIcon.remove();
+            }
+
+            screenTitle.textContent = title;
+            container.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const menuItem = document.createElement('div');
+                menuItem.className = `menu-item ${index === selectedIndex ? 'selected' : ''}`;
+
+                // Determine if this is a song list (viewing actual songs)
+                const isSongList = currentMenu === 'Songs' || currentMenu === 'I Sometimes Think' ||
+                                   currentMenu === 'Steve Baskin and the Fourteens' ||
+                                   currentMenu === 'c00l songz' || currentMenu === 'Americana';
+
+                // Show arrow if: has a submenu, OR is not a song and not "Shuffle Songs"
+                const showArrow = !isSongList && item.name !== 'Shuffle Songs';
+
+                menuItem.innerHTML = `
+                    <span class="menu-item-text">${item.name}</span>
+                    ${showArrow ? '<span class="menu-item-arrow">></span>' : ''}
+                `;
+                menuItem.onclick = () => selectItem(index);
+                container.appendChild(menuItem);
+            });
+
+            // Auto-scroll selected item into view and check if scrollbar is needed
+            setTimeout(() => {
+                const selectedItem = container.querySelector('.menu-item.selected');
+                if (selectedItem) {
+                    selectedItem.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+
+                // Hide scrollbar if content fits or if it's a short menu
+                const shortMenus = ['main', 'Music', 'Photos', 'Extras', 'Settings', 'Albums',
+                                   'Artists', 'Playlists', 'Genres'];
+                if (container.scrollHeight <= container.clientHeight || shortMenus.includes(currentMenu)) {
+                    container.classList.add('no-scroll');
+                } else {
+                    container.classList.remove('no-scroll');
+                }
+            }, 0);
+        }
+
+        function renderNowPlaying() {
+            viewMode = 'nowplaying';
+            const container = document.getElementById('menuContainer');
+            const screenTitle = document.getElementById('screenTitle');
+            const screenHeader = document.querySelector('.screen-header');
+
+            if (currentSongIndex === -1) return;
+
+            const song = songs[currentSongIndex];
+            screenTitle.textContent = 'Now Playing';
+
+            // Add play icon if not already there
+            if (!screenHeader.querySelector('.play-icon')) {
+                const playIcon = document.createElement('div');
+                playIcon.className = 'play-icon';
+                playIcon.innerHTML = '▶';
+                screenHeader.insertBefore(playIcon, screenTitle);
+            }
+
+            const trackNum = currentSongIndex + 1;
+            const totalTracks = songs.length;
+
+            container.innerHTML = `
+                <div class="now-playing">
+                    <div class="track-number">${trackNum} of ${totalTracks}</div>
+                    <div class="now-playing-content">
+                        <div class="album-art-container">
+                            <img src="isometimesthink.webp" alt="Album Art" style="width: 80px; height: 80px; border-radius: 4px; object-fit: cover; display: block;">
+                        </div>
+                        <div class="track-info">
+                            <div class="now-playing-title">${song.name}</div>
+                            <div class="now-playing-artist">${song.artist}</div>
+                            <div class="now-playing-album">${song.album}</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar" style="height: 20px !important; background: linear-gradient(180deg, #d0d0d0 0%, #a8a8a8 50%, #d0d0d0 100%) !important; border: 2px solid #888 !important; border-radius: 10px !important; box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3) !important; overflow: hidden !important;">
+                        <div class="progress-fill" id="progressFill" style="height: 100% !important; background: linear-gradient(180deg, #a8d5ff 0%, #7fc2ff 10%, #6db3f2 25%, #5b9dd9 40%, #4a8cc8 50%, #5b9dd9 60%, #6db3f2 75%, #7fc2ff 90%, #a8d5ff 100%) !important; border-radius: 8px !important; box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.3) !important;"></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalTime">-0:00</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderNotesList() {
+            viewMode = 'notelist';
+            const container = document.getElementById('menuContainer');
+            const screenTitle = document.getElementById('screenTitle');
+            const screenHeader = document.querySelector('.screen-header');
+
+            // Remove play icon if it exists
+            const playIcon = screenHeader.querySelector('.play-icon');
+            if (playIcon) {
+                playIcon.remove();
+            }
+
+            screenTitle.textContent = 'Notes';
+            container.innerHTML = '';
+
+            notes.forEach((note, index) => {
+                const menuItem = document.createElement('div');
+                menuItem.className = `menu-item ${index === selectedIndex ? 'selected' : ''}`;
+                menuItem.innerHTML = `
+                    <span class="menu-item-text">${note.title}</span>
+                    <span class="menu-item-arrow">></span>
+                `;
+                menuItem.onclick = () => {
+                    playClick();
+                    selectedIndex = index;
+                    renderNotesList();
+                };
+                container.appendChild(menuItem);
+            });
+        }
+
+        function renderNoteView(noteIndex) {
+            viewMode = 'noteview';
+            const container = document.getElementById('menuContainer');
+            const screenTitle = document.getElementById('screenTitle');
+            const screenHeader = document.querySelector('.screen-header');
+
+            // Remove play icon if it exists
+            const playIcon = screenHeader.querySelector('.play-icon');
+            if (playIcon) {
+                playIcon.remove();
+            }
+
+            const note = notes[noteIndex];
+            screenTitle.textContent = note.title;
+
+            container.innerHTML = `
+                <div class="note-view">
+                    <div class="note-content">${note.content}</div>
+                </div>
+            `;
+        }
+
+        function renderPhotosList() {
+            viewMode = 'photolist';
+            const container = document.getElementById('menuContainer');
+            const screenTitle = document.getElementById('screenTitle');
+            const screenHeader = document.querySelector('.screen-header');
+
+            // Remove play icon if it exists
+            const playIcon = screenHeader.querySelector('.play-icon');
+            if (playIcon) {
+                playIcon.remove();
+            }
+
+            screenTitle.textContent = 'Photo Library';
+            container.innerHTML = '';
+
+            photos.forEach((photo, index) => {
+                const menuItem = document.createElement('div');
+                menuItem.className = `menu-item ${index === selectedIndex ? 'selected' : ''}`;
+                menuItem.innerHTML = `
+                    <span class="menu-item-text">${photo.name}</span>
+                    <span class="menu-item-arrow">></span>
+                `;
+                menuItem.onclick = () => {
+                    playClick();
+                    selectedIndex = index;
+                    renderPhotosList();
+                };
+                container.appendChild(menuItem);
+            });
+        }
+
+        function renderPhotoView(photoIndex) {
+            viewMode = 'photoview';
+            const container = document.getElementById('menuContainer');
+            const screenTitle = document.getElementById('screenTitle');
+            const screenHeader = document.querySelector('.screen-header');
+
+            // Remove play icon if it exists
+            const playIcon = screenHeader.querySelector('.play-icon');
+            if (playIcon) {
+                playIcon.remove();
+            }
+
+            currentPhotoIndex = photoIndex;
+            const photo = photos[photoIndex];
+            screenTitle.textContent = photo.name;
+
+            container.innerHTML = `
+                <div class="photo-view" style="position: relative;">
+                    <img src="${photo.file}" alt="${photo.name}">
+                    <div class="photo-counter">${photoIndex + 1} of ${photos.length}</div>
+                </div>
+            `;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            if (viewMode !== 'nowplaying' || !audioPlayer.duration) return;
+
+            const progressFill = document.getElementById('progressFill');
+            const currentTime = document.getElementById('currentTime');
+            const totalTime = document.getElementById('totalTime');
+
+            if (progressFill) {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressFill.style.width = percent + '%';
+            }
+
+            if (currentTime) {
+                currentTime.textContent = formatTime(audioPlayer.currentTime);
+            }
+
+            if (totalTime) {
+                const remaining = audioPlayer.duration - audioPlayer.currentTime;
+                totalTime.textContent = '-' + formatTime(remaining);
+            }
+        }
+
+        function playSong(index) {
+            currentSongIndex = index;
+            const song = songs[index];
+            audioPlayer.src = song.file;
+            audioPlayer.play();
+            isPlaying = true;
+            renderNowPlaying();
+        }
+
+        function togglePlayPause() {
+            playClick();
+            if (viewMode === 'nowplaying') {
+                if (isPlaying) {
+                    audioPlayer.pause();
+                    isPlaying = false;
+                } else {
+                    audioPlayer.play();
+                    isPlaying = true;
+                }
+                renderNowPlaying();
+            }
+        }
+
+        function nextSong() {
+            playClick();
+            if (currentSongIndex !== -1) {
+                currentSongIndex = (currentSongIndex + 1) % songs.length;
+                playSong(currentSongIndex);
+            }
+        }
+
+        function previousSong() {
+            playClick();
+            if (currentSongIndex !== -1) {
+                if (audioPlayer.currentTime > 3) {
+                    audioPlayer.currentTime = 0;
+                } else {
+                    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+                    playSong(currentSongIndex);
+                }
+            }
+        }
+
+        function selectItem(index) {
+            playClick();
+            selectedIndex = index;
+            if (currentMenu === 'main') {
+                renderMenu(mainMenu);
+            } else {
+                renderMenu(subMenus[currentMenu], currentMenu);
+            }
+        }
+
+        function scrollUp() {
+            if (viewMode === 'nowplaying' || viewMode === 'noteview') return;
+            playClick();
+
+            if (viewMode === 'photoview') {
+                // Previous photo
+                currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+                renderPhotoView(currentPhotoIndex);
+            } else if (viewMode === 'photolist') {
+                selectedIndex = (selectedIndex - 1 + photos.length) % photos.length;
+                renderPhotosList();
+            } else if (viewMode === 'notelist') {
+                selectedIndex = (selectedIndex - 1 + notes.length) % notes.length;
+                renderNotesList();
+            } else if (currentMenu === 'main') {
+                selectedIndex = (selectedIndex - 1 + mainMenu.length) % mainMenu.length;
+                renderMenu(mainMenu);
+            } else if (currentMenu === 'Songs' || currentMenu === 'I Sometimes Think' ||
+                       currentMenu === 'Steve Baskin and the Fourteens' ||
+                       currentMenu === 'c00l songz' || currentMenu === 'Americana') {
+                selectedIndex = (selectedIndex - 1 + songs.length) % songs.length;
+                renderMenu(songs, currentMenu);
+            } else {
+                const items = subMenus[currentMenu];
+                selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                renderMenu(items, currentMenu);
+            }
+        }
+
+        function scrollDown() {
+            if (viewMode === 'nowplaying' || viewMode === 'noteview') return;
+            playClick();
+
+            if (viewMode === 'photoview') {
+                // Next photo
+                currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                renderPhotoView(currentPhotoIndex);
+            } else if (viewMode === 'photolist') {
+                selectedIndex = (selectedIndex + 1) % photos.length;
+                renderPhotosList();
+            } else if (viewMode === 'notelist') {
+                selectedIndex = (selectedIndex + 1) % notes.length;
+                renderNotesList();
+            } else if (currentMenu === 'main') {
+                selectedIndex = (selectedIndex + 1) % mainMenu.length;
+                renderMenu(mainMenu);
+            } else if (currentMenu === 'Songs' || currentMenu === 'I Sometimes Think' ||
+                       currentMenu === 'Steve Baskin and the Fourteens' ||
+                       currentMenu === 'c00l songz' || currentMenu === 'Americana') {
+                selectedIndex = (selectedIndex + 1) % songs.length;
+                renderMenu(songs, currentMenu);
+            } else {
+                const items = subMenus[currentMenu];
+                selectedIndex = (selectedIndex + 1) % items.length;
+                renderMenu(items, currentMenu);
+            }
+        }
+
+        function enterMenu() {
+            playClick();
+            if (viewMode === 'photolist') {
+                // Open the selected photo
+                currentPhotoIndex = selectedIndex;
+                menuHistory.push({ menu: 'photolist', index: selectedIndex, viewMode: 'photolist' });
+                renderPhotoView(currentPhotoIndex);
+            } else if (viewMode === 'notelist') {
+                // Open the selected note
+                currentNoteIndex = selectedIndex;
+                menuHistory.push({ menu: 'notelist', index: selectedIndex, viewMode: 'notelist' });
+                renderNoteView(currentNoteIndex);
+            } else if (currentMenu === 'main') {
+                const selected = mainMenu[selectedIndex];
+                if (subMenus[selected.name]) {
+                    menuHistory.push({ menu: currentMenu, index: selectedIndex });
+                    currentMenu = selected.name;
+                    selectedIndex = 0;
+                    renderMenu(subMenus[currentMenu], currentMenu);
+                } else if (selected.name === 'Shuffle Songs') {
+                    const randomIndex = Math.floor(Math.random() * songs.length);
+                    playSong(randomIndex);
+                }
+            } else if (currentMenu === 'Songs' || currentMenu === 'I Sometimes Think' ||
+                       currentMenu === 'Steve Baskin and the Fourteens' ||
+                       currentMenu === 'c00l songz' || currentMenu === 'Americana') {
+                playSong(selectedIndex);
+            } else {
+                const selected = subMenus[currentMenu][selectedIndex];
+                if (selected.name === 'Photo Library') {
+                    // Open photo library
+                    menuHistory.push({ menu: currentMenu, index: selectedIndex });
+                    selectedIndex = 0;
+                    renderPhotosList();
+                } else if (selected.name === 'Notes') {
+                    // Open notes list
+                    menuHistory.push({ menu: currentMenu, index: selectedIndex });
+                    selectedIndex = 0;
+                    renderNotesList();
+                } else if (selected.name === 'Songs' || selected.name === 'I Sometimes Think' ||
+                    selected.name === 'Steve Baskin and the Fourteens' ||
+                    selected.name === 'c00l songz' || selected.name === 'Americana') {
+                    menuHistory.push({ menu: currentMenu, index: selectedIndex });
+                    currentMenu = selected.name;
+                    selectedIndex = 0;
+                    renderMenu(songs, currentMenu);
+                } else if (selected.name === 'Albums' || selected.name === 'Artists' ||
+                           selected.name === 'Playlists' || selected.name === 'Genres') {
+                    menuHistory.push({ menu: currentMenu, index: selectedIndex });
+                    currentMenu = selected.name;
+                    selectedIndex = 0;
+                    renderMenu(subMenus[selected.name], selected.name);
+                }
+            }
+        }
+
+        function goBack() {
+            playClick();
+
+            // If in photo view, go back to photo list
+            if (viewMode === 'photoview') {
+                if (menuHistory.length > 0) {
+                    const previous = menuHistory.pop();
+                    selectedIndex = previous.index;
+                    renderPhotosList();
+                }
+                return;
+            }
+
+            // If in photo list, go back to Photos menu
+            if (viewMode === 'photolist') {
+                if (menuHistory.length > 0) {
+                    const previous = menuHistory.pop();
+                    currentMenu = previous.menu;
+                    selectedIndex = previous.index;
+                    renderMenu(subMenus[currentMenu], currentMenu);
+                }
+                return;
+            }
+
+            // If in note view, go back to notes list
+            if (viewMode === 'noteview') {
+                if (menuHistory.length > 0) {
+                    const previous = menuHistory.pop();
+                    selectedIndex = previous.index;
+                    renderNotesList();
+                }
+                return;
+            }
+
+            // If in notes list, go back to Extras menu
+            if (viewMode === 'notelist') {
+                if (menuHistory.length > 0) {
+                    const previous = menuHistory.pop();
+                    currentMenu = previous.menu;
+                    selectedIndex = previous.index;
+                    renderMenu(subMenus[currentMenu], currentMenu);
+                }
+                return;
+            }
+
+            // If in now playing mode, go back to the previous menu (don't pop history)
+            if (viewMode === 'nowplaying') {
+                viewMode = 'menu';
+                if (menuHistory.length > 0) {
+                    const previous = menuHistory[menuHistory.length - 1];
+                    currentMenu = previous.menu;
+                    selectedIndex = previous.index;
+
+                    if (currentMenu === 'main') {
+                        renderMenu(mainMenu, 'iPod');
+                    } else if (currentMenu === 'Songs' || currentMenu === 'I Sometimes Think' ||
+                               currentMenu === 'Steve Baskin and the Fourteens' ||
+                               currentMenu === 'c00l songz' || currentMenu === 'Americana') {
+                        renderMenu(songs, currentMenu);
+                    } else if (subMenus[currentMenu]) {
+                        renderMenu(subMenus[currentMenu], currentMenu);
+                    }
+                } else {
+                    currentMenu = 'main';
+                    selectedIndex = 0;
+                    renderMenu(mainMenu, 'iPod');
+                }
+                return;
+            }
+
+            // If in menu mode, go back one level (pop history)
+            if (menuHistory.length > 0) {
+                const previous = menuHistory.pop();
+                currentMenu = previous.menu;
+                selectedIndex = previous.index;
+
+                if (currentMenu === 'main') {
+                    renderMenu(mainMenu, 'iPod');
+                } else if (currentMenu === 'Songs' || currentMenu === 'I Sometimes Think' ||
+                           currentMenu === 'Steve Baskin and the Fourteens' ||
+                           currentMenu === 'c00l songz' || currentMenu === 'Americana') {
+                    renderMenu(songs, currentMenu);
+                } else if (subMenus[currentMenu]) {
+                    renderMenu(subMenus[currentMenu], currentMenu);
+                }
+            }
+        }
+
+        // Click wheel touch/mouse tracking for scrolling
+        let wheelElement = document.querySelector('.click-wheel');
+        let isDragging = false;
+        let lastAngle = null;
+
+        function getAngle(x, y, rect) {
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            return Math.atan2(y - centerY, x - centerX);
+        }
+
+        wheelElement.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.center-button') || e.target.closest('.wheel-button')) {
+                return;
+            }
+            isDragging = true;
+            const rect = wheelElement.getBoundingClientRect();
+            lastAngle = getAngle(e.clientX, e.clientY, rect);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const rect = wheelElement.getBoundingClientRect();
+            const currentAngle = getAngle(e.clientX, e.clientY, rect);
+
+            if (lastAngle !== null) {
+                let delta = currentAngle - lastAngle;
+
+                // Handle wraparound
+                if (delta > Math.PI) delta -= 2 * Math.PI;
+                if (delta < -Math.PI) delta += 2 * Math.PI;
+
+                if (Math.abs(delta) > 0.15) {
+                    if (delta > 0) {
+                        scrollDown();
+                    } else {
+                        scrollUp();
+                    }
+                    lastAngle = currentAngle;
+                }
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            lastAngle = null;
+        });
+
+        // Audio event listeners
+        audioPlayer.addEventListener('timeupdate', updateProgress);
+        audioPlayer.addEventListener('ended', () => {
+            nextSong();
+        });
+
+        // Button handlers
+        document.getElementById('centerBtn').addEventListener('click', enterMenu);
+        document.getElementById('menuBtn').addEventListener('click', goBack);
+        document.getElementById('playBtn').addEventListener('click', () => {
+            if (viewMode === 'nowplaying') {
+                togglePlayPause();
+            }
+        });
+        document.getElementById('forwardBtn').addEventListener('click', () => {
+            if (viewMode === 'nowplaying') {
+                nextSong();
+            } else if (viewMode === 'photoview') {
+                // Next photo
+                currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                renderPhotoView(currentPhotoIndex);
+                playClick();
+            } else {
+                scrollDown();
+            }
+        });
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (viewMode === 'nowplaying') {
+                previousSong();
+            } else if (viewMode === 'photoview') {
+                // Previous photo
+                currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+                renderPhotoView(currentPhotoIndex);
+                playClick();
+            } else {
+                scrollUp();
+            }
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowUp':
+                    if (viewMode === 'nowplaying') {
+                        previousSong();
+                    } else if (viewMode === 'photoview') {
+                        currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+                        renderPhotoView(currentPhotoIndex);
+                        playClick();
+                    } else {
+                        scrollUp();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'ArrowDown':
+                    if (viewMode === 'nowplaying') {
+                        nextSong();
+                    } else if (viewMode === 'photoview') {
+                        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                        renderPhotoView(currentPhotoIndex);
+                        playClick();
+                    } else {
+                        scrollDown();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'ArrowLeft':
+                    if (viewMode === 'nowplaying') {
+                        previousSong();
+                    } else if (viewMode === 'photoview') {
+                        currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+                        renderPhotoView(currentPhotoIndex);
+                        playClick();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'ArrowRight':
+                    if (viewMode === 'nowplaying') {
+                        nextSong();
+                    } else if (viewMode === 'photoview') {
+                        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                        renderPhotoView(currentPhotoIndex);
+                        playClick();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'Enter':
+                    enterMenu();
+                    e.preventDefault();
+                    break;
+                case ' ':
+                    if (viewMode === 'nowplaying') {
+                        togglePlayPause();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'Escape':
+                case 'Backspace':
+                    goBack();
+                    e.preventDefault();
+                    break;
+            }
+        });
+
+        // Initialize
+        renderMenu(mainMenu);
+    </script>
+</body>
+</html>
