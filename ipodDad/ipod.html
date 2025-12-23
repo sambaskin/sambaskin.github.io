@@ -81,7 +81,7 @@
             padding: 8px 0;
             overflow-y: auto;
             overflow-x: hidden;
-            height: calc(100% - 35px);
+            height: calc(100% - 15px);
         }
 
         .menu-container::-webkit-scrollbar {
@@ -291,7 +291,7 @@
             display: flex;
             flex-direction: column;
             height: calc(100% - 35px);
-            overflow: hidden;
+            overflow-y: auto;
         }
 
         .track-number {
@@ -299,12 +299,14 @@
             font-weight: 700;
             color: #555;
             margin-bottom: 8px;
+            flex-shrink: 0;
         }
 
         .now-playing-content {
             display: flex;
             gap: 12px;
             margin-bottom: 12px;
+            flex-shrink: 0;
         }
 
         .album-art-container {
@@ -354,6 +356,8 @@
         .progress-bar {
             width: 100%;
             height: 20px;
+            min-height: 20px;
+            flex-shrink: 0;
             background: linear-gradient(to bottom, #d0d0d0, #a8a8a8, #d0d0d0);
             border-radius: 10px;
             margin: 0 0 6px;
@@ -366,23 +370,36 @@
 
         .progress-fill {
             position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
+            top: 2px;
+            left: 2px;
+            height: calc(100% - 4px);
             background: linear-gradient(to bottom, #7fc2ff, #5b9dd9, #4a8cc8, #5b9dd9, #7fc2ff);
             width: 0%;
-            border-radius: 8px;
+            border-radius: 6px;
             pointer-events: none;
             z-index: 2;
+            display: block;
         }
 
         .time-display {
-            display: flex;
+            display: flex !important;
             justify-content: space-between;
-            font-size: 11px;
-            color: #000;
+            font-size: 12px;
+            color: #000 !important;
             font-weight: 700;
-            padding: 0 2px;
+            padding: 4px 2px;
+            flex-shrink: 0;
+            min-height: 18px;
+            height: auto;
+            margin-top: 4px;
+            background: transparent;
+            position: relative;
+            z-index: 10;
+        }
+
+        .time-display span {
+            color: #000;
+            display: block;
         }
 
         .note-view {
@@ -491,8 +508,8 @@
             { name: 'Music' },
             { name: 'Photos' },
             { name: 'Notes' },
-            { name: 'Settings' },
-            { name: 'Shuffle Songs' }
+            { name: 'Shuffle Songs' },
+            { name: 'Now Playing' }
         ];
 
         const subMenus = {
@@ -517,13 +534,6 @@
             ],
             'Photos': [
                 { name: 'Photo Library' }
-            ],
-            'Settings': [
-                { name: 'About' },
-                { name: 'Main Menu' },
-                { name: 'Backlight' },
-                { name: 'Brightness' },
-                { name: 'Date & Time' }
             ]
         };
 
@@ -568,8 +578,8 @@
                                    currentMenu === 'Steve Baskin and the Fourteens' ||
                                    currentMenu === 'c00l songz' || currentMenu === 'Americana';
 
-                // Show arrow if: has a submenu, OR is not a song and not "Shuffle Songs"
-                const showArrow = !isSongList && item.name !== 'Shuffle Songs';
+                // Show arrow if: has a submenu, OR is not a song and not "Shuffle Songs" and not "Now Playing"
+                const showArrow = !isSongList && item.name !== 'Shuffle Songs' && item.name !== 'Now Playing';
 
                 menuItem.innerHTML = `
                     <span class="menu-item-text">${item.name}</span>
@@ -956,6 +966,11 @@
                     currentMenu = 'Notes';
                     selectedIndex = 0;
                     renderNotesList();
+                } else if (selected.name === 'Now Playing') {
+                    // Go to now playing
+                    if (currentSongIndex !== -1) {
+                        renderNowPlaying();
+                    }
                 } else if (subMenus[selected.name]) {
                     menuHistory.push({ menu: currentMenu, index: selectedIndex });
                     currentMenu = selected.name;
@@ -1193,7 +1208,9 @@
             switch(e.key) {
                 case 'ArrowUp':
                     if (viewMode === 'nowplaying') {
-                        previousSong();
+                        // Skip backward 5 seconds
+                        audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 5);
+                        playClick();
                     } else if (viewMode === 'photoview') {
                         currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
                         renderPhotoView(currentPhotoIndex);
@@ -1205,7 +1222,13 @@
                     break;
                 case 'ArrowDown':
                     if (viewMode === 'nowplaying') {
-                        nextSong();
+                        // Skip forward 5 seconds
+                        if (audioPlayer.duration) {
+                            audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 5);
+                        } else {
+                            audioPlayer.currentTime += 5;
+                        }
+                        playClick();
                     } else if (viewMode === 'photoview') {
                         currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
                         renderPhotoView(currentPhotoIndex);
