@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>iPod Simulator</title>
     <style>
         * {
@@ -11,13 +13,21 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             background: #020e18;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
         }
 
@@ -33,13 +43,15 @@
 
         .screen {
             width: 100%;
-            height: 240px;
+            height: 260px;
             background: #e8eaed;
             border-radius: 12px;
             border: 3px solid #333;
             position: relative;
             overflow: hidden;
             box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
         }
 
         .screen-header {
@@ -53,6 +65,7 @@
             align-items: center;
             border-bottom: 1px solid #999;
             position: relative;
+            flex-shrink: 0;
         }
 
         .title {
@@ -81,7 +94,9 @@
             padding: 8px 0;
             overflow-y: auto;
             overflow-x: hidden;
-            height: calc(100% - 15px);
+            flex: 1;
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
         }
 
         .menu-container::-webkit-scrollbar {
@@ -90,7 +105,6 @@
 
         .menu-container::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.05);
-            border-radius: 5px;
             margin: 8px 0;
         }
 
@@ -103,7 +117,6 @@
                 #6db3f2 65%,
                 #5b9dd9 85%,
                 #3d7eb8 100%);
-            border-radius: 5px;
             border: 1px solid rgba(0, 0, 0, 0.15);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
@@ -152,9 +165,9 @@
         }
 
         .menu-item-arrow {
-            width: 10px;
-            height: 10px;
-            filter: brightness(0) saturate(100%) invert(33%);
+            width: 12px;
+            height: 12px;
+            filter: brightness(0);
         }
 
         .menu-item.selected .menu-item-arrow {
@@ -162,18 +175,17 @@
         }
 
         .controls {
-            margin-top: 30px;
+            margin-top: 20px;
             position: relative;
         }
 
         .click-wheel {
             width: 220px;
             height: 220px;
-            background: linear-gradient(145deg, #e8e8e8, #ffffff);
+            background: #B4C0CC;
             border-radius: 50%;
             margin: 0 auto;
             position: relative;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.5);
         }
 
         .click-wheel-inner {
@@ -181,11 +193,10 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             background: #ddd;
             border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .center-button {
@@ -193,18 +204,18 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+            width: 80px;
+            height: 80px;
+            background: #ffffff;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
             transition: all 0.1s;
         }
 
         .center-button:active {
             transform: translate(-50%, -50%) scale(0.95);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .wheel-button {
@@ -215,7 +226,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #555;
+            color: #FFFFFF;
             font-weight: 600;
             font-size: 12px;
             user-select: none;
@@ -228,38 +239,38 @@
         }
 
         .menu-btn {
-            top: 15px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .forward-btn {
-            right: 15px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .play-btn {
-            bottom: 15px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .back-btn {
-            left: 15px;
+            left: 10px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .wheel-button img {
-            width: 19px;
-            height: 19px;
+            width: 16px;
+            height: 16px;
             pointer-events: none;
-            filter: brightness(0) saturate(100%) invert(33%);
+            filter: brightness(0) invert(1);
         }
 
         .wheel-button:active img {
-            filter: brightness(0) saturate(100%);
+            filter: brightness(0) invert(0.8);
         }
 
         .menu-btn::before {
@@ -291,7 +302,7 @@
             display: flex;
             flex-direction: column;
             height: calc(100% - 35px);
-            overflow-y: auto;
+            overflow: hidden;
         }
 
         .track-number {
@@ -359,10 +370,8 @@
             min-height: 20px;
             flex-shrink: 0;
             background: linear-gradient(to bottom, #d0d0d0, #a8a8a8, #d0d0d0);
-            border-radius: 10px;
             margin: 0 0 6px;
-            border: 2px solid #888;
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.3);
             position: relative;
             cursor: pointer;
             overflow: hidden;
@@ -370,12 +379,11 @@
 
         .progress-fill {
             position: absolute;
-            top: 2px;
-            left: 2px;
-            height: calc(100% - 4px);
+            top: 0;
+            left: 0;
+            height: 100%;
             background: linear-gradient(to bottom, #7fc2ff, #5b9dd9, #4a8cc8, #5b9dd9, #7fc2ff);
             width: 0%;
-            border-radius: 6px;
             pointer-events: none;
             z-index: 2;
             display: block;
@@ -422,6 +430,41 @@
             justify-content: center;
             padding: 10px;
             background: #000;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .photo-view::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .photo-view::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            margin: 8px 0;
+        }
+
+        .photo-view::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg,
+                #3d7eb8 0%,
+                #5b9dd9 15%,
+                #6db3f2 35%,
+                #7fc2ff 50%,
+                #6db3f2 65%,
+                #5b9dd9 85%,
+                #3d7eb8 100%);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .photo-view::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg,
+                #2d6ea8 0%,
+                #4a8cc8 15%,
+                #5ca2e1 35%,
+                #6eb1f0 50%,
+                #5ca2e1 65%,
+                #4a8cc8 85%,
+                #2d6ea8 100%);
         }
 
         .photo-view img {
@@ -878,8 +921,15 @@
         }
 
         function scrollUp() {
-            if (viewMode === 'nowplaying' || viewMode === 'noteview') return;
             playClick();
+
+            if (viewMode === 'nowplaying') {
+                // Skip backward 5 seconds
+                audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 5);
+                return;
+            }
+
+            if (viewMode === 'noteview') return;
 
             if (viewMode === 'photoview') {
                 // Previous photo
@@ -910,8 +960,19 @@
         }
 
         function scrollDown() {
-            if (viewMode === 'nowplaying' || viewMode === 'noteview') return;
             playClick();
+
+            if (viewMode === 'nowplaying') {
+                // Skip forward 5 seconds
+                if (audioPlayer.duration) {
+                    audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 5);
+                } else {
+                    audioPlayer.currentTime += 5;
+                }
+                return;
+            }
+
+            if (viewMode === 'noteview') return;
 
             if (viewMode === 'photoview') {
                 // Next photo
@@ -1109,6 +1170,7 @@
         let wheelElement = document.querySelector('.click-wheel');
         let isDragging = false;
         let lastAngle = null;
+        let scrollThreshold = 0.08; // More sensitive scrolling
 
         function getAngle(x, y, rect) {
             const centerX = rect.left + rect.width / 2;
@@ -1116,20 +1178,21 @@
             return Math.atan2(y - centerY, x - centerX);
         }
 
-        wheelElement.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.center-button') || e.target.closest('.wheel-button')) {
-                return;
+        function handleWheelStart(x, y, target) {
+            if (target.closest('.center-button') || target.closest('.wheel-button')) {
+                return false;
             }
             isDragging = true;
             const rect = wheelElement.getBoundingClientRect();
-            lastAngle = getAngle(e.clientX, e.clientY, rect);
-        });
+            lastAngle = getAngle(x, y, rect);
+            return true;
+        }
 
-        document.addEventListener('mousemove', (e) => {
+        function handleWheelMove(x, y) {
             if (!isDragging) return;
 
             const rect = wheelElement.getBoundingClientRect();
-            const currentAngle = getAngle(e.clientX, e.clientY, rect);
+            const currentAngle = getAngle(x, y, rect);
 
             if (lastAngle !== null) {
                 let delta = currentAngle - lastAngle;
@@ -1138,7 +1201,7 @@
                 if (delta > Math.PI) delta -= 2 * Math.PI;
                 if (delta < -Math.PI) delta += 2 * Math.PI;
 
-                if (Math.abs(delta) > 0.15) {
+                if (Math.abs(delta) > scrollThreshold) {
                     if (delta > 0) {
                         scrollDown();
                     } else {
@@ -1147,11 +1210,44 @@
                     lastAngle = currentAngle;
                 }
             }
+        }
+
+        function handleWheelEnd() {
+            isDragging = false;
+            lastAngle = null;
+        }
+
+        // Mouse events
+        wheelElement.addEventListener('mousedown', (e) => {
+            handleWheelStart(e.clientX, e.clientY, e.target);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            handleWheelMove(e.clientX, e.clientY);
         });
 
         document.addEventListener('mouseup', () => {
-            isDragging = false;
-            lastAngle = null;
+            handleWheelEnd();
+        });
+
+        // Touch events
+        wheelElement.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            if (handleWheelStart(touch.clientX, touch.clientY, e.target)) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length > 0) {
+                const touch = e.touches[0];
+                handleWheelMove(touch.clientX, touch.clientY);
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', () => {
+            handleWheelEnd();
         });
 
         // Audio event listeners
@@ -1170,19 +1266,53 @@
             nextSong();
         });
 
-        // Button handlers
-        document.getElementById('centerBtn').addEventListener('click', enterMenu);
-        document.getElementById('menuBtn').addEventListener('click', goBack);
-        document.getElementById('playBtn').addEventListener('click', () => {
+        // Button handlers - only activate on tap, not drag
+        let buttonTouchStart = {};
+
+        function addButtonHandler(id, handler) {
+            const btn = document.getElementById(id);
+
+            // Mouse click
+            btn.addEventListener('click', (e) => {
+                if (!isDragging) {
+                    handler();
+                }
+            });
+
+            // Touch events
+            btn.addEventListener('touchstart', (e) => {
+                buttonTouchStart[id] = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                e.stopPropagation();
+            }, { passive: true });
+
+            btn.addEventListener('touchend', (e) => {
+                if (!isDragging && buttonTouchStart[id]) {
+                    const touch = e.changedTouches[0];
+                    const dx = touch.clientX - buttonTouchStart[id].x;
+                    const dy = touch.clientY - buttonTouchStart[id].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    // Only activate if finger didn't move much (tap, not drag)
+                    if (distance < 10) {
+                        handler();
+                    }
+                }
+                buttonTouchStart[id] = null;
+                e.preventDefault();
+            }, { passive: false });
+        }
+
+        addButtonHandler('centerBtn', enterMenu);
+        addButtonHandler('menuBtn', goBack);
+        addButtonHandler('playBtn', () => {
             if (viewMode === 'nowplaying') {
                 togglePlayPause();
             }
         });
-        document.getElementById('forwardBtn').addEventListener('click', () => {
+        addButtonHandler('forwardBtn', () => {
             if (viewMode === 'nowplaying') {
                 nextSong();
             } else if (viewMode === 'photoview') {
-                // Next photo
                 currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
                 renderPhotoView(currentPhotoIndex);
                 playClick();
@@ -1190,11 +1320,10 @@
                 scrollDown();
             }
         });
-        document.getElementById('backBtn').addEventListener('click', () => {
+        addButtonHandler('backBtn', () => {
             if (viewMode === 'nowplaying') {
                 previousSong();
             } else if (viewMode === 'photoview') {
-                // Previous photo
                 currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
                 renderPhotoView(currentPhotoIndex);
                 playClick();
