@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>Cloud AR</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html, body { width:100%; height:100%; overflow:hidden; background:#000; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#e0e6f0; }
+
+    /* ── Layout ── */
+    #cam-section {
+      position:fixed; top:0; left:0; right:0;
+      height:50svh;          /* safe viewport height for iPhone notch */
+      background:#000; overflow:hidden;
+    }
+    #map-section {
+      position:fixed; bottom:0; left:0; right:0;
+      top:50svh;
+      background:#0f1117;
+    }
+
+    /* ── Camera ── */
+    #cam {
+      width:100%; height:100%;
+      object-fit:cover;
+      /* iOS sometimes delivers landscape video in portrait; flip via transform if needed */
+    }
+
+    /* ── HUD overlay (sits above video) ── */
+    #hud {
+      position:absolute; inset:0;
+      pointer-events:none;
+    }
+
+    /* Heading */
+    #hud-heading {
+      position:absolute; top:max(16px, env(safe-area-inset-top));
+      left:50%; transform:translateX(-50%);
+      text-align:center;
+      text-shadow:0 1px 8px rgba(0,0,0,.9);
+    }
+    #hud-dir  { font-size:1rem; font-weight:700; color:#6eb5ff; letter-spacing:.08em; }
+    #hud-deg  { font-size:2.8rem; font-weight:800; color:#fff; line-height:1; }
+
+    /* Crosshair */
+    #crosshair {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      opacity:.55;
+    }
+
+    /* Horizon canvas */
+    #horizon { position:absolute; inset:0; width:100%; height:100%; }
+
+    /* Bottom stat bar */
+    #hud-stats {
+      position:absolute; bottom:max(12px, env(safe-area-inset-bottom));
+      left:0; right:0;
+      display:flex; justify-content:space-around; padding:0 12px;
+    }
+    .hstat { text-align:center; text-shadow:0 1px 6px rgba(0,0,0,.95); }
+    .hstat-lbl { font-size:.58rem; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.06em; }
+    .hstat-val { font-size:.88rem; font-weight:600; color:#fff; }
+
+    /* ── Shutter button ── */
+    #shutter {
+      position:fixed;
+      top:calc(50svh - 34px);   /* straddles the boundary */
+      left:50%; transform:translateX(-50%);
+      z-index:900;
+      width:68px; height:68px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.85);
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(12px) saturate(1.5);
+      -webkit-backdrop-filter:blur(12px) saturate(1.5);
+      cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:transform .08s, background .08s;
+      box-shadow:0 2px 16px rgba(0,0,0,.5);
+    }
+    #shutter:active { transform:translateX(-50%) scale(.88); background:rgba(255,255,255,.3); }
+    #shutter-inner {
+      width:52px; height:52px; border-radius:50%;
+      background:rgba(255,255,255,.9);
+      transition:background .08s;
+    }
+    #shutter:active #shutter-inner { background:#fff; }
+
+    /* ── Map ── */
+    #map { width:100%; height:100%; }
+
+    /* Custom pane keeps GOES filter isolated from base tiles */
+    /* (set in JS) */
+
+    /* GOES timestamp chip */
+    #goes-chip {
+      position:absolute; bottom:max(10px,env(safe-area-inset-bottom)); left:10px;
+      z-index:500;
+      background:rgba(16,22,36,.88);
+      border:1px solid #2a3347;
+      border-radius:10px;
+      padding:4px 10px;
+      font-size:.68rem; color:#6eb5ff;
+      display:flex; align-items:center; gap:6px;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      pointer-events:none;
+    }
+    .goes-dot {
+      width:7px; height:7px; border-radius:50%;
+      background:#6eb5ff;
+      animation:blink 3s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    /* Refresh button */
+    #refresh-btn {
+      position:absolute; bottom:max(10px,env(safe-area-inset-bottom)); right:10px;
+      z-index:500;
+      background:rgba(16,22,36,.88); border:1px solid #2a3347;
+      border-radius:10px; padding:5px 11px;
+      font-size:.68rem; color:#6eb5ff; cursor:pointer;
+      backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    }
+
+    /* ── Flash ── */
+    #flash {
+      position:fixed; inset:0; background:#fff;
+      opacity:0; pointer-events:none; z-index:9000;
+      transition:opacity .08s;
+    }
+    #flash.on { opacity:.75; }
+
+    /* ── Permission screen ── */
+    #perm {
+      position:fixed; inset:0; z-index:9999;
+      background:#0f1117;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      padding:32px; text-align:center;
+    }
+    #perm h1 { font-size:1.6rem; font-weight:800; color:#e0e6f0; margin-bottom:10px; }
+    #perm p  { font-size:.88rem; color:#6b7a99; line-height:1.65; max-width:320px; }
+    #perm .note { font-size:.72rem; color:#3a4560; margin-top:10px; }
+    #start {
+      margin-top:28px;
+      background:#1e3a5f; color:#6eb5ff;
+      border:1px solid #2a5080; border-radius:14px;
+      padding:15px 36px; font-size:1rem; font-weight:700;
+      cursor:pointer; width:100%; max-width:280px;
+    }
+    #perm-err { margin-top:14px; font-size:.78rem; color:#ff6060; display:none; }
+
+    /* ── Shot markers ── */
+    .shot-label {
+      background:#ff9040; color:#fff; border-radius:50%;
+      width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+      font-size:10px; font-weight:800; border:2px solid #fff;
+      box-shadow:0 2px 6px rgba(0,0,0,.5);
+    }
+    .shot-popup b { color:#ff9040; }
+    .shot-popup { font-size:.8rem; line-height:1.6; }
+  </style>
+</head>
+<body>
+
+<!-- Permission screen -->
+<div id="perm">
+  <h1>Cloud AR</h1>
+  <p>Point your camera at the sky. Real-time GOES satellite cloud data appears below, synced to your GPS location.</p>
+  <p class="note">⚠️ Requires HTTPS or local network (e.g. <code>python3 -m http.server</code> then open on iPhone via your Mac's IP).</p>
+  <button id="start" onclick="boot()">Enable Camera &amp; GPS</button>
+  <div id="perm-err"></div>
+</div>
+
+<!-- Flash effect -->
+<div id="flash"></div>
+
+<!-- ── Camera section ── -->
+<div id="cam-section">
+  <video id="cam" autoplay playsinline muted></video>
+
+  <div id="hud">
+    <div id="hud-heading">
+      <div id="hud-dir">—</div>
+      <div id="hud-deg">—°</div>
+    </div>
+
+    <div id="crosshair">
+      <svg width="54" height="54" viewBox="0 0 54 54" fill="none">
+        <circle cx="27" cy="27" r="20" stroke="white" stroke-width="1.2" opacity=".6"/>
+        <line x1="27" y1="4"  x2="27" y2="16" stroke="white" stroke-width="1.4"/>
+        <line x1="27" y1="38" x2="27" y2="50" stroke="white" stroke-width="1.4"/>
+        <line x1="4"  y1="27" x2="16" y2="27" stroke="white" stroke-width="1.4"/>
+        <line x1="38" y1="27" x2="50" y2="27" stroke="white" stroke-width="1.4"/>
+        <circle cx="27" cy="27" r="2.5" fill="white" opacity=".7"/>
+      </svg>
+    </div>
+
+    <canvas id="horizon"></canvas>
+
+    <div id="hud-stats">
+      <div class="hstat"><div class="hstat-lbl">Heading</div><div class="hstat-val" id="s-hdg">—</div></div>
+      <div class="hstat"><div class="hstat-lbl">Tilt</div>   <div class="hstat-val" id="s-tlt">—</div></div>
+      <div class="hstat"><div class="hstat-lbl">Altitude</div><div class="hstat-val" id="s-alt">—</div></div>
+      <div class="hstat"><div class="hstat-lbl">±GPS</div>   <div class="hstat-val" id="s-acc">—</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Shutter -->
+<button id="shutter" onclick="shoot()" aria-label="Capture heading">
+  <div id="shutter-inner"></div>
+</button>
+
+<!-- ── Map section ── -->
+<div id="map-section">
+  <div id="map"></div>
+  <div id="goes-chip"><div class="goes-dot"></div><span id="goes-time">GOES · loading…</span></div>
+  <button id="refresh-btn" onclick="refreshGOES()">↺ Refresh</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// State
+// ─────────────────────────────────────────────────────────
+let gLat=null, gLon=null, gAlt=null, gAcc=null;
+let gHeading=0, gTilt=0, gRoll=0;
+let gpsMarker=null, liveRay=null;
+let shotCount=0;
+let orientationReady=false;
+
+// ─────────────────────────────────────────────────────────
+// Map
+// ─────────────────────────────────────────────────────────
+const map = L.map('map', {
+  center:[40.75,-74.0], zoom:9,
+  zoomControl:false, attributionControl:false,
+});
+
+// Base
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  {subdomains:'abcd',maxZoom:19,pane:'tilePane'}).addTo(map);
+
+// Dedicated pane for GOES so CSS filter doesn't bleed onto base tiles
+map.createPane('goesPane');
+map.getPane('goesPane').style.zIndex = 300;
+
+let goesLayer = L.tileLayer(
+  'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/{z}/{x}/{y}.png',
+  {pane:'goesPane', opacity:.88, maxNativeZoom:10, maxZoom:16}
+).addTo(map);
+
+// False color on the dedicated pane
+map.getPane('goesPane').style.filter =
+  'saturate(0) sepia(1) saturate(7) hue-rotate(162deg) brightness(1.1)';
+
+// ─────────────────────────────────────────────────────────
+// GOES refresh
+// ─────────────────────────────────────────────────────────
+function refreshGOES() {
+  const el = document.getElementById('goes-time');
+  el.textContent = 'GOES · refreshing…';
+  // Append timestamp to bust IEM's edge cache
+  goesLayer.setUrl(
+    `https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/{z}/{x}/{y}.png?_=${Date.now()}`
+  );
+  goesLayer.redraw();
+  setTimeout(()=>{
+    el.textContent = 'GOES · ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  }, 2500);
+}
+refreshGOES();
+setInterval(refreshGOES, 15*60*1000);
+
+// ─────────────────────────────────────────────────────────
+// GPS
+// ─────────────────────────────────────────────────────────
+const myIcon = L.divIcon({
+  className:'',
+  html:`<div style="width:16px;height:16px;border-radius:50%;
+    background:#6eb5ff;border:2.5px solid #fff;
+    box-shadow:0 0 0 5px rgba(110,181,255,.25),0 0 12px #6eb5ff99;"></div>`,
+  iconSize:[16,16], iconAnchor:[8,8]
+});
+
+function onGPS(pos) {
+  gLat = pos.coords.latitude;
+  gLon = pos.coords.longitude;
+  gAlt = pos.coords.altitude;
+  gAcc = pos.coords.accuracy;
+
+  if (!gpsMarker) {
+    gpsMarker = L.marker([gLat,gLon],{icon:myIcon,zIndexOffset:1000}).addTo(map);
+    map.setView([gLat,gLon], 9);
+  } else {
+    gpsMarker.setLatLng([gLat,gLon]);
+  }
+
+  document.getElementById('s-alt').textContent = gAlt!=null ? Math.round(gAlt)+'m' : '—';
+  document.getElementById('s-acc').textContent = gAcc!=null ? '±'+Math.round(gAcc)+'m' : '—';
+
+  updateLiveRay();
+}
+
+// ─────────────────────────────────────────────────────────
+// Device orientation
+// ─────────────────────────────────────────────────────────
+function onOrientation(e) {
+  // iOS: webkitCompassHeading counts clockwise from North (what we want)
+  // Android: alpha counts counter-clockwise from arbitrary reference
+  const raw = e.webkitCompassHeading ?? (360 - (e.alpha||0));
+  gHeading = ((raw % 360) + 360) % 360;
+  gTilt    = e.beta  ?? 0;   // front-to-back tilt
+  gRoll    = e.gamma ?? 0;   // left-to-right roll
+
+  document.getElementById('hud-dir').textContent = cardinal(gHeading);
+  document.getElementById('hud-deg').textContent = Math.round(gHeading) + '°';
+  document.getElementById('s-hdg').textContent   = Math.round(gHeading) + '°';
+  document.getElementById('s-tlt').textContent   = Math.round(gTilt)    + '°';
+
+  drawHorizon(gTilt, gRoll);
+  updateLiveRay();
+}
+
+// ─────────────────────────────────────────────────────────
+// Live heading ray on map
+// ─────────────────────────────────────────────────────────
+function updateLiveRay() {
+  if (gLat===null) return;
+  if (liveRay) map.removeLayer(liveRay);
+  const dest = destPoint(gLat, gLon, gHeading, 4);
+  liveRay = L.polyline([[gLat,gLon], dest], {
+    color:'#6eb5ff', weight:2, opacity:.6, dashArray:'5 4'
+  }).addTo(map);
+}
+
+// ─────────────────────────────────────────────────────────
+// Horizon line on camera HUD
+// ─────────────────────────────────────────────────────────
+function drawHorizon(beta, gamma) {
+  const cv = document.getElementById('horizon');
+  const W = cv.offsetWidth, H = cv.offsetHeight;
+  if (!W||!H) return;
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  // When beta=90 phone is vertical, camera faces horizon.
+  // Deviation from 90° is angle above/below horizon.
+  const elevDeg  = 90 - (beta||0);           // degrees camera is above horizon
+  const rollRad  = ((gamma||0)*Math.PI)/180;
+  const pixPerDeg = H / 55;                   // ~55° vertical FOV
+  const yOff = elevDeg * pixPerDeg;
+
+  const cx=W/2, cy=H/2+yOff;
+  const len=Math.hypot(W,H);
+  const cosR=Math.cos(rollRad), sinR=Math.sin(rollRad);
+
+  ctx.save();
+  ctx.strokeStyle='rgba(110,181,255,.45)';
+  ctx.lineWidth=1; ctx.setLineDash([10,6]);
+  ctx.beginPath();
+  ctx.moveTo(cx-len*cosR, cy+len*sinR);
+  ctx.lineTo(cx+len*cosR, cy-len*sinR);
+  ctx.stroke();
+
+  // Small elevation label
+  if (Math.abs(elevDeg) < 60) {
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(110,181,255,.6)';
+    ctx.font='10px -apple-system';
+    ctx.fillText((elevDeg>0?'+':'')+Math.round(elevDeg)+'°', cx+8, cy-4);
+  }
+  ctx.restore();
+}
+
+// ─────────────────────────────────────────────────────────
+// Shutter — capture heading shot
+// ─────────────────────────────────────────────────────────
+function shoot() {
+  if (gLat===null) return;
+
+  // Flash
+  const fl=document.getElementById('flash');
+  fl.classList.add('on');
+  setTimeout(()=>fl.classList.remove('on'),280);
+  if(navigator.vibrate) navigator.vibrate(40);
+
+  shotCount++;
+  const id = shotCount;
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const hdg = Math.round(gHeading);
+
+  // Frozen heading ray (orange, permanent)
+  const dest = destPoint(gLat, gLon, hdg, 6);
+  L.polyline([[gLat,gLon],dest],{
+    color:'#ff9040', weight:2.5, opacity:.9
+  }).addTo(map);
+
+  // Arrow tip
+  const arrTip = destPoint(gLat, gLon, hdg, 6.05);
+  const arrL   = destPoint(gLat, gLon, hdg-20, 5.5);
+  const arrR   = destPoint(gLat, gLon, hdg+20, 5.5);
+  L.polygon([arrTip,arrL,arrR],{
+    color:'#ff9040', fillColor:'#ff9040', fillOpacity:.9, weight:1
+  }).addTo(map);
+
+  // Shot marker
+  const icon = L.divIcon({
+    className:'',
+    html:`<div class="shot-label">${id}</div>`,
+    iconSize:[22,22], iconAnchor:[11,11]
+  });
+  L.marker([gLat,gLon],{icon,zIndexOffset:500})
+    .addTo(map)
+    .bindPopup(`<div class="shot-popup">
+      <b>Shot #${id}</b><br>
+      ${timeStr}<br>
+      Heading: <b>${hdg}°</b> ${cardinal(hdg)}<br>
+      Tilt: ${Math.round(gTilt)}°<br>
+      ${gAlt!=null?`Altitude: ${Math.round(gAlt)} m<br>`:''}
+      ${gLat.toFixed(5)}°, ${gLon.toFixed(5)}°
+    </div>`,{maxWidth:200});
+
+  map.panTo([gLat,gLon]);
+}
+
+// ─────────────────────────────────────────────────────────
+// Geo math
+// ─────────────────────────────────────────────────────────
+function destPoint(lat,lon,bearDeg,distKm) {
+  const R=6371, d=distKm/R;
+  const b=bearDeg*Math.PI/180;
+  const φ1=lat*Math.PI/180, λ1=lon*Math.PI/180;
+  const φ2=Math.asin(Math.sin(φ1)*Math.cos(d)+Math.cos(φ1)*Math.sin(d)*Math.cos(b));
+  const λ2=λ1+Math.atan2(Math.sin(b)*Math.sin(d)*Math.cos(φ1),Math.cos(d)-Math.sin(φ1)*Math.sin(φ2));
+  return [φ2*180/Math.PI, λ2*180/Math.PI];
+}
+
+function cardinal(deg) {
+  const d=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  return d[Math.round(((deg%360)+360)%360/22.5)%16];
+}
+
+// ─────────────────────────────────────────────────────────
+// Boot — request all permissions on user gesture
+// ─────────────────────────────────────────────────────────
+async function boot() {
+  const errEl = document.getElementById('perm-err');
+  errEl.style.display='none';
+  document.getElementById('start').textContent = 'Requesting…';
+  document.getElementById('start').disabled = true;
+
+  try {
+    // Camera
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:'environment', width:{ideal:1920}, height:{ideal:1080} },
+      audio:false
+    });
+    document.getElementById('cam').srcObject = stream;
+
+    // Orientation (iOS 13+ requires explicit permission request on user gesture)
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const res = await DeviceOrientationEvent.requestPermission();
+      if (res !== 'granted') throw new Error('Orientation permission denied');
+    }
+    window.addEventListener('deviceorientation', onOrientation, true);
+
+    // GPS
+    navigator.geolocation.watchPosition(onGPS, (e)=>{
+      document.getElementById('s-acc').textContent = 'ERR';
+      console.warn('GPS error:', e);
+    }, { enableHighAccuracy:true, maximumAge:3000, timeout:15000 });
+
+    // Done
+    document.getElementById('perm').style.display='none';
+
+  } catch(e) {
+    errEl.textContent = e.message + ' — ensure HTTPS and try again.';
+    errEl.style.display='block';
+    document.getElementById('start').textContent = 'Try Again';
+    document.getElementById('start').disabled = false;
+  }
+}
+</script>
+</body>
+</html>
