@@ -452,44 +452,59 @@ function cardinal(deg) {
 
 // ─────────────────────────────────────────────────────────
 // Boot — request all permissions on user gesture
+//
+// iOS IMPORTANT: DeviceOrientationEvent.requestPermission() must be
+// called synchronously inside the click handler — before any await.
+// We kick off both camera + orientation simultaneously (no await in
+// between) then handle results via Promise.all().
 // ─────────────────────────────────────────────────────────
-async function boot() {
-  const errEl = document.getElementById('perm-err');
-  errEl.style.display='none';
-  document.getElementById('start').textContent = 'Requesting…';
-  document.getElementById('start').disabled = true;
+function boot() {
+  const errEl  = document.getElementById('perm-err');
+  const startBtn = document.getElementById('start');
+  errEl.style.display = 'none';
+  startBtn.textContent = 'Requesting…';
+  startBtn.disabled = true;
 
-  try {
-    // Camera
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video:{ facingMode:'environment', width:{ideal:1920}, height:{ideal:1080} },
-      audio:false
+  // ── Fire both requests synchronously (same gesture tick) ──
+  const camPromise = navigator.mediaDevices.getUserMedia({
+    video:{ facingMode:'environment', width:{ideal:1920}, height:{ideal:1080} },
+    audio:false
+  });
+
+  // On iOS 13+ this MUST be called before any await / then-chain resolves
+  const orientPromise = (
+    typeof DeviceOrientationEvent !== 'undefined' &&
+    typeof DeviceOrientationEvent.requestPermission === 'function'
+  )
+    ? DeviceOrientationEvent.requestPermission()
+    : Promise.resolve('granted');
+
+  // ── Handle results together ──
+  Promise.all([camPromise, orientPromise])
+    .then(([stream, orientResult]) => {
+      // Camera
+      document.getElementById('cam').srcObject = stream;
+
+      // Orientation
+      if (orientResult === 'granted') {
+        window.addEventListener('deviceorientation', onOrientation, true);
+      }
+
+      // GPS (no permission dialog needed in same gesture — just start watching)
+      navigator.geolocation.watchPosition(onGPS, (e) => {
+        document.getElementById('s-acc').textContent = 'ERR';
+        console.warn('GPS error:', e.message);
+      }, { enableHighAccuracy:true, maximumAge:3000, timeout:15000 });
+
+      // Hide permission screen
+      document.getElementById('perm').style.display = 'none';
+    })
+    .catch(e => {
+      errEl.textContent = e.message;
+      errEl.style.display = 'block';
+      startBtn.textContent = 'Try Again';
+      startBtn.disabled = false;
     });
-    document.getElementById('cam').srcObject = stream;
-
-    // Orientation (iOS 13+ requires explicit permission request on user gesture)
-    if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-      const res = await DeviceOrientationEvent.requestPermission();
-      if (res !== 'granted') throw new Error('Orientation permission denied');
-    }
-    window.addEventListener('deviceorientation', onOrientation, true);
-
-    // GPS
-    navigator.geolocation.watchPosition(onGPS, (e)=>{
-      document.getElementById('s-acc').textContent = 'ERR';
-      console.warn('GPS error:', e);
-    }, { enableHighAccuracy:true, maximumAge:3000, timeout:15000 });
-
-    // Done
-    document.getElementById('perm').style.display='none';
-
-  } catch(e) {
-    errEl.textContent = e.message + ' — ensure HTTPS and try again.';
-    errEl.style.display='block';
-    document.getElementById('start').textContent = 'Try Again';
-    document.getElementById('start').disabled = false;
-  }
 }
 </script>
 </body>
