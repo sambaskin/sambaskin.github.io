@@ -157,6 +157,35 @@
     }
     #perm-err { margin-top:14px; font-size:.78rem; color:#ff6060; display:none; }
 
+    /* ── Cloud filter bar ── */
+    #filter-bar {
+      position:absolute; top:8px; left:8px; right:8px;
+      z-index:500;
+      background:rgba(16,22,36,.88);
+      border:1px solid #2a3347;
+      border-radius:12px;
+      padding:8px 12px;
+      display:flex; align-items:center; gap:10px;
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    }
+    #filter-bar svg { flex-shrink:0; opacity:.7; }
+    #filter-slider {
+      flex:1; -webkit-appearance:none; appearance:none;
+      height:4px; border-radius:2px;
+      background:linear-gradient(to right,#6eb5ff var(--pct,20%),#2a3347 var(--pct,20%));
+      outline:none; cursor:pointer;
+    }
+    #filter-slider::-webkit-slider-thumb {
+      -webkit-appearance:none; appearance:none;
+      width:20px; height:20px; border-radius:50%;
+      background:#6eb5ff; border:2px solid #fff;
+      box-shadow:0 1px 6px rgba(0,0,0,.5);
+    }
+    #filter-label {
+      font-size:.65rem; color:#6b7a99; white-space:nowrap;
+      min-width:60px; text-align:right;
+    }
+
     /* ── Shot markers ── */
     .shot-label {
       background:#ff9040; color:#fff; border-radius:50%;
@@ -222,6 +251,16 @@
 <!-- ── Map section ── -->
 <div id="map-section">
   <div id="map"></div>
+  <!-- Cloud density filter -->
+  <div id="filter-bar">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M1 3h14M3 8h10M6 13h4" stroke="#6eb5ff" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <input type="range" id="filter-slider" min="0" max="100" value="15"
+           oninput="onFilterSlide(this.value)" ontouchstart="event.stopPropagation()" />
+    <span id="filter-label">Light+</span>
+  </div>
+
   <div id="goes-chip"><div class="goes-dot"></div><span id="goes-time">GOES · loading…</span></div>
   <button id="refresh-btn" onclick="refreshGOES()">↺ Refresh</button>
 </div>
@@ -237,6 +276,78 @@ let shotCount=0;
 let orientationReady=false;
 
 // ─────────────────────────────────────────────────────────
+// Cloud filter threshold (0–255 brightness)
+// Slider 0–100 maps to brightness threshold 0–200
+// ─────────────────────────────────────────────────────────
+let cloudThreshold = 38; // default: cut thin haze, keep real clouds
+
+const FILTER_LABELS = ['All','Light+','Scattered+','Broken+','Overcast+','Dense only'];
+
+function onFilterSlide(val) {
+  const v = +val;
+  cloudThreshold = Math.round(v * 2);  // 0–100 → 0–200
+  // Track gradient fill on slider
+  document.getElementById('filter-slider').style.setProperty('--pct', v + '%');
+  // Label
+  const idx = Math.min(Math.floor(v / 20), FILTER_LABELS.length - 1);
+  document.getElementById('filter-label').textContent = FILTER_LABELS[idx];
+  // Redraw tiles with new threshold
+  if (goesLayer) goesLayer.redraw();
+}
+
+// ─────────────────────────────────────────────────────────
+// False-color + threshold canvas tile layer
+// Pixels with brightness < cloudThreshold → transparent
+// ─────────────────────────────────────────────────────────
+function falseColor(br) {
+  if (br < cloudThreshold) return [0, 0, 0, 0];   // cut out below threshold
+  const t = Math.min((br - cloudThreshold) / (220 - cloudThreshold), 1);
+  const stops = [
+    [0.00, [100, 220, 255, 160]],  // thin cirrus  → ice blue
+    [0.30, [ 40, 200, 200, 190]],  // mid cloud    → teal
+    [0.60, [100, 230,  60, 215]],  // thick mid    → lime
+    [0.80, [255, 200,  20, 230]],  // thick        → yellow/orange
+    [1.00, [255,  60,  20, 245]],  // deep convect → red
+  ];
+  let lo = stops[0], hi = stops[stops.length - 1];
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (t >= stops[i][0] && t <= stops[i+1][0]) { lo = stops[i]; hi = stops[i+1]; break; }
+  }
+  const s = (t - lo[0]) / ((hi[0] - lo[0]) || 1);
+  return lo[1].map((v, i) => Math.round(v + (hi[1][i] - v) * s));
+}
+
+const ColoredTileLayer = L.TileLayer.extend({
+  createTile(coords, done) {
+    const canvas = document.createElement('canvas');
+    const sz = this.getTileSize();
+    canvas.width = sz.x; canvas.height = sz.y;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      try {
+        const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < data.length; i += 4) {
+          const br = data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114;
+          const [r, g, b, a] = falseColor(br);
+          data[i] = r; data[i+1] = g; data[i+2] = b; data[i+3] = a;
+        }
+        ctx.putImageData(new ImageData(data, canvas.width, canvas.height), 0, 0);
+      } catch(e) {
+        // CORS blocked — fall back to CSS tint
+        canvas.style.filter = 'sepia(1) saturate(6) hue-rotate(165deg)';
+      }
+      done(null, canvas);
+    };
+    img.onerror = e => done(e, canvas);
+    img.src = this.getTileUrl(coords);
+    return canvas;
+  }
+});
+
+// ─────────────────────────────────────────────────────────
 // Map
 // ─────────────────────────────────────────────────────────
 const map = L.map('map', {
@@ -246,20 +357,16 @@ const map = L.map('map', {
 
 // Base
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  {subdomains:'abcd',maxZoom:19,pane:'tilePane'}).addTo(map);
+  {subdomains:'abcd', maxZoom:19}).addTo(map);
 
-// Dedicated pane for GOES so CSS filter doesn't bleed onto base tiles
-map.createPane('goesPane');
-map.getPane('goesPane').style.zIndex = 300;
-
-let goesLayer = L.tileLayer(
+// GOES canvas layer (threshold + false color applied per pixel)
+let goesLayer = new ColoredTileLayer(
   'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/{z}/{x}/{y}.png',
-  {pane:'goesPane', opacity:.88, maxNativeZoom:10, maxZoom:16}
+  {opacity:1, maxNativeZoom:10, maxZoom:16}
 ).addTo(map);
 
-// False color on the dedicated pane
-map.getPane('goesPane').style.filter =
-  'saturate(0) sepia(1) saturate(7) hue-rotate(162deg) brightness(1.1)';
+// Init slider visual
+document.getElementById('filter-slider').style.setProperty('--pct', '15%');
 
 // ─────────────────────────────────────────────────────────
 // GOES refresh
@@ -267,13 +374,13 @@ map.getPane('goesPane').style.filter =
 function refreshGOES() {
   const el = document.getElementById('goes-time');
   el.textContent = 'GOES · refreshing…';
-  // Append timestamp to bust IEM's edge cache
+  // Cache-bust so IEM serves a fresh tile
   goesLayer.setUrl(
     `https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/{z}/{x}/{y}.png?_=${Date.now()}`
   );
   goesLayer.redraw();
-  setTimeout(()=>{
-    el.textContent = 'GOES · ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  setTimeout(() => {
+    el.textContent = 'GOES · ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
   }, 2500);
 }
 refreshGOES();
