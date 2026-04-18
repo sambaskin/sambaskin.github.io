@@ -67,30 +67,6 @@
     .hstat-lbl { font-size:.58rem; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.06em; }
     .hstat-val { font-size:.88rem; font-weight:600; color:#fff; }
 
-    /* ── Shutter button ── */
-    #shutter {
-      position:fixed;
-      top:calc(50svh - 34px);   /* straddles the boundary */
-      left:50%; transform:translateX(-50%);
-      z-index:900;
-      width:68px; height:68px;
-      border-radius:50%;
-      border:3px solid rgba(255,255,255,.85);
-      background:rgba(255,255,255,.12);
-      backdrop-filter:blur(12px) saturate(1.5);
-      -webkit-backdrop-filter:blur(12px) saturate(1.5);
-      cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      transition:transform .08s, background .08s;
-      box-shadow:0 2px 16px rgba(0,0,0,.5);
-    }
-    #shutter:active { transform:translateX(-50%) scale(.88); background:rgba(255,255,255,.3); }
-    #shutter-inner {
-      width:52px; height:52px; border-radius:50%;
-      background:rgba(255,255,255,.9);
-      transition:background .08s;
-    }
-    #shutter:active #shutter-inner { background:#fff; }
 
     /* ── Map ── */
     #map { width:100%; height:100%; }
@@ -128,14 +104,6 @@
       font-size:.68rem; color:#6eb5ff; cursor:pointer;
       backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
     }
-
-    /* ── Flash ── */
-    #flash {
-      position:fixed; inset:0; background:#fff;
-      opacity:0; pointer-events:none; z-index:9000;
-      transition:opacity .08s;
-    }
-    #flash.on { opacity:.75; }
 
     /* ── Permission screen ── */
     #perm {
@@ -186,15 +154,6 @@
       min-width:60px; text-align:right;
     }
 
-    /* ── Shot markers ── */
-    .shot-label {
-      background:#ff9040; color:#fff; border-radius:50%;
-      width:22px; height:22px; display:flex; align-items:center; justify-content:center;
-      font-size:10px; font-weight:800; border:2px solid #fff;
-      box-shadow:0 2px 6px rgba(0,0,0,.5);
-    }
-    .shot-popup b { color:#ff9040; }
-    .shot-popup { font-size:.8rem; line-height:1.6; }
   </style>
 </head>
 <body>
@@ -207,9 +166,6 @@
   <button id="start" onclick="boot()">Enable Camera &amp; GPS</button>
   <div id="perm-err"></div>
 </div>
-
-<!-- Flash effect -->
-<div id="flash"></div>
 
 <!-- ── Camera section ── -->
 <div id="cam-section">
@@ -243,11 +199,6 @@
   </div>
 </div>
 
-<!-- Shutter -->
-<button id="shutter" onclick="shoot()" aria-label="Capture heading">
-  <div id="shutter-inner"></div>
-</button>
-
 <!-- ── Map section ── -->
 <div id="map-section">
   <div id="map"></div>
@@ -272,8 +223,6 @@
 let gLat=null, gLon=null, gAlt=null, gAcc=null;
 let gHeading=0, gTilt=0, gRoll=0;
 let gpsMarker=null, liveRay=null;
-let shotCount=0;
-let orientationReady=false;
 
 // ─────────────────────────────────────────────────────────
 // Cloud filter threshold (0–255 brightness)
@@ -369,19 +318,43 @@ let goesLayer = new ColoredTileLayer(
 document.getElementById('filter-slider').style.setProperty('--pct', '15%');
 
 // ─────────────────────────────────────────────────────────
-// GOES refresh
+// GOES refresh — reads real capture time from tile headers
+// IEM's tile server sets Last-Modified to the satellite scan time
 // ─────────────────────────────────────────────────────────
-function refreshGOES() {
+async function fetchGOESCaptureTime() {
+  try {
+    // Use a fixed low-zoom tile — small, fast, and always exists
+    const r = await fetch(
+      'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/4/5/7.png',
+      { method: 'HEAD', cache: 'no-store' }
+    );
+    const lm = r.headers.get('Last-Modified');
+    if (lm) {
+      const d = new Date(lm);
+      // Show in local time with timezone label
+      return d.toLocaleTimeString('en-US', {
+        hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+      });
+    }
+  } catch(e) { /* CORS or network failure */ }
+  return null;
+}
+
+async function refreshGOES() {
   const el = document.getElementById('goes-time');
-  el.textContent = 'GOES · refreshing…';
-  // Cache-bust so IEM serves a fresh tile
+  el.textContent = 'GOES · fetching…';
+
+  // Force new tiles from IEM
   goesLayer.setUrl(
     `https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/{z}/{x}/{y}.png?_=${Date.now()}`
   );
   goesLayer.redraw();
-  setTimeout(() => {
-    el.textContent = 'GOES · ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
-  }, 2500);
+
+  // Get actual satellite capture time from response headers
+  const captureTime = await fetchGOESCaptureTime();
+  el.textContent = captureTime
+    ? `Captured ${captureTime}`
+    : 'GOES · ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
 }
 refreshGOES();
 setInterval(refreshGOES, 15*60*1000);
@@ -486,58 +459,6 @@ function drawHorizon(beta, gamma) {
     ctx.fillText((elevDeg>0?'+':'')+Math.round(elevDeg)+'°', cx+8, cy-4);
   }
   ctx.restore();
-}
-
-// ─────────────────────────────────────────────────────────
-// Shutter — capture heading shot
-// ─────────────────────────────────────────────────────────
-function shoot() {
-  if (gLat===null) return;
-
-  // Flash
-  const fl=document.getElementById('flash');
-  fl.classList.add('on');
-  setTimeout(()=>fl.classList.remove('on'),280);
-  if(navigator.vibrate) navigator.vibrate(40);
-
-  shotCount++;
-  const id = shotCount;
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const hdg = Math.round(gHeading);
-
-  // Frozen heading ray (orange, permanent)
-  const dest = destPoint(gLat, gLon, hdg, 6);
-  L.polyline([[gLat,gLon],dest],{
-    color:'#ff9040', weight:2.5, opacity:.9
-  }).addTo(map);
-
-  // Arrow tip
-  const arrTip = destPoint(gLat, gLon, hdg, 6.05);
-  const arrL   = destPoint(gLat, gLon, hdg-20, 5.5);
-  const arrR   = destPoint(gLat, gLon, hdg+20, 5.5);
-  L.polygon([arrTip,arrL,arrR],{
-    color:'#ff9040', fillColor:'#ff9040', fillOpacity:.9, weight:1
-  }).addTo(map);
-
-  // Shot marker
-  const icon = L.divIcon({
-    className:'',
-    html:`<div class="shot-label">${id}</div>`,
-    iconSize:[22,22], iconAnchor:[11,11]
-  });
-  L.marker([gLat,gLon],{icon,zIndexOffset:500})
-    .addTo(map)
-    .bindPopup(`<div class="shot-popup">
-      <b>Shot #${id}</b><br>
-      ${timeStr}<br>
-      Heading: <b>${hdg}°</b> ${cardinal(hdg)}<br>
-      Tilt: ${Math.round(gTilt)}°<br>
-      ${gAlt!=null?`Altitude: ${Math.round(gAlt)} m<br>`:''}
-      ${gLat.toFixed(5)}°, ${gLon.toFixed(5)}°
-    </div>`,{maxWidth:200});
-
-  map.panTo([gLat,gLon]);
 }
 
 // ─────────────────────────────────────────────────────────
