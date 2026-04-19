@@ -369,7 +369,7 @@ async function refreshGOES() {
   // Get actual satellite capture time from response headers
   const captureTime = await fetchGOESCaptureTime();
   el.textContent = captureTime
-    ? `Captured ${captureTime}`
+    ? `GOES · Last update ${captureTime}`
     : 'GOES · ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
 }
 refreshGOES();
