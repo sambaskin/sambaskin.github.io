@@ -47,6 +47,24 @@
     #hud-dir  { font-size:1rem; font-weight:700; color:#6eb5ff; letter-spacing:.08em; }
     #hud-deg  { font-size:2.8rem; font-weight:800; color:#fff; line-height:1; }
 
+    /* Cloud heights chip (top-left of camera view) */
+    #cloud-heights {
+      position:absolute; top:max(14px, env(safe-area-inset-top)); left:12px;
+      background:rgba(16,22,36,.78);
+      border:1px solid #2a3347;
+      border-radius:10px;
+      padding:5px 10px;
+      font-size:.65rem; line-height:1.75;
+      color:#e0e6f0;
+      text-shadow:none;
+      backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+      pointer-events:none;
+      min-width:110px;
+    }
+    .ch-label { color:#6eb5ff; font-weight:700; letter-spacing:.04em; margin-right:5px; }
+    .ch-val   { color:#fff; font-weight:500; }
+    .ch-sub   { color:rgba(255,255,255,.45); font-size:.58rem; }
+
     /* Crosshair */
     #crosshair {
       position:absolute; top:50%; left:50%;
@@ -175,6 +193,12 @@
     <div id="hud-heading">
       <div id="hud-dir">—</div>
       <div id="hud-deg">—°</div>
+    </div>
+
+    <div id="cloud-heights">
+      <div><span class="ch-label">LGA</span><span class="ch-val" id="ch-lga">—</span></div>
+      <div><span class="ch-label">JFK</span><span class="ch-val" id="ch-jfk">—</span></div>
+      <div class="ch-sub" id="ch-age"></div>
     </div>
 
     <div id="crosshair">
@@ -316,6 +340,52 @@ let goesLayer = new ColoredTileLayer(
 
 // Init slider visual
 document.getElementById('filter-slider').style.setProperty('--pct', '15%');
+
+// ─────────────────────────────────────────────────────────
+// Cloud heights from LGA + JFK METARs (NWS API)
+// Shows cloud layer coverage + base height in feet
+// ─────────────────────────────────────────────────────────
+const CLOUD_STATIONS = [
+  { id: 'KLGA', elId: 'ch-lga', label: 'LGA' },
+  { id: 'KJFK', elId: 'ch-jfk', label: 'JFK' },
+];
+
+function formatCloudLayers(layers) {
+  if (!layers || !layers.length) return 'Clear';
+  // Show up to 2 significant layers; highlight lowest BKN/OVC as ceiling
+  return layers
+    .filter(l => l.amount !== 'CLR' && l.amount !== 'SKC')
+    .slice(0, 2)
+    .map(l => {
+      const ft = l.base?.value != null
+        ? Math.round(l.base.value * 3.281 / 100) * 100
+        : null;
+      return ft != null ? `${l.amount} ${ft.toLocaleString()}'` : l.amount;
+    })
+    .join('  ') || 'Clear';
+}
+
+async function fetchCloudHeights() {
+  await Promise.all(CLOUD_STATIONS.map(async ({ id, elId }) => {
+    const el = document.getElementById(elId);
+    try {
+      const r = await fetch(
+        `https://api.weather.gov/stations/${id}/observations/latest`,
+        { headers: { Accept: 'application/geo+json' }, cache: 'no-store' }
+      );
+      if (!r.ok) throw new Error(r.status);
+      const { properties: p } = await r.json();
+      el.textContent = formatCloudLayers(p.cloudLayers);
+    } catch(e) {
+      el.textContent = '—';
+    }
+  }));
+  // Timestamp
+  document.getElementById('ch-age').textContent =
+    'obs ' + new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+}
+fetchCloudHeights();
+setInterval(fetchCloudHeights, 10 * 60 * 1000); // refresh every 10 min
 
 // ─────────────────────────────────────────────────────────
 // GOES refresh — reads real capture time from NOAA's open
