@@ -318,25 +318,41 @@ let goesLayer = new ColoredTileLayer(
 document.getElementById('filter-slider').style.setProperty('--pct', '15%');
 
 // ─────────────────────────────────────────────────────────
-// GOES refresh — reads real capture time from tile headers
-// IEM's tile server sets Last-Modified to the satellite scan time
+// GOES refresh — reads real capture time from NOAA's open
+// GOES-16 S3 bucket (public, CORS-enabled).  Filenames embed
+// the exact ABI scan-start time: _sYYYYDDDHHMMSST_
+// Product: ABI-L1b-RadC (CONUS, every ~5 min)
 // ─────────────────────────────────────────────────────────
 async function fetchGOESCaptureTime() {
   try {
-    // Use a fixed low-zoom tile — small, fast, and always exists
-    const r = await fetch(
-      'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/4/5/7.png',
-      { method: 'HEAD', cache: 'no-store' }
-    );
-    const lm = r.headers.get('Last-Modified');
-    if (lm) {
-      const d = new Date(lm);
-      // Show in local time with timezone label
-      return d.toLocaleTimeString('en-US', {
+    const now = new Date();
+    // Try current hour and up to 2 hours back (data may lag a few minutes)
+    for (let back = 0; back <= 2; back++) {
+      const d   = new Date(now.getTime() - back * 3600000);
+      const yr  = d.getUTCFullYear();
+      const doy = Math.floor((d - new Date(Date.UTC(yr, 0, 0))) / 864e5); // 1-based DOY
+      const hr  = d.getUTCHours();
+
+      const prefix  = `ABI-L1b-RadC/${yr}/${String(doy).padStart(3,'0')}/${String(hr).padStart(2,'0')}/`;
+      const listUrl = `https://noaa-goes16.s3.amazonaws.com/?list-type=2` +
+                      `&prefix=${encodeURIComponent(prefix)}&max-keys=500`;
+
+      const r = await fetch(listUrl, { cache: 'no-store' });
+      if (!r.ok) continue;
+      const xml = await r.text();
+
+      // Each filename encodes scan start: _sYYYYDDDHHMMSST_
+      const hits = [...xml.matchAll(/_s(\d{4})(\d{3})(\d{2})(\d{2})\d{3}_/g)];
+      if (!hits.length) continue;
+
+      const [, year, dayOfYr, hh, mm] = hits[hits.length - 1]; // last = most recent
+      const scanDate = new Date(Date.UTC(+year, 0, +dayOfYr, +hh, +mm));
+
+      return scanDate.toLocaleTimeString('en-US', {
         hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
       });
     }
-  } catch(e) { /* CORS or network failure */ }
+  } catch(e) { console.warn('GOES timestamp fetch failed:', e); }
   return null;
 }
 
