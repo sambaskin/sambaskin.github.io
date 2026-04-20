@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>NYC Cloud · Live</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#0d1117;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#c9d1d9;-webkit-font-smoothing:antialiased}
+
+/* Map fills everything */
+#map{position:fixed;inset:0;z-index:0}
+
+/* ── Floating top bar ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;gap:9px;
+  padding:max(10px,env(safe-area-inset-top)) 12px 8px;
+  background:linear-gradient(to bottom,rgba(13,17,23,.85) 60%,transparent);
+  pointer-events:none;
+}
+.topbar>*{pointer-events:auto}
+.top-title{font-size:.82rem;font-weight:600;color:#e6edf3;white-space:nowrap}
+.badge{font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:9px;background:#1f3d2e;color:#3fb950;border:1px solid #2ea043;letter-spacing:.05em}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:7px}
+.ts-chip{display:flex;align-items:center;gap:4px;font-size:.65rem;background:rgba(28,33,40,.9);border:1px solid #21262d;border-radius:6px;padding:3px 7px}
+.ts-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ts-lbl{color:#6e7681}
+.ts-val{color:#c9d1d9;font-weight:500}
+.icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid #21262d;background:rgba(28,33,40,.9);color:#8b949e;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.icon-btn:active{background:#21262d;color:#e6edf3}
+.icon-btn.spinning svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Compass overlay ── */
+.compass{
+  position:fixed;bottom:calc(var(--sheet-peek, 210px) + 16px);right:14px;z-index:400;
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(22,27,34,.85);border:1px solid #30363d;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  transition:bottom .3s cubic-bezier(.32,.72,0,1);
+}
+.compass-arrow{font-size:18px;line-height:1;transition:transform .2s}
+.compass-deg{font-size:.55rem;color:#6e7681;font-variant-numeric:tabular-nums}
+
+/* ── Location button ── */
+.loc-btn{
+  position:fixed;bottom:calc(var(--sheet-peek, 210px) + 72px);right:14px;z-index:400;
+  width:42px;height:42px;border-radius:10px;
+  background:rgba(22,27,34,.9);border:1px solid #21262d;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:bottom .3s cubic-bezier(.32,.72,0,1);
+}
+.loc-btn.active{border-color:#388bfd;background:rgba(56,139,253,.15)}
+.loc-btn svg{transition:opacity .2s}
+
+/* ── Bottom Sheet ── */
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:600;
+  background:#161b22;
+  border-radius:18px 18px 0 0;
+  border-top:1px solid #21262d;
+  display:flex;flex-direction:column;
+  touch-action:none;
+  will-change:transform;
+  transition:transform .32s cubic-bezier(.32,.72,0,1);
+  padding-bottom:env(safe-area-inset-bottom);
+  /* height is set so content fills 85vh max */
+  max-height:88vh;
+}
+.sheet.animating{transition:transform .32s cubic-bezier(.32,.72,0,1)}
+
+.drag-handle{
+  width:100%;padding:10px 0 2px;display:flex;align-items:center;justify-content:center;
+  cursor:grab;flex-shrink:0;
+}
+.drag-handle:active{cursor:grabbing}
+.drag-pill{width:36px;height:4px;border-radius:2px;background:#30363d}
+
+/* Always-visible section (within peek) */
+.sheet-always{flex-shrink:0;padding:0 14px 10px}
+
+/* Scrollable section */
+.sheet-scroll{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:0 14px;
+}
+.sheet-scroll::-webkit-scrollbar{display:none}
+
+/* ── Section headers ── */
+.sec-title{
+  font-size:.58rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.09em;color:#6e7681;margin:12px 0 7px;
+}
+.sec-title:first-child{margin-top:0}
+
+/* ── Color filter ── */
+.scheme-select{
+  width:100%;background:#1c2128;border:1px solid #30363d;border-radius:8px;
+  color:#e6edf3;font-size:.82rem;padding:8px 10px;cursor:pointer;margin-bottom:8px;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236e7681' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;
+}
+.scheme-select:focus{outline:none;border-color:#388bfd}
+
+.color-preview{height:12px;border-radius:4px;overflow:hidden;margin-bottom:4px}
+.color-preview canvas{width:100%;height:100%;display:block}
+.scale-labels{display:flex;justify-content:space-between;font-size:.56rem;color:#6e7681;margin-bottom:8px}
+
+.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.filter-label{font-size:.68rem;color:#6e7681;width:66px;flex-shrink:0}
+.filter-row input[type=range]{
+  flex:1;-webkit-appearance:none;appearance:none;height:4px;
+  background:#21262d;border-radius:2px;cursor:pointer;outline:none;
+}
+.filter-row input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:#388bfd;cursor:pointer;
+}
+.filter-val{font-size:.7rem;font-weight:600;color:#388bfd;width:30px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ── Airport panels ── */
+.ap-panel{
+  background:#1c2128;border-radius:10px;border:1px solid #21262d;
+  padding:10px 11px;margin-bottom:8px;
+}
+.ap-header{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.ap-code{font-size:.95rem;font-weight:700;color:#e6edf3}
+.ap-name{font-size:.63rem;color:#6e7681;flex:1}
+.ap-fc{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:8px;letter-spacing:.04em}
+.ap-time{font-size:.58rem;color:#6e7681;margin-bottom:5px}
+.cloud-layers{display:flex;flex-direction:column;gap:4px;margin-bottom:5px}
+.cl-row{display:flex;align-items:center;gap:5px}
+.cl-cover{font-size:.62rem;font-weight:700;width:26px;padding:1px 2px;border-radius:3px;text-align:center;flex-shrink:0}
+.cl-bar{flex:1;height:5px;background:#21262d;border-radius:3px;overflow:hidden}
+.cl-fill{height:100%;border-radius:3px}
+.cl-ht{font-size:.63rem;font-variant-numeric:tabular-nums;color:#c9d1d9;min-width:90px;text-align:right}
+.cl-tag{font-size:.52rem;margin-left:2px}
+.ceil-row{display:flex;align-items:baseline;gap:5px;margin-bottom:4px}
+.ceil-lbl{font-size:.58rem;color:#6e7681}
+.ceil-val{font-size:.8rem;font-weight:700}
+.ap-wx{display:flex;gap:8px;font-size:.62rem;color:#8b949e;flex-wrap:wrap}
+.ap-wx b{color:#c9d1d9}
+.raw-metar{margin-top:4px;font-size:.54rem;color:#3a4550;font-family:monospace;word-break:break-all;line-height:1.4}
+.ap-loading{display:flex;align-items:center;gap:6px;font-size:.7rem;color:#6e7681;padding:5px 0}
+
+/* ── Cloud profile bars ── */
+.lbar-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.lbar-name{font-size:.62rem;width:34px;flex-shrink:0}
+.lbar-track{flex:1;height:6px;background:#1c2128;border-radius:3px;overflow:hidden}
+.lbar-fill{height:100%;border-radius:3px;transition:width .4s}
+.lbar-pct{font-size:.65rem;font-weight:600;width:28px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ── Cloud type box ── */
+.ct-box{border-radius:8px;padding:9px 10px;margin-bottom:8px;border:1px solid #21262d}
+.ct-name{font-size:.88rem;font-weight:700}
+.ct-desc{font-size:.62rem;color:#8b949e;line-height:1.5;margin-top:2px}
+
+/* ── Stat grid ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stat-label{font-size:.58rem;color:#6e7681;margin-bottom:1px}
+.stat-value{font-size:1rem;font-weight:600;color:#e6edf3}
+.stat-unit{font-size:.6rem;color:#8b949e}
+
+/* ── Timestamp list ── */
+.ts-list-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.ts-list-row:last-child{margin-bottom:0}
+.ts-list-lbl{font-size:.65rem;color:#6e7681}
+.ts-list-val{font-size:.65rem;color:#c9d1d9;font-weight:500;font-variant-numeric:tabular-nums}
+.ts-fresh{color:#3fb950}.ts-stale{color:#d29922}
+
+/* ── Layer toggles ── */
+.layer-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.layer-row:last-of-type{margin-bottom:0}
+.layer-label{font-size:.75rem;display:flex;align-items:center;gap:6px}
+.l-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.toggle-pill{position:relative;width:34px;height:18px;flex-shrink:0}
+.toggle-pill input{opacity:0;width:0;height:0}
+.toggle-pill .sl{position:absolute;inset:0;background:#21262d;border-radius:9px;cursor:pointer;transition:background .2s}
+.toggle-pill .sl::after{content:'';position:absolute;width:12px;height:12px;left:3px;top:3px;background:#6e7681;border-radius:50%;transition:transform .2s,background .2s}
+.toggle-pill input:checked+.sl{background:#1f3a5f}
+.toggle-pill input:checked+.sl::after{transform:translateX(16px);background:#388bfd}
+
+/* ── Spinner ── */
+.spinner{width:11px;height:11px;border:2px solid #21262d;border-top-color:#388bfd;border-radius:50%;animation:spin .7s linear infinite}
+
+/* ── Leaflet popup ── */
+.leaflet-popup-content-wrapper{background:#1c2128!important;border:1px solid #21262d!important;border-radius:10px!important;box-shadow:0 4px 24px rgba(0,0,0,.7)!important}
+.leaflet-popup-tip{background:#1c2128!important}
+.leaflet-popup-content{color:#c9d1d9!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;font-size:.8rem!important;margin:10px 13px!important;line-height:1.55}
+</style>
+</head>
+<body>
+
+<!-- Map -->
+<div id="map"></div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <span class="top-title">NYC Cloud</span>
+  <span class="badge" id="live-badge">LIVE</span>
+  <div class="topbar-right">
+    <div class="ts-chip">
+      <div class="ts-dot" style="background:#58a6ff"></div>
+      <span class="ts-lbl">GOES~</span>
+      <span class="ts-val" id="hdr-goes">—</span>
+    </div>
+    <div class="ts-chip">
+      <div class="ts-dot" style="background:#3fb950"></div>
+      <span class="ts-val" id="hdr-metar">—</span>
+    </div>
+    <div class="icon-btn" id="refresh-btn" title="Refresh">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- Compass -->
+<div class="compass" id="compass">
+  <div class="compass-arrow" id="compass-arrow">↑</div>
+  <div class="compass-deg" id="compass-deg">—°</div>
+</div>
+
+<!-- Location button -->
+<div class="loc-btn" id="loc-btn" title="Show my location">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+    <circle cx="12" cy="12" r="7" stroke-dasharray="2 2"/>
+  </svg>
+</div>
+
+<!-- Bottom sheet -->
+<div class="sheet" id="sheet">
+  <div class="drag-handle" id="drag-handle"><div class="drag-pill"></div></div>
+
+  <!-- Always visible: color controls -->
+  <div class="sheet-always">
+    <select class="scheme-select" id="color-scheme">
+      <option value="false-color">False Color — cloud thickness</option>
+      <option value="enhanced-ir">Enhanced IR — cold to warm</option>
+      <option value="thermal">Thermal</option>
+      <option value="grayscale">Grayscale</option>
+    </select>
+    <div class="color-preview"><canvas id="preview-canvas" height="12"></canvas></div>
+    <div class="scale-labels"><span>Thin / low</span><span>Thick / convective</span></div>
+    <div class="filter-row">
+      <span class="filter-label">Min thresh</span>
+      <input type="range" id="min-br" min="0" max="200" value="30" step="1">
+      <span class="filter-val" id="min-br-val">30</span>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Max thresh</span>
+      <input type="range" id="max-br" min="50" max="255" value="240" step="1">
+      <span class="filter-val" id="max-br-val">240</span>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Opacity</span>
+      <input type="range" id="sat-opacity" min="10" max="100" value="85" step="1">
+      <span class="filter-val" id="sat-opacity-val">85%</span>
+    </div>
+  </div>
+
+  <!-- Scrollable content -->
+  <div class="sheet-scroll" id="sheet-scroll">
+
+    <!-- Airport ceilings -->
+    <div class="sec-title">Airport Cloud Ceilings</div>
+    <div id="ap-lga" class="ap-panel"><div class="ap-loading"><div class="spinner"></div>Loading LGA…</div></div>
+    <div id="ap-jfk" class="ap-panel"><div class="ap-loading"><div class="spinner"></div>Loading JFK…</div></div>
+
+    <!-- NYC profile -->
+    <div class="sec-title" id="profile-title">NYC Cloud Profile</div>
+    <div class="ct-box" id="ct-box"><div class="ct-name" id="ct-name">—</div><div class="ct-desc" id="ct-desc">Fetching…</div></div>
+    <div class="lbar-row"><span class="lbar-name" style="color:#b39ddb">High</span><div class="lbar-track"><div class="lbar-fill" id="bar-high" style="width:0%;background:#b39ddb"></div></div><span class="lbar-pct" id="pct-high" style="color:#b39ddb">—</span></div>
+    <div class="lbar-row"><span class="lbar-name" style="color:#64b5f6">Mid</span><div class="lbar-track"><div class="lbar-fill" id="bar-mid" style="width:0%;background:#64b5f6"></div></div><span class="lbar-pct" id="pct-mid" style="color:#64b5f6">—</span></div>
+    <div class="lbar-row"><span class="lbar-name" style="color:#4db6ac">Low</span><div class="lbar-track"><div class="lbar-fill" id="bar-low" style="width:0%;background:#4db6ac"></div></div><span class="lbar-pct" id="pct-low" style="color:#4db6ac">—</span></div>
+    <div class="lbar-row" style="margin-bottom:0"><span class="lbar-name" style="color:#e6edf3">Total</span><div class="lbar-track"><div class="lbar-fill" id="bar-total" style="width:0%;background:#388bfd"></div></div><span class="lbar-pct" id="pct-total" style="color:#e6edf3">—</span></div>
+
+    <!-- Atmosphere -->
+    <div class="sec-title" id="atmo-title">NYC Atmosphere</div>
+    <div class="stat-grid" style="margin-bottom:12px">
+      <div><div class="stat-label">Temperature</div><div><span class="stat-value" id="val-temp">—</span><span class="stat-unit" id="unit-temp"></span></div></div>
+      <div><div class="stat-label">Humidity</div><div><span class="stat-value" id="val-hum">—</span><span class="stat-unit" id="unit-hum"></span></div></div>
+      <div><div class="stat-label">Wind</div><div><span class="stat-value" id="val-wind">—</span><span class="stat-unit" id="unit-wind"></span></div></div>
+      <div><div class="stat-label">Visibility</div><div><span class="stat-value" id="val-vis">—</span><span class="stat-unit" id="unit-vis"></span></div></div>
+    </div>
+
+    <!-- Map layers -->
+    <div class="sec-title">Map Layers</div>
+    <div class="layer-row"><span class="layer-label"><div class="l-dot" style="background:#388bfd"></div>GOES-East</span><label class="toggle-pill"><input type="checkbox" id="toggle-sat" checked><span class="sl"></span></label></div>
+    <div class="layer-row"><span class="layer-label"><div class="l-dot" style="background:#f85149"></div>NEXRAD Radar</span><label class="toggle-pill"><input type="checkbox" id="toggle-radar"><span class="sl"></span></label></div>
+    <div class="layer-row"><span class="layer-label"><div class="l-dot" style="background:#f0883e"></div>GOES Infrared</span><label class="toggle-pill"><input type="checkbox" id="toggle-ir"><span class="sl"></span></label></div>
+
+    <!-- Timestamps -->
+    <div class="sec-title">Data Timestamps</div>
+    <div class="ts-list-row"><span class="ts-list-lbl">GOES-East (IEM)</span><span class="ts-list-val" id="ts-goes">—</span></div>
+    <div class="ts-list-row"><span class="ts-list-lbl">LGA METAR</span><span class="ts-list-val" id="ts-lga">—</span></div>
+    <div class="ts-list-row"><span class="ts-list-lbl">JFK METAR</span><span class="ts-list-val" id="ts-jfk">—</span></div>
+    <div class="ts-list-row"><span class="ts-list-lbl">Model (Open-Meteo)</span><span class="ts-list-val" id="ts-model">—</span></div>
+
+    <div style="height:16px"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════
+// Color schemes
+// ════════════════════════════════
+const SCHEMES = {
+  'false-color':{stops:[[0,[100,220,255,140]],[.25,[40,200,200,170]],[.5,[100,230,60,200]],[.75,[255,200,20,220]],[1,[255,60,20,240]]]},
+  'enhanced-ir':{stops:[[0,[60,0,120,150]],[.3,[0,80,200,170]],[.6,[0,200,220,200]],[.85,[255,255,255,230]],[1,[255,200,200,240]]]},
+  'thermal':{stops:[[0,[0,0,80,150]],[.33,[160,0,120,185]],[.67,[255,140,0,215]],[1,[255,255,100,245]]]},
+  'grayscale':{stops:[[0,[180,200,220,120]],[1,[255,255,255,240]]]}
+};
+let scheme='false-color', minBr=30, maxBr=240;
+
+function lerpColor(t,stops){
+  let lo=stops[0],hi=stops[stops.length-1];
+  for(let i=0;i<stops.length-1;i++){if(t>=stops[i][0]&&t<=stops[i+1][0]){lo=stops[i];hi=stops[i+1];break;}}
+  const s=(t-lo[0])/((hi[0]-lo[0])||1);
+  return lo[1].map((v,i)=>Math.round(v+(hi[1][i]-v)*s));
+}
+function colorPixel(lum){
+  if(lum<minBr)return[0,0,0,0];
+  const t=Math.min((lum-minBr)/((maxBr-minBr)||1),1);
+  return lerpColor(t,SCHEMES[scheme].stops);
+}
+
+function drawPreview(){
+  const canvas=document.getElementById('preview-canvas');
+  const w=canvas.parentElement.offsetWidth||260;
+  canvas.width=w;canvas.height=12;
+  const ctx=canvas.getContext('2d');
+  const img=ctx.createImageData(w,12);
+  for(let x=0;x<w;x++){
+    const[r,g,b,a]=colorPixel((x/w)*255);
+    for(let y=0;y<12;y++){const i=(y*w+x)*4;img.data[i]=r;img.data[i+1]=g;img.data[i+2]=b;img.data[i+3]=a;}
+  }
+  ctx.putImageData(img,0,0);
+}
+
+// ════════════════════════════════
+// Canvas tile layer
+// ════════════════════════════════
+const ColoredTileLayer=L.TileLayer.extend({
+  createTile(coords,done){
+    const c=document.createElement('canvas');
+    const sz=this.getTileSize();c.width=sz.x;c.height=sz.y;
+    const img=new Image();img.crossOrigin='anonymous';
+    img.onload=()=>{
+      const ctx=c.getContext('2d');ctx.drawImage(img,0,0);
+      try{
+        const{data}=ctx.getImageData(0,0,c.width,c.height);
+        for(let i=0;i<data.length;i+=4){
+          const lum=data[i]*.299+data[i+1]*.587+data[i+2]*.114;
+          const[r,g,b,a]=colorPixel(lum);
+          data[i]=r;data[i+1]=g;data[i+2]=b;data[i+3]=a;
+        }
+        ctx.putImageData(new ImageData(data,c.width,c.height),0,0);
+      }catch(e){c.style.filter='sepia(1) saturate(5) hue-rotate(160deg)';}
+      done(null,c);
+    };
+    img.onerror=e=>done(e,c);
+    img.src=this.getTileUrl(coords);return c;
+  }
+});
+
+// ════════════════════════════════
+// Map
+// ════════════════════════════════
+const map=L.map('map',{center:[40.73,-73.93],zoom:10,zoomControl:false,preferCanvas:true,tap:false});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'©OSM ©CartoDB',subdomains:'abcd',maxZoom:19}).addTo(map);
+
+const SAT_URL='https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-vis-1km-900913/{z}/{x}/{y}.png';
+let satLayer=null;
+function buildSatLayer(){
+  if(satLayer)map.removeLayer(satLayer);
+  satLayer=new ColoredTileLayer(SAT_URL,{opacity:+document.getElementById('sat-opacity').value/100,attribution:'NOAA GOES-East',maxNativeZoom:10,maxZoom:13});
+  if(document.getElementById('toggle-sat').checked)satLayer.addTo(map);
+}
+
+const radarLayer=L.tileLayer('https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png',{opacity:.7,maxZoom:10});
+const irLayer=L.tileLayer('https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/goes-east-ir-1km-900913/{z}/{x}/{y}.png',{opacity:.55,maxZoom:10});
+
+document.getElementById('toggle-sat').addEventListener('change',e=>satLayer&&(e.target.checked?satLayer.addTo(map):map.removeLayer(satLayer)));
+document.getElementById('toggle-radar').addEventListener('change',e=>e.target.checked?radarLayer.addTo(map):map.removeLayer(radarLayer));
+document.getElementById('toggle-ir').addEventListener('change',e=>e.target.checked?irLayer.addTo(map):map.removeLayer(irLayer));
+
+// ════════════════════════════════
+// Airport markers
+// ════════════════════════════════
+const AIRPORTS={
+  KLGA:{code:'LGA',name:'LaGuardia',lat:40.7769,lon:-73.8740,panelId:'ap-lga'},
+  KJFK:{code:'JFK',name:'JFK Intl', lat:40.6413,lon:-73.7781,panelId:'ap-jfk'},
+};
+const FC={
+  VFR: {bg:'#1a3d2a',border:'#2ea043',text:'#3fb950'},
+  MVFR:{bg:'#1a2d4a',border:'#388bfd',text:'#58a6ff'},
+  IFR: {bg:'#3d1a1a',border:'#f85149',text:'#ff6b6b'},
+  LIFR:{bg:'#3d1a3d',border:'#bc8cff',text:'#d2a8ff'},
+  UNKN:{bg:'#1c2128',border:'#30363d',text:'#6e7681'},
+};
+const CS={FEW:{text:'#3fb950',bg:'#1a3d2a',border:'#2ea043'},SCT:{text:'#d29922',bg:'#2d2200',border:'#9e6a03'},BKN:{text:'#f0883e',bg:'#2d1600',border:'#bd561d'},OVC:{text:'#ff6b6b',bg:'#3d1a1a',border:'#f85149'},VV:{text:'#d2a8ff',bg:'#2d1a3d',border:'#8957e5'}};
+
+function apIcon(cat){
+  const f=FC[cat]||FC.UNKN;
+  return L.divIcon({className:'',html:`<div style="width:20px;height:20px;border-radius:50%;background:${f.bg};border:2px solid ${f.border};box-shadow:0 0 10px ${f.border}88;"></div>`,iconSize:[20,20],iconAnchor:[10,10]});
+}
+const apMarkers={};
+Object.entries(AIRPORTS).forEach(([icao,ap])=>{
+  apMarkers[icao]=L.marker([ap.lat,ap.lon],{icon:apIcon('UNKN'),zIndexOffset:500}).addTo(map).bindPopup(`<b>${ap.code}</b> — fetching…`);
+});
+
+function flightCat(clouds,visib){
+  const cl=(clouds||[]).filter(c=>['BKN','OVC','VV'].includes(c.cover));
+  const ceil=cl.length?Math.min(...cl.map(c=>c.base)):Infinity;
+  const vis=visib==='10+'||visib==='10.0+'?10:(parseFloat(visib)||10);
+  if(ceil<500||vis<1)return'LIFR';
+  if(ceil<1000||vis<3)return'IFR';
+  if(ceil<3000||vis<5)return'MVFR';
+  return'VFR';
+}
+
+function renderAirport(icao,d){
+  const ap=AIRPORTS[icao];
+  const el=document.getElementById(ap.panelId);
+  if(!d){el.innerHTML=`<div style="font-size:.68rem;color:#6e7681">No METAR for ${ap.code}.</div>`;return;}
+  const clouds=d.clouds||[];
+  const cat=flightCat(clouds,d.visib);
+  const fc=FC[cat]||FC.UNKN;
+  const ceilLayers=clouds.filter(c=>['BKN','OVC','VV'].includes(c.cover));
+  const ceilFt=ceilLayers.length?Math.min(...ceilLayers.map(c=>c.base)):null;
+  let timeStr='—',ageMin=9999;
+  const raw=d.reportTime||d.obsTime;
+  if(raw){
+    const dt=typeof raw==='number'?new Date(raw*1000):new Date(raw);
+    timeStr=dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+    ageMin=Math.floor((Date.now()-dt.getTime())/60000);
+    const tsEl=document.getElementById(`ts-${ap.code.toLowerCase()}`);
+    if(tsEl){tsEl.textContent=timeStr;tsEl.className=`ts-list-val ${ageMin<90?'ts-fresh':'ts-stale'}`;}
+    document.getElementById('hdr-metar').textContent=timeStr;
+  }
+  const layerRows=clouds.map(c=>{
+    const cs=CS[c.cover]||CS.FEW;
+    const pct=Math.min((c.base/25000)*100,100);
+    const isCeil=['BKN','OVC','VV'].includes(c.cover)&&c.base===ceilFt;
+    const htFt=c.base!=null?c.base.toLocaleString()+' ft':'—';
+    const htKm=c.base!=null?` (${((c.base*.3048)/1000).toFixed(1)}km)`:'';
+    return`<div class="cl-row" style="${isCeil?'background:'+cs.bg+'44;border-radius:4px;padding:1px 2px;margin:0 -2px':''}"><span class="cl-cover" style="color:${cs.text};background:${cs.bg};border:1px solid ${cs.border}">${c.cover}</span><div class="cl-bar"><div class="cl-fill" style="width:${pct}%;background:${cs.text}77"></div></div><span class="cl-ht" style="${isCeil?'color:'+cs.text+';font-weight:600':''}">${htFt}${htKm}</span>${isCeil?`<span class="cl-tag" style="color:${cs.text}">▲</span>`:''}</div>`;
+  }).join('');
+  const windStr=(d.wdir!=null&&d.wspd!=null)?`${d.wdir}°@${d.wspd}${d.wgst?'G'+d.wgst:''}kt`:'—';
+  el.innerHTML=`<div class="ap-header"><span class="ap-code">${ap.code}</span><span class="ap-name">${ap.name}</span><span class="ap-fc" style="color:${fc.text};background:${fc.bg};border:1px solid ${fc.border}">${cat}</span></div><div class="ap-time">Obs: ${timeStr}${ageMin<9999?' · '+ageMin+'m ago':''}</div>${clouds.length?`<div class="cloud-layers">${layerRows}</div>`:`<div style="font-size:.65rem;color:#3fb950;margin-bottom:5px">Sky clear</div>`}${ceilFt!=null?`<div class="ceil-row"><span class="ceil-lbl">Ceiling:</span><span class="ceil-val" style="color:${fc.text}">${ceilFt.toLocaleString()} ft</span><span style="font-size:.58rem;color:#6e7681">(${((ceilFt*.3048)/1000).toFixed(1)} km)</span></div>`:`<div style="font-size:.62rem;color:#3fb950;margin-bottom:4px">No ceiling</div>`}<div class="ap-wx"><span class="ap-wx-item"><b>${d.temp!=null?d.temp.toFixed(1)+'°C':'—'}</b> T</span><span class="ap-wx-item"><b>${d.dewp!=null?d.dewp.toFixed(1)+'°C':'—'}</b> DP</span><span class="ap-wx-item"><b>${d.visib?d.visib+' sm':'—'}</b> vis</span><span class="ap-wx-item"><b>${windStr}</b></span></div>${d.rawOb?`<div class="raw-metar">${d.rawOb}</div>`:''}`;
+  apMarkers[icao].setIcon(apIcon(cat));
+  apMarkers[icao].bindPopup(`<b>${ap.code} · ${ap.name}</b><br><span style="display:inline-block;margin:3px 0;padding:2px 7px;border-radius:5px;font-weight:700;font-size:.7rem;color:${fc.text};background:${fc.bg};border:1px solid ${fc.border}">${cat}</span><br>${timeStr}${ceilFt!=null?`<br><b style="color:${fc.text}">${ceilFt.toLocaleString()} ft</b> ceiling`:'<br>No ceiling'}`);
+}
+
+// ════════════════════════════════
+// METAR fetch
+// ════════════════════════════════
+async function fetchMetar(){
+  try{
+    const res=await fetch('https://aviationweather.gov/api/data/metar?ids=KLGA,KJFK&format=json&hours=2');
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const data=await res.json();
+    const by={};data.forEach(m=>{const id=m.icaoId;if(!by[id]||(m.obsTime||0)>(by[id].obsTime||0))by[id]=m;});
+    renderAirport('KLGA',by['KLGA']||null);
+    renderAirport('KJFK',by['KJFK']||null);
+  }catch(err){
+    ['KLGA','KJFK'].forEach(id=>{const ap=AIRPORTS[id];document.getElementById(ap.panelId).innerHTML=`<div style="font-size:.65rem;color:#f85149">METAR error: ${err.message}</div>`;});
+  }
+}
+
+// ════════════════════════════════
+// Open-Meteo NYC
+// ════════════════════════════════
+const WMO={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Icy fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Light showers',81:'Showers',82:'Heavy showers',95:'Thunderstorm',96:'Thunderstorm+hail',99:'Severe thunderstorm'};
+function cloudType(lo,mi,hi,wmo){
+  lo=lo||0;mi=mi||0;hi=hi||0;
+  if(wmo>=95)return{name:'Cumulonimbus (Cb)',color:'#ff6b6b',desc:'Deep convective towers, thunderstorm activity.'};
+  if(wmo>=80)return{name:'Cumulus / TCu',color:'#f0883e',desc:'Convective clouds, strong updrafts.'};
+  if(wmo>=61&&lo>50)return{name:'Nimbostratus (Ns)',color:'#8b949e',desc:'Thick rain-producing layer cloud.'};
+  if(wmo===45||wmo===48||(lo>80&&hi<10&&mi<10))return{name:'Stratus / Fog',color:'#a0b4c8',desc:'Very low flat layer, reduced visibility.'};
+  const H=hi>20,M=mi>20,L=lo>20;
+  if(!H&&!M&&!L)return{name:'Clear sky',color:'#3fb950',desc:'No significant cloud cover.'};
+  if(H&&!M&&!L)return{name:'Cirrus / Cirrostratus',color:'#b39ddb',desc:'High ice-crystal clouds above 6 km.'};
+  if(!H&&!M&&L)return{name:'Stratocumulus (Sc)',color:'#4db6ac',desc:'Low lumpy layer cloud.'};
+  if(H&&M&&!L)return{name:'Altostratus + Cirrus',color:'#7986cb',desc:'Multi-layer, warm front approach.'};
+  if(!H&&M&&!L)return{name:'Altostratus / Altocumulus',color:'#64b5f6',desc:'Mid-level clouds at 2–6 km.'};
+  if(H&&M&&L)return{name:'Multi-layer frontal',color:'#a0a8cc',desc:'Clouds at all levels, frontal passage.'};
+  return{name:'Scattered clouds',color:'#8b949e',desc:'Partial coverage at one or more levels.'};
+}
+async function fetchModel(){
+  try{
+    const now=new Date();
+    const vars='cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,visibility';
+    const res=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.006&hourly=${vars}&forecast_days=1&timezone=America%2FNew_York`);
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const json=await res.json();const h=json.hourly;const hr=now.getHours();
+    const g=k=>h[k]?.[hr]??null;
+    const lo=g('cloud_cover_low'),mi=g('cloud_cover_mid'),hi=g('cloud_cover_high'),tot=g('cloud_cover');
+    const temp=g('temperature_2m'),hum=g('relative_humidity_2m'),wind=g('wind_speed_10m'),wmo=g('weather_code'),vis=g('visibility');
+    const ct=cloudType(lo,mi,hi,wmo);
+    const box=document.getElementById('ct-box');
+    box.style.borderColor=ct.color+'44';box.style.background=ct.color+'0d';
+    document.getElementById('ct-name').textContent=ct.name;document.getElementById('ct-name').style.color=ct.color;
+    document.getElementById('ct-desc').textContent=ct.desc+(wmo!=null?` · ${WMO[wmo]||'code '+wmo}`:'');
+    const setBar=(id,pid,v)=>{document.getElementById(id).style.width=(v||0)+'%';document.getElementById(pid).textContent=v!=null?v+'%':'—';};
+    setBar('bar-high','pct-high',hi);setBar('bar-mid','pct-mid',mi);setBar('bar-low','pct-low',lo);setBar('bar-total','pct-total',tot);
+    const s=(id,uid,v,u,d=1)=>{document.getElementById(id).textContent=v!=null?(typeof d==='number'?+v.toFixed(d):v):'—';document.getElementById(uid).textContent=v!=null?u:'';};
+    s('val-temp','unit-temp',temp,'°C');s('val-hum','unit-hum',hum,'%',0);s('val-wind','unit-wind',wind,' km/h',0);
+    s('val-vis','unit-vis',vis!=null?vis/1000:null,' km');
+    const ts=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+    document.getElementById('profile-title').textContent=`NYC Cloud · ${ts}`;
+    document.getElementById('atmo-title').textContent=`NYC Atmosphere · ${ts}`;
+    document.getElementById('ts-model').textContent=ts;document.getElementById('ts-model').className='ts-list-val ts-fresh';
+  }catch(e){console.warn('Open-Meteo:',e);}
+}
+
+// ════════════════════════════════
+// GOES timestamp
+// ════════════════════════════════
+function updateGoesTs(){
+  const t=new Date(Date.now()-8*60*1000);t.setMinutes(Math.floor(t.getMinutes()/5)*5,0,0);
+  const str=t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+  document.getElementById('hdr-goes').textContent=str;
+  document.getElementById('ts-goes').textContent='~'+str;
+  document.getElementById('ts-goes').className='ts-list-val ts-fresh';
+}
+
+// ════════════════════════════════
+// GPS + Orientation line
+// ════════════════════════════════
+let userLat=null, userLon=null, userHeading=null;
+let userDot=null, orientLine=null;
+
+function destinationPoint(lat,lon,headingDeg,distKm){
+  const R=6371,d=distKm/R,b=headingDeg*Math.PI/180;
+  const φ1=lat*Math.PI/180,λ1=lon*Math.PI/180;
+  const φ2=Math.asin(Math.sin(φ1)*Math.cos(d)+Math.cos(φ1)*Math.sin(d)*Math.cos(b));
+  const λ2=λ1+Math.atan2(Math.sin(b)*Math.sin(d)*Math.cos(φ1),Math.cos(d)-Math.sin(φ1)*Math.sin(φ2));
+  return[φ2*180/Math.PI,λ2*180/Math.PI];
+}
+
+function updateOrientLine(){
+  if(userLat==null)return;
+  if(!userDot){
+    userDot=L.marker([userLat,userLon],{
+      icon:L.divIcon({
+        className:'',
+        html:`<div style="width:16px;height:16px;border-radius:50%;background:#388bfd;border:3px solid #fff;box-shadow:0 0 0 4px rgba(56,139,253,.25);"></div>`,
+        iconSize:[16,16],iconAnchor:[8,8]
+      }),
+      zIndexOffset:1000
+    }).addTo(map).bindPopup('<b>Your location</b>');
+  } else {
+    userDot.setLatLng([userLat,userLon]);
+  }
+
+  if(userHeading==null){
+    if(orientLine){map.removeLayer(orientLine);orientLine=null;}
+    return;
+  }
+
+  const end=destinationPoint(userLat,userLon,userHeading,10);
+  if(!orientLine){
+    orientLine=L.polyline([[userLat,userLon],end],{
+      color:'#388bfd',weight:2,opacity:.8,
+      dashArray:'6 4'
+    }).addTo(map);
+  } else {
+    orientLine.setLatLngs([[userLat,userLon],end]);
+  }
+}
+
+function startLocation(){
+  if(!navigator.geolocation){alert('Geolocation not supported on this device.');return;}
+  document.getElementById('loc-btn').classList.add('active');
+  navigator.geolocation.watchPosition(pos=>{
+    userLat=pos.coords.latitude;userLon=pos.coords.longitude;
+    updateOrientLine();
+    map.setView([userLat,userLon],map.getZoom());
+  },err=>{
+    document.getElementById('loc-btn').classList.remove('active');
+    console.warn('Geolocation error:',err);
+  },{enableHighAccuracy:true,maximumAge:5000});
+}
+
+function handleOrientation(e){
+  let heading=null;
+  if(e.webkitCompassHeading!=null){
+    heading=e.webkitCompassHeading; // iOS
+  } else if(e.alpha!=null){
+    heading=(360-e.alpha)%360; // Android
+  }
+  if(heading==null)return;
+  userHeading=heading;
+  // Update compass UI
+  document.getElementById('compass-arrow').style.transform=`rotate(${heading}deg)`;
+  document.getElementById('compass-deg').textContent=Math.round(heading)+'°';
+  updateOrientLine();
+}
+
+function requestOrientation(){
+  if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+    DeviceOrientationEvent.requestPermission().then(state=>{
+      if(state==='granted')window.addEventListener('deviceorientation',handleOrientation,true);
+    }).catch(console.error);
+  } else {
+    window.addEventListener('deviceorientation',handleOrientation,true);
+  }
+}
+
+document.getElementById('loc-btn').addEventListener('click',()=>{
+  startLocation();
+  requestOrientation();
+});
+
+// ════════════════════════════════
+// Bottom sheet — drag & snap
+// ════════════════════════════════
+const sheet=document.getElementById('sheet');
+const handle=document.getElementById('drag-handle');
+const scroller=document.getElementById('sheet-scroll');
+
+// Measure always-visible section height
+const alwaysEl=document.querySelector('.sheet-always');
+
+// Snap heights (distance sheet top is from viewport bottom, i.e., translateY offset from 0)
+// We compute after layout
+let SNAP_PEEK, SNAP_HALF, SNAP_FULL=0;
+let sheetH=0, vpH=0;
+let currentSnap='peek';
+let currentY=0;
+
+function computeSnaps(){
+  vpH=window.innerHeight;
+  sheetH=sheet.offsetHeight;
+  // peek: show drag handle + always section
+  const peekVis=handle.offsetHeight+alwaysEl.offsetHeight+8;
+  SNAP_PEEK=sheetH-peekVis;
+  SNAP_HALF=sheetH*0.4;
+  SNAP_FULL=0;
+  // Expose peek height for compass/loc-btn CSS vars
+  document.documentElement.style.setProperty('--sheet-peek',peekVis+'px');
+}
+
+function setSheetY(y,animate){
+  currentY=Math.max(SNAP_FULL,Math.min(SNAP_PEEK,y));
+  sheet.style.transition=animate?'transform .3s cubic-bezier(.32,.72,0,1)':'none';
+  sheet.style.transform=`translateY(${currentY}px)`;
+  scroller.style.overflowY=currentY<=SNAP_HALF?'auto':'hidden';
+}
+
+function snapTo(target,animate=true){
+  currentSnap=target;
+  const y={peek:SNAP_PEEK,half:SNAP_HALF,full:SNAP_FULL}[target]??SNAP_PEEK;
+  setSheetY(y,animate);
+}
+
+let dragStartY=0,dragStartSheetY=0,isDragging=false;
+
+function onDragStart(clientY){
+  isDragging=true;dragStartY=clientY;dragStartSheetY=currentY;
+  sheet.style.transition='none';
+}
+function onDragMove(clientY){
+  if(!isDragging)return;
+  const dy=clientY-dragStartY;
+  setSheetY(dragStartSheetY+dy,false);
+}
+function onDragEnd(clientY){
+  if(!isDragging)return;
+  isDragging=false;
+  const vel=clientY-dragStartY; // positive = dragging down
+  let target;
+  if(vel>40) target=currentSnap==='full'?'half':currentSnap==='half'?'peek':'peek';
+  else if(vel<-40) target=currentSnap==='peek'?'half':currentSnap==='half'?'full':'full';
+  else{
+    // snap to nearest
+    const dPeek=Math.abs(currentY-SNAP_PEEK),dHalf=Math.abs(currentY-SNAP_HALF),dFull=Math.abs(currentY-SNAP_FULL);
+    if(dPeek<=dHalf&&dPeek<=dFull)target='peek';
+    else if(dHalf<=dFull)target='half';
+    else target='full';
+  }
+  snapTo(target);
+}
+
+// Touch on handle
+handle.addEventListener('touchstart',e=>{onDragStart(e.touches[0].clientY);},{passive:true});
+handle.addEventListener('touchmove',e=>{onDragMove(e.touches[0].clientY);},{passive:true});
+handle.addEventListener('touchend',e=>{onDragEnd(e.changedTouches[0].clientY);});
+// Also tap handle to cycle states
+handle.addEventListener('click',()=>{
+  if(currentSnap==='peek')snapTo('half');
+  else if(currentSnap==='half')snapTo('full');
+  else snapTo('peek');
+});
+
+// Touch on scroll area when at top
+let scrollDragActive=false;
+scroller.addEventListener('touchstart',e=>{
+  if(scroller.scrollTop===0&&currentY>SNAP_FULL){
+    scrollDragActive=true;onDragStart(e.touches[0].clientY);
+  }},{passive:true});
+scroller.addEventListener('touchmove',e=>{
+  if(scrollDragActive)onDragMove(e.touches[0].clientY);
+  },{passive:true});
+scroller.addEventListener('touchend',e=>{
+  if(scrollDragActive){scrollDragActive=false;onDragEnd(e.changedTouches[0].clientY);}
+  });
+
+window.addEventListener('resize',()=>{computeSnaps();snapTo(currentSnap,false);});
+
+// ════════════════════════════════
+// Color filter controls
+// ════════════════════════════════
+let rebuildTimer=null;
+function scheduleRebuild(){clearTimeout(rebuildTimer);rebuildTimer=setTimeout(()=>{drawPreview();buildSatLayer();},350);}
+
+document.getElementById('color-scheme').addEventListener('change',e=>{scheme=e.target.value;scheduleRebuild();});
+document.getElementById('min-br').addEventListener('input',e=>{
+  minBr=+e.target.value;
+  if(minBr>=maxBr){maxBr=minBr+10;document.getElementById('max-br').value=maxBr;document.getElementById('max-br-val').textContent=maxBr;}
+  document.getElementById('min-br-val').textContent=minBr;scheduleRebuild();
+});
+document.getElementById('max-br').addEventListener('input',e=>{
+  maxBr=+e.target.value;
+  if(maxBr<=minBr){minBr=maxBr-10;document.getElementById('min-br').value=minBr;document.getElementById('min-br-val').textContent=minBr;}
+  document.getElementById('max-br-val').textContent=maxBr;scheduleRebuild();
+});
+document.getElementById('sat-opacity').addEventListener('input',e=>{
+  const v=+e.target.value;document.getElementById('sat-opacity-val').textContent=v+'%';
+  if(satLayer)satLayer.setOpacity(v/100);
+});
+
+// ════════════════════════════════
+// Refresh
+// ════════════════════════════════
+async function refreshAll(){
+  const btn=document.getElementById('refresh-btn');btn.classList.add('spinning');
+  updateGoesTs();buildSatLayer();
+  await Promise.all([fetchMetar(),fetchModel()]);
+  btn.classList.remove('spinning');
+}
+document.getElementById('refresh-btn').addEventListener('click',refreshAll);
+setInterval(refreshAll,5*60*1000);
+setInterval(updateGoesTs,60*1000);
+
+// ════════════════════════════════
+// Init
+// ════════════════════════════════
+window.addEventListener('load',()=>{
+  computeSnaps();
+  snapTo('peek',false);
+  drawPreview();
+  buildSatLayer();
+  updateGoesTs();
+  fetchMetar();
+  fetchModel();
+});
+</script>
+</body>
+</html>
