@@ -128,16 +128,6 @@ html,body{height:100%;overflow:hidden;background:#0d1117;font-family:-apple-syst
    Recording UI additions
    ══════════════════════════════════ */
 
-/* ── Login overlay ── */
-.login-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:20px}
-.login-card{background:#161b22;border:1px solid #21262d;border-radius:16px;padding:28px 24px;width:100%;max-width:320px}
-.login-title{font-size:1.3rem;font-weight:700;color:#e6edf3;margin-bottom:3px}
-.login-sub{font-size:.72rem;color:#6e7681;margin-bottom:22px;line-height:1.5}
-.login-input{width:100%;background:#1c2128;border:1px solid #30363d;border-radius:8px;color:#e6edf3;font-size:.95rem;padding:11px 13px;margin-bottom:10px}
-.login-input:focus{outline:none;border-color:#388bfd}
-.login-btn{width:100%;background:#388bfd;border:none;border-radius:8px;color:#fff;font-size:.9rem;font-weight:600;padding:11px;cursor:pointer}
-.login-btn:active{background:#1f6feb}
-.login-error{font-size:.72rem;color:#f85149;margin-top:8px;min-height:18px;text-align:center}
 
 /* ── Recording controls ── */
 .rec-action-btn{width:100%;padding:10px;border-radius:8px;font-size:.84rem;font-weight:600;cursor:pointer;border:1px solid}
@@ -271,8 +261,8 @@ html,body{height:100%;overflow:hidden;background:#0d1117;font-family:-apple-syst
   <!-- Scrollable content -->
   <div class="sheet-scroll" id="sheet-scroll">
 
-    <!-- ── Recording section (shown after login) ── -->
-    <div id="rec-section" style="display:none">
+    <!-- ── Recording section ── -->
+    <div id="rec-section">
       <div class="sec-title">Recording</div>
       <div id="rec-controls">
         <button class="rec-action-btn rec-start" onclick="showStartModal()">⏺ Start Recording</button>
@@ -318,20 +308,6 @@ html,body{height:100%;overflow:hidden;background:#0d1117;font-family:-apple-syst
     <div class="ts-list-row"><span class="ts-list-lbl">Model (Open-Meteo)</span><span class="ts-list-val" id="ts-model">—</span></div>
 
     <div style="height:16px"></div>
-  </div>
-</div>
-
-<!-- Login overlay -->
-<div class="login-overlay" id="login-overlay">
-  <div class="login-card">
-    <div class="login-title">NYC Cloud</div>
-    <div class="login-sub">Sign in to start recording sessions that run in the background — even when this tab is closed.</div>
-    <input type="password" class="login-input" id="login-pw" placeholder="Password" autocomplete="current-password">
-    <button class="login-btn" onclick="doLogin()">Sign In</button>
-    <div class="login-error" id="login-error"></div>
-    <div style="text-align:center;margin-top:14px">
-      <span style="font-size:.65rem;color:#6e7681;cursor:pointer" onclick="skipLogin()">Continue without recording →</span>
-    </div>
   </div>
 </div>
 
@@ -619,50 +595,16 @@ setInterval(refreshAll,5*60*1000);
 setInterval(updateGoesTs,60*1000);
 
 // ════════════════════════════════════════════════════════════
-// Auth
+// API
 // ════════════════════════════════════════════════════════════
-let authToken = localStorage.getItem('nyc_cloud_token');
-
 async function api(path, opts={}) {
   const res = await fetch(SERVER_URL + path, {
     ...opts,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-      ...(opts.headers||{}),
-    },
+    headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) },
   });
-  if (res.status === 401) { authToken=null; localStorage.removeItem('nyc_cloud_token'); showLoginOverlay(); throw new Error('Session expired'); }
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
-
-async function doLogin() {
-  const pw = document.getElementById('login-pw').value;
-  const errEl = document.getElementById('login-error');
-  errEl.textContent = '';
-  if (!pw) { errEl.textContent = 'Enter your password.'; return; }
-  try {
-    const { token } = await api('/api/auth', { method:'POST', body: JSON.stringify({ password: pw }) });
-    authToken = token;
-    localStorage.setItem('nyc_cloud_token', token);
-    document.getElementById('login-overlay').style.display = 'none';
-    initRecording();
-  } catch {
-    errEl.textContent = 'Wrong password.';
-  }
-}
-
-function skipLogin() {
-  document.getElementById('login-overlay').style.display = 'none';
-}
-
-function showLoginOverlay() {
-  document.getElementById('login-overlay').style.display = 'flex';
-  document.getElementById('login-pw').value = '';
-}
-
-document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
 // ════════════════════════════════════════════════════════════
 // Recording session management
@@ -670,7 +612,6 @@ document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key
 let activeSession = null;
 
 async function initRecording() {
-  document.getElementById('rec-section').style.display = 'block';
   await loadSessions();
 }
 
@@ -870,14 +811,7 @@ window.addEventListener('load', () => {
   fetchMetar();
   fetchModel();
 
-  // Check if already logged in
-  if (authToken) {
-    api('/api/health')
-      .then(() => initRecording())
-      .catch(() => { authToken = null; localStorage.removeItem('nyc_cloud_token'); showLoginOverlay(); });
-  } else {
-    showLoginOverlay();
-  }
+  initRecording();
 });
 </script>
 </body>
