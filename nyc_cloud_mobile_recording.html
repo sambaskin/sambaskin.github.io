@@ -703,7 +703,9 @@ async function confirmStart() {
   try {
     await api('/api/sessions', { method:'POST', body: JSON.stringify({ duration_hours: selectedDuration, label }) });
     await loadSessions();
-    snapTo('full'); // show the recording section
+    snapTo('full');
+    await new Promise(r => setTimeout(r, 5000));
+    await loadSessions();
   } catch(e) { alert('Could not start recording: ' + e.message); }
 }
 
