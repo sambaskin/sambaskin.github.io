@@ -158,7 +158,7 @@ html,body{height:100%;overflow:hidden;background:#0d1117;font-family:-apple-syst
 .modal-btn-confirm:active{background:#1f6feb}
 
 /* ── Playback bar ── */
-.playback-bar{position:fixed;left:12px;right:12px;z-index:550;bottom:calc(var(--sheet-peek,210px) + 14px);background:rgba(22,27,34,.97);border:1px solid #30363d;border-radius:12px;padding:9px 12px;display:flex;align-items:center;gap:7px;backdrop-filter:blur(10px)}
+.playback-bar{position:fixed;left:12px;right:12px;z-index:550;top:calc(max(44px,env(safe-area-inset-top)) + 44px);background:rgba(22,27,34,.97);border:1px solid #30363d;border-radius:12px;padding:9px 12px;display:flex;align-items:center;gap:7px;backdrop-filter:blur(10px)}
 .pb-ctrl{background:#21262d;border:1px solid #30363d;border-radius:6px;color:#8b949e;font-size:.78rem;padding:4px 8px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .pb-ctrl:active{background:#30363d;color:#e6edf3}
 .pb-ctrl.playing{border-color:#388bfd;color:#58a6ff}
@@ -315,7 +315,7 @@ html,body{height:100%;overflow:hidden;background:#0d1117;font-family:-apple-syst
 <div class="modal-overlay" id="start-modal" style="display:none" onclick="if(event.target===this)hideStartModal()">
   <div class="modal-card">
     <div class="modal-title">Start Recording</div>
-    <div class="modal-sub">The server will capture a snapshot every time GOES updates (~every 10–15 min). Recording continues when this tab is closed.</div>
+    <div class="modal-sub">The server saves the satellite timestamp every time GOES updates (~every 10–15 min). You can play back the satellite imagery after. Recording continues when this tab is closed.</div>
     <div class="dur-grid" id="dur-grid">
       <button class="dur-btn" data-h="1">1 h</button>
       <button class="dur-btn" data-h="2">2 h</button>
@@ -577,7 +577,7 @@ function scheduleRebuild(){clearTimeout(rebuildTimer);rebuildTimer=setTimeout(()
 document.getElementById('color-scheme').addEventListener('change',e=>{scheme=e.target.value;scheduleRebuild();});
 document.getElementById('min-br').addEventListener('input',e=>{minBr=+e.target.value;if(minBr>=maxBr){maxBr=minBr+10;document.getElementById('max-br').value=maxBr;document.getElementById('max-br-val').textContent=maxBr;}document.getElementById('min-br-val').textContent=minBr;scheduleRebuild();});
 document.getElementById('max-br').addEventListener('input',e=>{maxBr=+e.target.value;if(maxBr<=minBr){minBr=maxBr-10;document.getElementById('min-br').value=minBr;document.getElementById('min-br-val').textContent=minBr;}document.getElementById('max-br-val').textContent=maxBr;scheduleRebuild();});
-document.getElementById('sat-opacity').addEventListener('input',e=>{const v=+e.target.value;document.getElementById('sat-opacity-val').textContent=v+'%';if(satLayer)satLayer.setOpacity(v/100);});
+document.getElementById('sat-opacity').addEventListener('input',e=>{const v=+e.target.value;document.getElementById('sat-opacity-val').textContent=v+'%';if(satLayer)satLayer.setOpacity(v/100);if(pbSatLayer)pbSatLayer.setOpacity(v/100);});
 
 // ════════════════════════════════
 // Refresh
@@ -712,20 +712,21 @@ async function confirmStart() {
 // ════════════════════════════════════════════════════════════
 // Playback
 // ════════════════════════════════════════════════════════════
-let pbSnaps = [], pbIdx = 0, pbTimer = null;
+let pbSnaps = [], pbIdx = 0, pbTimer = null, pbSatLayer = null, pbSessionId = null;
 
 async function openSession(id, e) {
   if (e) e.stopPropagation();
   try {
     const snaps = await api(`/api/sessions/${id}/snapshots`);
     if (!snaps.length) { alert('No snapshots yet.'); return; }
-    pbSnaps = snaps; pbIdx = 0;
+    pbSnaps = snaps; pbIdx = 0; pbSessionId = id;
     enterPlayback();
   } catch(e) { alert('Error loading session: ' + e.message); }
 }
 
 function enterPlayback() {
   isPlayback = true;
+  if (satLayer) map.removeLayer(satLayer);
   document.getElementById('live-badge').className = 'badge pb-mode';
   document.getElementById('live-badge').textContent = 'PLAYBACK';
   document.getElementById('playback-bar').style.display = 'flex';
@@ -738,13 +739,13 @@ function enterPlayback() {
 function exitPlayback() {
   if (pbTimer) { clearInterval(pbTimer); pbTimer = null; }
   isPlayback = false;
-  pbSnaps = []; pbIdx = 0;
+  pbSnaps = []; pbIdx = 0; pbSessionId = null;
+  if (pbSatLayer) { map.removeLayer(pbSatLayer); pbSatLayer = null; }
   document.getElementById('playback-bar').style.display = 'none';
   document.getElementById('pb-play-btn').textContent = '▶';
   document.getElementById('pb-play-btn').classList.remove('playing');
   document.getElementById('live-badge').className = 'badge';
   document.getElementById('live-badge').textContent = 'LIVE';
-  // Restore live satellite layer
   buildSatLayer();
   refreshAll();
 }
@@ -755,27 +756,23 @@ function applySnapshot(idx) {
   pbIdx = idx;
   document.getElementById('pb-range').value = idx;
 
-  const d = new Date(snap.captured_at);
-  const hr = d.getHours();
-  document.getElementById('pb-info').textContent = `${idx+1}/${pbSnaps.length}`;
+  const ts = new Date(snap.timestamp || snap.captured_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('pb-info').textContent = `${ts} (${idx+1}/${pbSnaps.length})`;
 
-  const ts = d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-  document.getElementById('profile-title').textContent = `NYC Cloud · ${ts}`;
-  document.getElementById('atmo-title').textContent = `NYC Atmosphere · ${ts}`;
+  if (!snap.tileBaseUrl) return;
+  const tileUrl = SERVER_URL + snap.tileBaseUrl;
+  const maxNative = Math.max(...(snap.zooms || [10]));
 
-  // Render weather from snapshot
-  renderWeather(snap.weather.hourly, hr);
-
-  // Build satellite layer from GIBS archive
-  if (snap.goes_modified) {
-    const gd = new Date(snap.goes_modified);
-    const year = gd.getUTCFullYear();
-    if (year >= 2018) {
-      // Snap to nearest 10 min for GIBS
-      gd.setUTCMinutes(Math.floor(gd.getUTCMinutes() / 10) * 10, 0, 0);
-      const timeStr = gd.toISOString().replace('.000Z', 'Z');
-      buildSatLayer(`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/GOES_East_CONUS_TrueColor/default/${timeStr}/GoogleMapsCompatible_Level7/{z}/{y}/{x}.jpg`);
-    }
+  if (pbSatLayer) {
+    pbSatLayer.setUrl(tileUrl, true);
+  } else {
+    pbSatLayer = new ColoredTileLayer(tileUrl, {
+      opacity: +document.getElementById('sat-opacity').value / 100,
+      maxNativeZoom: maxNative,
+      maxZoom: 13,
+      attribution: 'NOAA GOES-East',
+    });
+    pbSatLayer.addTo(map);
   }
 }
 
