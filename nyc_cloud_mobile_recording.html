@@ -798,6 +798,9 @@ function pbTogglePlay() {
   }
 }
 
+// Auto-refresh session list every 60s when not in playback
+setInterval(() => { if (!isPlayback) loadSessions(); }, 60_000);
+
 // ════════════════════════════════
 // Init
 // ════════════════════════════════
