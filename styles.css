@@ -175,9 +175,10 @@
 	#aboutContainer
 	{
 		display:flex;
-		flex-direction: row; 
-		padding-bottom:200px; 
-		margin-left: 20%; 
+		flex-direction: row;
+		justify-content: center;
+		padding-bottom:200px;
+		margin-left: 20%;
 		margin-right: 20%;
 	}
 
@@ -205,9 +206,78 @@
 	}
 
 
-	#about_me 
+	#about_me
 	{
 		padding-bottom: 5%;
+	}
+
+	.currentSection
+	{
+		margin-top: 12px;
+	}
+
+	.currentLabel
+	{
+		font-family: "POIOrbiter";
+		font-weight: 500;
+		color: #707070;
+		font-size: 14px;
+		margin-bottom: 10px;
+	}
+
+	.currentLogos
+	{
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.currentLogoItem
+	{
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-family: "POIOrbiter";
+		font-weight: 300;
+		color: #707070;
+		font-size: 18px;
+		text-decoration: none;
+		transition: transform 0.2s ease;
+		width: fit-content;
+	}
+
+	.currentLogoItem:hover
+	{
+		transform: scale(1.05);
+		color: #707070;
+	}
+
+	.currentLogoText
+	{
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.currentLogoName
+	{
+		font-weight: 500;
+		font-size: 18px;
+		color: #707070;
+	}
+
+	.currentLogoRole
+	{
+		font-weight: 300;
+		font-size: 14px;
+		color: #707070;
+	}
+
+	.currentLogoImg
+	{
+		height: 60px;
+		width: auto;
+		border-radius: 8px;
 	}
 
 	#headshotPar
@@ -215,16 +285,25 @@
 		text-align: left;
 		font-family: "POIOrbiter";
 		font-weight: 300;
-/*		margin-left:35%;
-		margin-right: 35%;*/
 		color: #707070;
 		font-size: 18;
 		line-height: 1.2;
 
-		width:50%; 
-		padding-top:20%; 
-		padding-bottom:10%; 
-		margin-left: 5%;
+		width:50%;
+		padding-top:1%;
+		padding-bottom:10%;
+	}
+
+	#headshotPar .currentSection
+	{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	#headshotPar .currentLogos
+	{
+		align-items: flex-start;
 	}
 
 	a:visited
