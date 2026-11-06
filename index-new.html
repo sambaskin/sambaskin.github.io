@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sam Baskin</title>
+	<meta name="description" content="Sam Baskin is a designer and animator based in Brooklyn, specializing in communicating complex topics simply and visually.">
+	<link rel="icon" href="favicon.ico">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@1,700&family=Montserrat:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="site-new.css">
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-NTYRJQTJ4G"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-NTYRJQTJ4G');
+	</script>
+
+	<style>
+		/* Home page: original-style header + square tile grid */
+		@font-face { font-family: 'POIOrbiter'; src: url('Orbiter/POIOrbiter-Black.otf') format('opentype'); font-weight: 900; }
+		@font-face { font-family: 'POIOrbiter'; src: url('Orbiter/POIOrbiter-Bold.otf') format('opentype'); font-weight: 700; }
+		@font-face { font-family: 'POIOrbiter'; src: url('Orbiter/POIOrbiter-Medium.otf') format('opentype'); font-weight: 500; }
+		@font-face { font-family: 'POIOrbiter'; src: url('Orbiter/POIOrbiter-Regular.otf') format('opentype'); font-weight: 400; }
+
+		.home {
+			max-width: 1400px;
+			margin: 0 auto;
+			padding: 0 5%;
+		}
+
+		.home-header {
+			display: flex;
+			align-items: flex-end;
+			justify-content: space-between;
+			gap: 24px;
+			padding: 28px 0 36px;
+		}
+		.home-header .name {
+			display: block;
+			font-family: 'POIOrbiter', sans-serif;
+			font-weight: 900;
+			font-size: clamp(34px, 5vw, 56px);
+			line-height: 1;
+			color: #373737;
+		}
+		.home-header .tagline {
+			display: block;
+			margin-top: 6px;
+			font-family: 'POIOrbiter', sans-serif;
+			font-weight: 400;
+			font-size: 16px;
+			color: #373737;
+		}
+		.home-nav { display: flex; gap: 22px; }
+		.home-nav a {
+			font-family: 'POIOrbiter', sans-serif;
+			font-weight: 500;
+			font-size: 16px;
+			letter-spacing: 0.5px;
+			color: #373737;
+		}
+		.home-nav a:hover { opacity: 0.5; }
+
+		/* Square rounded tiles */
+		.tiles {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 28px 20px;
+			padding-bottom: 56px;
+		}
+		.tile { display: block; }
+		.tile-img {
+			position: relative;
+			aspect-ratio: 1 / 1;
+			border-radius: 15px;
+			overflow: hidden;
+			background: #f4f4f4;
+			box-shadow: inset 0 0 0 1.5px #f1f1f1;
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+		.tile-img img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.tile:hover .tile-img,
+		.tile:focus-visible .tile-img {
+			transform: scale(1.04);
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+		}
+		.tile-title {
+			display: block;
+			margin-top: 12px;
+			font-family: 'POIOrbiter', 'Montserrat', sans-serif;
+			font-weight: 700;
+			font-size: 15px;
+			line-height: 1.25;
+			color: #373737;
+		}
+		.tile-sub {
+			display: block;
+			margin-top: 3px;
+			font-family: 'POIOrbiter', 'Montserrat', sans-serif;
+			font-weight: 400;
+			font-size: 14px;
+			line-height: 1.3;
+			color: #8a8a8a;
+		}
+
+		/* About — same as the original site */
+		.old-about { padding: 40px 0 5%; scroll-margin-top: 24px; }
+		.old-about h2 {
+			margin: 10px 0;
+			font-family: 'Crimson Text', serif;
+			font-size: 36px;
+			font-style: italic;
+			font-weight: 700;
+			text-align: center;
+			color: #707070;
+		}
+		.old-about-body {
+			width: 50%;
+			margin: 0 auto;
+			padding: 1% 0 10%;
+			font-family: 'POIOrbiter', sans-serif;
+			font-weight: 400;
+			font-size: 18px;
+			line-height: 1.2;
+			color: #707070;
+		}
+		.old-logos {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 24px;
+			margin: 12px 0 28px;
+		}
+		.old-logo {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: #707070;
+			transition: transform 0.2s ease;
+		}
+		.old-logo:hover { transform: scale(1.05); }
+		.old-logo img { height: 60px; width: auto; border-radius: 8px; }
+		.old-logo > span { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+		.old-logo-name { font-weight: 500; font-size: 18px; }
+		.old-logo-role { font-size: 14px; }
+
+		@media (max-width: 1000px) {
+			.tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+		}
+		@media (max-width: 700px) {
+			.home-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+			.tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+			.old-about-body { width: 100%; text-align: center; }
+		}
+		@media (max-width: 540px) {
+			.home { padding: 0 16px; }
+			.tile-title { font-size: 13px; }
+			.tile-sub { font-size: 12px; }
+		}
+	</style>
+</head>
+<body>
+
+<div class="home">
+
+	<!-- Header -->
+	<header class="home-header">
+		<a href="index-new.html">
+			<span class="name">SAM BASKIN</span>
+			<span class="tagline">Designer and animator based in Brooklyn</span>
+		</a>
+		<nav class="home-nav">
+			<a href="#work">WORK</a>
+			<a href="reel.html">REEL</a>
+			<a href="#about">ABOUT</a>
+			<a href="#contact">CONTACT</a>
+		</nav>
+	</header>
+
+	<!-- Work: images with data-hover swap /static/ for /animated/ on hover -->
+	<section id="work" class="tiles">
+
+		<a class="tile" href="work/welch-labs.html">
+			<div class="tile-img"><img src="home/welchLabsLogo.webp" alt=""></div>
+			<span class="tile-title">Welch Labs</span>
+			<span class="tile-sub">Animation for math and science explainers</span>
+		</a>
+
+		<a class="tile" href="work/ontra-branding.html">
+			<div class="tile-img"><img src="portfolioPics/frontPage/static/ontraAnimation.gif" data-hover alt=""></div>
+			<span class="tile-title">Ontra Mobility Branding</span>
+			<span class="tile-sub">Placeholder description</span>
+		</a>
+
+		<a class="tile" href="work/ontra-launch-video.html">
+			<div class="tile-img"><img src="portfolioPics/frontPage/ontraPlatformLaunch.webp" alt=""></div>
+			<span class="tile-title">Ontra Mobility Launch Video</span>
+			<span class="tile-sub">Placeholder description</span>
+		</a>
+
+		<a class="tile" href="work/ontra-site-animations.html">
+			<div class="tile-img"><img src="portfolioPics/Ontra/ontraMap.webp" alt=""></div>
+			<span class="tile-title">Ontra Mobility Site Animations</span>
+			<span class="tile-sub">Placeholder description</span>
+		</a>
+
+		<a class="tile" href="work/city-animations.html">
+			<div class="tile-img"><img src="portfolioPics/frontPage/static/subway.gif" data-hover alt=""></div>
+			<span class="tile-title">City Animations</span>
+			<span class="tile-sub">Composite animations around NYC</span>
+		</a>
+
+		<a class="tile" href="work/personal-work.html">
+			<div class="tile-img"><img src="portfolioPics/frontPage/static/amarludeTest.gif" data-hover alt=""></div>
+			<span class="tile-title">Personal Work</span>
+			<span class="tile-sub">Placeholder description</span>
+		</a>
+
+		<a class="tile" href="work/ajc-social.html">
+			<div class="tile-img"><img src="portfolioPics/frontPage/static/gasPriceGif.gif" data-hover alt=""></div>
+			<span class="tile-title">AJC Social Media Animations</span>
+			<span class="tile-sub">Social assets for Atlanta's newspaper</span>
+		</a>
+
+		<a class="tile" href="work/3484-promo-videos.html">
+			<div class="tile-img"><img src="portfolioPics/frontPage/static/climateCover.gif" data-hover alt=""></div>
+			<span class="tile-title">3484 Promotional Videos</span>
+			<span class="tile-sub">Animated launch videos for student magazine</span>
+		</a>
+
+	</section>
+
+	<!-- About (original layout: centered heading, logos, then text) -->
+	<section id="about" class="old-about">
+		<h2>About</h2>
+		<div class="old-about-body">
+			<div class="old-logos">
+				<a class="old-logo" href="https://ontramobility.com" target="_blank" rel="noopener">
+					<img src="home/ontraMobilityLogo.webp" alt="Ontra Mobility">
+					<span>
+						<span class="old-logo-name">Ontra Mobility</span>
+						<span class="old-logo-role">Founding designer</span>
+					</span>
+				</a>
+				<a class="old-logo" href="https://www.youtube.com/@WelchLabs" target="_blank" rel="noopener">
+					<img src="home/welchLabsLogo.webp" alt="Welch Labs">
+					<span>
+						<span class="old-logo-name">Welch Labs</span>
+						<span class="old-logo-role">Animation and design</span>
+					</span>
+				</a>
+			</div>
+
+			I’m Sam! I’m a designer and animator specializing in communicating complex topics simply and visually. <br><br>
+
+			I’m the founding designer at Ontra Mobility, where I handle our branding, UX, and public-facing media. <br><br>
+
+			At Welch Labs, an educational YouTube channel, I animate scenes for videos and design branding and book layouts. My video work specializes in explainer-style motion design and composite animations. I also handle branding and print design for our books.
+		</div>
+	</section>
+
+	<!-- Contact -->
+	<section id="contact" class="section">
+		<h2>Contact</h2>
+		<div class="contact-links">
+			<a href="mailto:samsonbaskin@gmail.com">Email</a>
+			<a href="https://www.linkedin.com/in/sam-baskin-06b59b53/" target="_blank" rel="noopener">LinkedIn</a>
+			<a href="https://www.instagram.com/imsambaskin/" target="_blank" rel="noopener">Instagram</a>
+		</div>
+	</section>
+
+	<footer>© Sam Baskin 2026</footer>
+
+</div>
+
+<script>
+	// Hover: swap static GIF frame for the animated version
+	document.querySelectorAll('.tile').forEach(function (tile) {
+		var img = tile.querySelector('img[data-hover]');
+		if (!img) return;
+		var staticSrc = img.getAttribute('src');
+		var animatedSrc = staticSrc.replace('/static/', '/animated/');
+		tile.addEventListener('mouseenter', function () { img.src = animatedSrc; });
+		tile.addEventListener('mouseleave', function () { img.src = staticSrc; });
+	});
+</script>
+
+</body>
+</html>
