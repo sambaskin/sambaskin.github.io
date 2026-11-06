@@ -3,8 +3,7 @@
 <html>
 	<head charset="utf-8";>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-		 <link rel="stylesheet" href="styles.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 
 		 <script>
@@ -16,6 +15,8 @@
 
  		 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
 	</head>
+
+
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-NTYRJQTJ4G"></script>
 	<script>
@@ -27,123 +28,77 @@
 	</script>
 
 <!-- Header -->
-<div id="max-width">
+<body>
 	<div class="header">  <!-- style="position:fixed; background-color: #ffffff; width: 100%; -->
-		<a href="#default" class="headerLink">
+		<a href="index.html" class="headerLink">
 			<h1>SAM BASKIN</h1> 						
-			<h3>Designer and animator based in Brooklyn</h3>
+			<h3>Digital media designer based in Brooklyn</h3>
 		</a>
 		<div class="header-right">
-			<a href=#work>WORK</a>
-			<a href=reel.html>REEL</a>
+			<a href="work.html">WORK</a>
+			<a href="index.html">REEL</a>
 
-			<a href="#aboutmetarget">ABOUT</a>
-			<a href="#aboutmetarget">CONTACT</a>
+			<a href="work.html#aboutmetarget">ABOUT</a>
+			<a href="work.html#aboutmetarget">CONTACT</a>
 		</div>
-
-</div>
-
-
-
-
-<!-- WORK -->
-<div style="padding-bottom:50px;">
-
-	<div id="flex-gallery">
-			<img src="portfolioPics/frontPage/static/ontraAnimation.gif" class="flexpicStat" id="hoverImg" onclick="openModal();currentSlide(1)"
-				onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')"
-				style="border: 1.5px solid #f1f1f1f1">
-
-
-		<img src="portfolioPics/frontPage/static/amarludeTest.gif" class="flexpicStat" id="hoverImg" onclick="openModal();currentSlide(2)" 
-			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')">
-
-		<img src="portfolioPics/frontPage/static/subway.gif" class="flexpicStat" id="hoverImg" onclick="openModal();currentSlide(3)" 
-			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')">
-		
-
-		<img src="portfolioPics/frontPage/static/gasPriceGif.gif" class="flexpicStat" onclick="openModal();currentSlide(4)"
-			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')">
-
-		<img src="portfolioPics/frontPage/static/renuVid.gif" class="flexpicStat" onclick="openModal();currentSlide(4)"
-			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')"
-			style="border: 1.5px solid #f1f1f1f1">	
-
-
-		<img src="portfolioPics/frontPage/static/climateCover.gif" class="flexpicStat" onclick="openModal();currentSlide(5)"
-			onmouseover="changeImageSrc(this, 'animated')" onmouseout="changeImageSrc(this, 'static')"
-			style="border: 1.5px solid #f1f1f1f1">
-
-		<img src="portfolioPics/frontPage/3484fall2020cover.webp" class="flexpicNorm" onclick="openModal();currentSlide(6)">
-
-		<img src="portfolioPics/frontPage/kontinuaCover.webp" class="flexpicNorm" onclick="openModal();currentSlide(7)">
-
-
 
 	</div>
 
 
-</div>
-
-
-<!-- About Me -->
-
-		<div id="about_me">
-			<a id="aboutmetarget"></a>
-			<h2> About </h2>
-			<div id="aboutContainer">
-				<div id = "headshotContainer" style="display:none;">
-						<img src="headshot2023-small.gif" id="headshotgif2">
-					<div id="headshotCapt" style="text-align:center;">
-						(Sam)
-					</div>
-				</div>
-				<div id="headshotPar">
-					<div class="currentSection">
-						<div class="currentLogos">
-							<a class="currentLogoItem" href="https://ontramobility.com" target="_blank" rel="noopener">
-								<img src="home/ontraMobilityLogo.webp" class="currentLogoImg" alt="Ontra Mobility">
-								<div class="currentLogoText">
-									<span class="currentLogoName">Ontra Mobility</span>
-									<span class="currentLogoRole">Founding designer</span>
-								</div>
-							</a>
-							<a class="currentLogoItem" href="https://www.youtube.com/@WelchLabs" target="_blank" rel="noopener">
-								<img src="home/welchLabsLogo.webp" class="currentLogoImg" alt="Welch Labs">
-								<div class="currentLogoText">
-									<span class="currentLogoName">Welch Labs</span>
-									<span class="currentLogoRole">Animation and design</span>
-								</div>
-							</a>
-						</div>
-					</div>
-
-					<div style="margin-top: 28px;"></div>
-					I’m Sam! I’m a designer and animator specializing in communicating complex topics simply and visually. <br><br>
-
-					I’m the founding designer at Ontra Mobility, where I handle our branding, UX, and public-facing media. <br><br>
-
-
-					At Welch Labs, an educational YouTube channel, I animate scenes for videos and design branding and book layouts. My video work specializes in explainer-style motion design and composite animations. I also handle branding and print design for our books. <br><br>
 
 
 
-				</div>
+	<div id="reelFrame">
+		<iframe id="youtube_player" class="yt_player_iframe" src="https://www.youtube.com/embed/T-WEhyCl8ek?enablejsapi=1&version=3&playerapiid=ytplayer" title="Sam Baskin Showreel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
+	</div>
 
-
+	<!-- Work featured in the reel (from the YouTube description breakdown) -->
+	<section id="reelCredits">
+		<h2>Featured Work</h2>
+		<div class="creditGroups">
+			<div class="creditGroup">
+				<h4><a href="https://www.youtube.com/@WelchLabs" target="_blank" rel="noopener">Welch Labs</a></h4>
+				<ul>
+					<li><a href="https://www.youtube.com/shorts/V7yQEV4NSso" target="_blank" rel="noopener">How LLMs Became Robot Brains <span>2026</span></a></li>
+					<li><a href="https://www.youtube.com/shorts/30X4KfOcqj8" target="_blank" rel="noopener">Imaginary Numbers Are Real <span>2026</span></a></li>
+					<li><a href="https://www.youtube.com/shorts/MHfTfrRcsFc" target="_blank" rel="noopener">Death to the Em Dash <span>2026</span></a></li>
+					<li><a href="https://www.youtube.com/watch?v=kYkIdXwW2AE&amp;t=148s" target="_blank" rel="noopener">Yann LeCun’s $1B Bet Against LLMs <span>2026</span></a></li>
+					<li><a href="https://www.youtube.com/shorts/phU8kF-8K7c" target="_blank" rel="noopener">Can LLMs Make Significant New Discoveries? <span>2026</span></a></li>
+					<li><a href="https://www.youtube.com/watch?v=D8GOeCFFby4" target="_blank" rel="noopener">The Most Complex Model We Actually Understand <span>2025</span></a></li>
+					<li><a href="https://www.youtube.com/@WelchLabs" target="_blank" rel="noopener">Back-propagation <span>2025</span></a></li>
+				</ul>
 			</div>
-
+			<div class="creditGroup">
+				<h4><a href="https://ontramobility.com" target="_blank" rel="noopener">Ontra Mobility</a></h4>
+				<ul>
+					<li><a href="https://www.youtube.com/watch?v=PIQCndZBPp4" target="_blank" rel="noopener">Planning Platform Launch Video <span>2025</span></a></li>
+				</ul>
+				<h4>CD-ROM COM</h4>
+				<ul>
+					<li><a href="https://www.youtube.com/watch?v=Z15KD0hbw9w" target="_blank" rel="noopener">Amarlude Music Video <span>2024</span></a></li>
+				</ul>
+			</div>
+			<div class="creditGroup">
+				<h4>Personal Work</h4>
+				<ul>
+					<li>Q.E.D <span>2026</span></li>
+					<li>Chimney Clicker <span>2026</span></li>
+					<li>Cloud Animations <span>2025 · DEMO Festival submission</span></li>
+					<li><a href="https://www.youtube.com/watch?v=7_BmklPtF3Y" target="_blank" rel="noopener">Columns <span>2024</span></a></li>
+					<li><a href="https://www.youtube.com/watch?v=1ZJoYjK33nI" target="_blank" rel="noopener">Subway Animation <span>2024</span></a></li>
+					<li><a href="https://www.youtube.com/watch?v=1ZJoYjK33nI" target="_blank" rel="noopener">Package Thief <span>2024</span></a></li>
+				</ul>
+			</div>
 		</div>
+	</section>
+
 
 
 
 <!-- Footer -->
 
-		<div id="footer">
-<!-- 			<img src="SkylineFooter.webp" id="footerImg">
- -->			<div id="footerText" style="color:#d9d9d9;">
-				SAM BASKIN
-			</div>
+		<footer>
+
 			<div id="icons">
 				<a href="https://www.linkedin.com/in/sam-baskin-06b59b53/" style="color:white;">
 					<img src="linkedin.png" id="linkedin">
@@ -151,354 +106,301 @@
 				<a href="mailto:samsonbaskin@gmail.com"> <!--ADD CAPTCHA TO AVOID SPAM-->
 					<img src="email.png" id="email">
 				</a>
+				<a href="https://www.instagram.com/imsambaskin/" target="_blank" rel="noopener">
+					<img src="instagram.png" id="instagram" alt="Instagram">
+				</a>
+			</div>
+			 			<div id="footerText" style="color:#d9d9d9;">
+				SAM BASKIN
 			</div>
 			<div id="copyright" style="color:#d9d9d9;">  
 			 <!----> © Sam Baskin 2026
 			</div>
 
-		</div>
+		</footer>
 		
+</body>
 
 
 
-
-<!-- LIGHT BOX -->
-	
-
-	<div id="myModal" class="modal">
-	  <span class="close cursor" onclick="closeModal();pauseAllYouTubeVideos();">&times;</span>
-	  <div class="modal-content">
-		<!-- 1 Ontra Logo -->
-		<div class="mySlides">
-	    	<div class="leftSlide">
-	      	<img src="portfolioPics/frontPage/animated/ontraAnimation.gif" id="leftImg">
-	      	</div>
-	      	<div class="rightSlide">
-	      		<h3 class="slideHeader">Ontra Animated Logo</h3>
-		    	<p class="slideHeader">
-				I created the logo and this animation for Ontra, a mobility startup.
-				The animation uses the three main vehicle icons featured in Ontra's app, which I designed around the "O" in the logo to easily transition. 
-	 
-		    	</p>
-	    	</div>
-	    </div>
-
-
-
-	    <!-- 2 Amarlude -->
-		<div class="mySlides">
-  			<div class="leftSlide">
-				<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/Z15KD0hbw9w?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	    	
-			</div> 
-	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">Amarlude Music Video</h3>
-	    	<p class="slideHeader"> I created this music video for CD-ROM COM, an Atlanta-based rock/funk band. CD-ROM COM gave me a lot of artistic freedom, so I decided that this would be a good opportunity to expand on the style I used in my previous animation series. I wanted to add motion to iconography that people see every day, so I recorded short clips of street signs around Brooklyn. I used After Effects, Photoshop, and the character animation plug-in Rubberhose. I also included an animated montage in the middle of the video to make sure the sign animations didn't get too repetitive. 
-	    	</p>
-	    	</div>
-		</div>
-
-		<!-- 3 Animations -->
-		<div class="mySlides">
-  			<div class="leftSlide">
-				<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/NB7wCYbW4hU?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	    	
-			</div> 
-	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">City Animations</h3>
-	    	<p class="slideHeader"> I created this series of animations to brush up on After Effects while I had been primarily working in Illustrator. I used Photoshop and After Effects for most of these. I shot all the footage on my phone to give it an everyday look, while also making it easy to collect footage whenever inspiration struck. In all of these projects I used motion tracking since I filmed the source footage with no tripod. I also added sound effects to make these clips seem more realistic. 
-	    	</p>
-	    	</div>
-		</div>
-
-		<!-- 4  Gas Prices -->
-		<div class="mySlides">
-  			<div class="leftSlide">
-
-			<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/tv/Cg4yizQh7GH/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/tv/Cg4yizQh7GH/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/tv/Cg4yizQh7GH/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by AJC (@ajcnews)</a></p></div></blockquote> <script async src="//www.instagram.com/embed.js"></script>
-			 	    	</div>
-	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">AJC Gas Prices Animation</h3>
-	    	<p class="slideHeader"> I created this animation as a promotional post for an article on gas prices. I used Adobe Photoshop and Illustrator. I used heavily-edited photos I took at gas stations around Atlanta to create the board, and then animated the moving numbers and zoom in After Effects. 
-	    </p>
-	    </div>
-		</div>
-
-		<!-- 5 Renu -->
-<!-- 		<div class="mySlides">
-  			<div class="leftSlide">
-				<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/aG0hizi383s?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	 	    	
-			</div> 
-	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">Re-Nuble Amazon Video</h3>
-	    	<p class="slideHeader"> I created two videos for Re-Nuble’s Amazon page on a tight turnaround. I used textured elements with crisp edges to represent Re-Nuble’s modern approach to agriculture. 
-	    	</p>
-	    	</div>
-		</div> -->
-
-
-		<!-- 5  Climate Promo -->
-		<div class="mySlides">
-  			<div class="leftSlide">
-			<iframe id="youtube_player" class="yt_player_iframe" width="720" height="360" class="lazy" src="https://www.youtube.com/embed/Of_gjwlD4ME?enablejsapi=1&version=3&playerapiid=ytplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" allowscriptaccess="always"></iframe>	 	    	</div> 
-	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">3484 Magazine Climate Issue Promo Video</h3>
-	    	<p class="slideHeader"> I created the climate issue promo video for 3484 Magazine using Adobe After Effects and Photoshop. My goal was to create a short promotional video we could post on Instagram to get people excited about the upcoming issue. I animated the original cover Photoshop file in After Effects and then added sound effects. The tree ring animation also highlights the Atlanta skyline in the stump. 
-	    	</p>
-	    	</div>
-		</div>
-
-
-
-		<!-- 6  Fall 2021 -->
-		<div class="mySlides">
-  			<div class="leftSlidePdf">
-			<a href="portfolioPics/Magazine2020/3484fall2020.pdf" target="_blank" ><img class="pdfLink" src="portfolioPics/Magazine2020/3484fall2020cover.webp" id="leftImg"></a>
-	    	</div>
-	    	<div class="rightSlide">
-	    	<h3 class="slideHeader">3484 Magazine Fall 2020</h3>
-	    	<p class="slideHeader"><a href="portfolioPics/Magazine2020/3484fall2020.pdf" target="_blank" > Click here to read full issue.</a>I was in charge of the overall layout and design for this issue. I also fully designed and wrote several articles. This issue delved into issues related to the election, so I styled the cover after Georgia's voter sticker. The peach texture is featured throughout the magazine. As with the Spring 2020 issue, each article has its own line icon, which are combined into a logo variant in the table of contents. The line icons create consistency throughout the magazine while still providing enough room for creative expression. We designed this issue in only a few weeks, as we had to follow a tight deadline in order to publish before the election. 
-	    	</p>
-	    	</div>
-	    </div>
-
-
-		<!-- 7 Kontinua -->
-		<div class="mySlides">
-	    	<div class="leftSlide">
-	      	<img src="portfolioPics/frontPage/kontinuaCover.webp" id="leftImg">
-	      	</div>
-	      	<div class="rightSlide">
-	      		<h3 class="slideHeader">The Kontinua Foundation</h3>
-		    	<p class="slideHeader">
-				I created all of the illustrations in a series of science and engineering textbooks for an education non-profit. 
-				Each week I would research and learn the topic, plan out how to best teach it, and then begin drafting illustrations.
-				<br>
-				Since we needed a large amount of illustrations on a fairly tight schedule, I kept the illustrations simple and vector-based. Kontinua expects the textbook chapters to be printed on a school or home printer, so I also ensured that all graphics are relatively light on ink and understandable in color and black and white.
-	 
-		    	</p>
-	    	</div>
-	    </div>
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	    <!-- Next/previous controls -->
-	    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-	    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-	    <!-- Caption text -->
-	    <div class="caption-container">
-	      <p id="caption"></p>
-	    </div>
-
-
-	  </div>
-	</div>
-
-	</div>
-
-
-
-<script>
-
-//LAZY LOADING FOR YOUTUBE SPEED UP
-	window.lazyLoadOptions = {
-	    // Your custom settings go here
-	};
-
-	// Listen to the initialization event
-	// and get the instance of LazyLoad
-	window.addEventListener("LazyLoad::Initialized", function (event) {
-	    window.lazyLoadInstance = event.detail.instance;
-	}, false);
-
-	function pauseAllYouTubeVideos() {
-  		// Get all embedded YouTube videos on the page
-  		var videos = document.getElementsByTagName("iframe");
-
-	  // Iterate through each video and pause it
-	  for (var i = 0; i < videos.length; i++) {
-	    var video = videos[i].contentWindow;
-	     console.log("Pausing video", i);
-	     var videoUrl = videos[i].src; // Extract the video URL from the iframe
-    	console.log("Video URL:", videoUrl);
-	    video.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-	  }
-}
-
-//LIGHTBOX CONTROLS
-	function openModal() {
-	  document.getElementById("myModal").style.display = "block";
+ <style>
+ 	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Black.otf') format('opentype');
+	    font-weight: 900; /* Use appropriate font weight for Bold */
 	}
 
-	function closeModal() {
-	  document.getElementById("myModal").style.display = "none";
-	  pauseAllYouTubeVideos();
-
-	  //document.getElementById("iframe").style.display = "none";
-
-
-
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-ExtraBold.otf') format('opentype');
+	    font-weight: 800; /* Use appropriate font weight for Bold */
 	}
-	
-	document.addEventListener('keydown', handleKeyPress);
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Bold.otf') format('opentype');
+	    font-weight: 700; 
+	}
 
-	function handleKeyPress(event) {
-		if (event.key === 'Escape') {
-			// Call the close button click handler
-			closeModal();
-		}
-		if (event.key === 'ArrowLeft') {
-			// Call the close button click handler
-			plusSlides(-1);
-		}
-		if (event.key === 'ArrowRight') {
-			// Call the close button click handler
-			plusSlides(1);
-		}
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-SemiBold.otf') format('opentype');
+	    font-weight: 600; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Medium.otf') format('opentype');
+	    font-weight: 500; /* Use appropriate font weight for Bold */
+	}
+
+	@font-face {
+	    font-family: 'POIOrbiter';
+	    src: url('Orbiter/POIOrbiter-Regular.otf') format('opentype');
+	    font-weight: 400; 
 	}
 
 
+	h1 {
+		font-family: 'POIOrbiter', sans-serif;
+		font-weight: 900;
+		color: #707070;
+		font-size: 48px;
+	}
+
+	h2 {
+		font-family: 'Crimson Text', serif;
+		font-size: 36px;
+		font-style: italic;
+		text-align: center;
+		color: #707070;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
 
 
-	var slideIndex = 1;
-	showSlides(slideIndex);
-
-	function plusSlides(n) {
-	pauseAllYouTubeVideos();
-	  showSlides(slideIndex += n);
+	p {
+		font-family: "POIOrbiter";
+		font-weight: 300;
+		text-align: center;
+		margin-left: 35%;
+		margin-right: 35%;
 
 	}
 
-	function currentSlide(n) {
-	  showSlides(slideIndex = n);
+ 		#footerText
+	{
+		font-family: 'POIOrbiter';
+		font-weight: 800;
+		color: #e6e6e6;
+		font-size: 48px;
+
+		margin-left: 20px;
+		margin-right: 20px;
+				width: 33%;
+
+	}
+	#icons
+	{
+		width: 33%;
 	}
 
-	function showSlides(n) {
-	  var i;
-	  var slides = document.getElementsByClassName("mySlides");
-	  var dots = document.getElementsByClassName("demo");
-	  var captionText = document.getElementById("caption");
-	  if (n > slides.length) {slideIndex = 1}
-	  if (n < 1) {slideIndex = slides.length}
-	  for (i = 0; i < slides.length; i++) {
-	      slides[i].style.display = "none";
-	  }
-	  for (i = 0; i < dots.length; i++) {
-	      dots[i].className = dots[i].className.replace(" active", "");
-	  }
-	  slides[slideIndex-1].style.display = "flex";
-
-	  dots[slideIndex-1].className += " active";
-	  captionText.innerHTML = dots[slideIndex-1].alt;
+	#email
+	{
+		width:7%;
+		margin-left: 10px;
+		margin-right: 10px;
 	}
-	function callPlayer(frame_id, func, args) {
-	    if (window.jQuery && frame_id instanceof jQuery) frame_id = frame_id.get(0).id;
-	    var iframe = document.getElementById(frame_id);
-	    if (iframe && iframe.tagName.toUpperCase() != 'IFRAME') {
-	        iframe = iframe.getElementsByTagName('iframe')[0];
-	    }
 
-	    // When the player is not ready yet, add the event to a queue
-	    // Each frame_id is associated with an own queue.
-	    // Each queue has three possible states:
-	    //  undefined = uninitialised / array = queue / .ready=true = ready
-	    if (!callPlayer.queue) callPlayer.queue = {};
-	    var queue = callPlayer.queue[frame_id],
-	        domReady = document.readyState == 'complete';
+	#linkedin
+	{
+		width:7%;
+	}
 
-	    if (domReady && !iframe) {
-	        // DOM is ready and iframe does not exist. Log a message
-	        window.console && console.log('callPlayer: Frame not found; id=' + frame_id);
-	        if (queue) clearInterval(queue.poller);
-	    } else if (func === 'listening') {
-	        // Sending the "listener" message to the frame, to request status updates
-	        if (iframe && iframe.contentWindow) {
-	            func = '{"event":"listening","id":' + JSON.stringify(''+frame_id) + '}';
-	            iframe.contentWindow.postMessage(func, '*');
-	        }
-	    } else if ((!queue || !queue.ready) && (
-	               !domReady ||
-	               iframe && !iframe.contentWindow ||
-	               typeof func === 'function')) {
-	        if (!queue) queue = callPlayer.queue[frame_id] = [];
-	        queue.push([func, args]);
-	        if (!('poller' in queue)) {
-	            // keep polling until the document and frame is ready
-	            queue.poller = setInterval(function() {
-	                callPlayer(frame_id, 'listening');
-	            }, 250);
-	            // Add a global "message" event listener, to catch status updates:
-	            messageEvent(1, function runOnceReady(e) {
-	                if (!iframe) {
-	                    iframe = document.getElementById(frame_id);
-	                    if (!iframe) return;
-	                    if (iframe.tagName.toUpperCase() != 'IFRAME') {
-	                        iframe = iframe.getElementsByTagName('iframe')[0];
-	                        if (!iframe) return;
-	                    }
-	                }
-	                if (e.source === iframe.contentWindow) {
-	                    // Assume that the player is ready if we receive a
-	                    // message from the iframe
-	                    clearInterval(queue.poller);
-	                    queue.ready = true;
-	                    messageEvent(0, runOnceReady);
-	                    // .. and release the queue:
-	                    while (tmp = queue.shift()) {
-	                        callPlayer(frame_id, tmp[0], tmp[1]);
-	                    }
-	                }
-	            }, false);
-	        }
-	    } else if (iframe && iframe.contentWindow) {
-	        // When a function is supplied, just call it (like "onYouTubePlayerReady")
-	        if (func.call) return func();
-	        // Frame exists, send message
-	        iframe.contentWindow.postMessage(JSON.stringify({
-	            "event": "command",
-	            "func": func,
-	            "args": args || [],
-	            "id": frame_id
-	        }), "*");
-	    }
-	    /* IE8 does not support addEventListener... */
-	    function messageEvent(add, listener) {
-	        var w3 = add ? window.addEventListener : window.removeEventListener;
-	        w3 ?
-	            w3('message', listener, !1)
-	        :
-	            (add ? window.attachEvent : window.detachEvent)('onmessage', listener);
-	    }
-		}
+	#instagram
+	{
+		width:7%;
+	}
 
-        function changeImageSrc(img, folder) {
-            const originalSrc = img.src;
-            const parts = originalSrc.split('/');
-            parts[parts.length - 2] = folder;
-            img.src = parts.join('/');
-        }
+	#copyright
+	{
+		font-family: "POIOrbiter";
+		font-weight: 300;
+		color: #e6e6e6;
+		width: 33%;
 
 
+	}
 
-</script>
+	#reelFrame
+	{
+		padding: 0 5% 48px;
+	}
+
+	/* Wide 16:9 player */
+	#reelFrame iframe
+	{
+		display: block;
+		width: 100%;
+		max-width: 1280px;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		margin: 0 auto;
+		border: 0;
+		border-radius: 12px;
+	}
+
+	/* Featured work list */
+	#reelCredits
+	{
+		width: 100%;
+		max-width: 1280px;
+		margin: 0 auto;
+		padding: 0 5% 80px;
+		box-sizing: border-box;
+	}
+	#reelCredits h2 { margin-bottom: 28px; }
+	.creditGroups
+	{
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 32px;
+		text-align: center;
+	}
+	.creditGroup h4
+	{
+		margin: 0 0 10px;
+		font-family: 'POIOrbiter';
+		font-weight: 700;
+		font-size: 16px;
+		color: #373737;
+	}
+	.creditGroup h4 a
+	{
+		color: inherit;
+		text-decoration: none;
+	}
+	.creditGroup h4 a:hover
+	{
+		color: #000;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.creditGroup ul
+	{
+		list-style: none;
+		margin: 0 0 24px;
+		padding: 0;
+	}
+	.creditGroup li
+	{
+		font-family: 'POIOrbiter';
+		font-weight: 400;
+		font-size: 15px;
+		line-height: 1.3;
+		color: #373737;
+		margin-bottom: 9px;
+	}
+	.creditGroup li a
+	{
+		display: inline-block;
+		color: inherit;
+		text-decoration: none;
+		transition: color 0.15s ease;
+	}
+	.creditGroup li a:hover
+	{
+		color: #000;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.creditGroup li a:hover span { text-decoration: none; }
+	.creditGroup li span
+	{
+		display: block;
+		font-size: 13px;
+		color: #9a9a9a;
+	}
+
+	@media (max-width: 800px)
+	{
+		.creditGroups { grid-template-columns: 1fr 1fr; }
+	}
+	@media (max-width: 540px)
+	{
+		#reelFrame { padding: 0 16px 32px; }
+		#reelCredits { padding: 0 16px 56px; }
+		.creditGroups { grid-template-columns: 1fr; gap: 8px; }
+	}
+
+	.header {
+	  overflow: hidden;
+	  padding: 20px 5%;
+	  margin-bottom: 3%;
+	}
+
+	.header a
+	{
+	  float: left;
+	  text-align: center;
+	  text-decoration: none;
+  	}
+
+  	.header-right a, .header-right a:visited {
+  		margin: auto;
+  		font-family: 'POIOrbiter';
+  		font-size: 16px;
+  		font-weight: 500;
+  		padding-left: 15px;
+  		color: #373737;
+  		text-decoration: none;
+  		letter-spacing: 0.5px;
+
+
+  	}
+
+  	.header h1 {
+  		text-align: left;
+  		margin: 0px;
+  		color: #373737;
+
+  	}
+  	.header h3 {
+  		text-align: left;
+  		font-family: 'POIOrbiter';
+  		font-size: 16px;
+  		font-weight: 300;
+  		color: #373737;
+  		margin: 0px;
+  	}
+  	.headerLink h1:hover {
+	  opacity: 50%;
+	}
+	.headerLink h1:hover {
+	  opacity: 100%;
+	}
+
+	.header-right {
+	  float: right;
+	}
+
+	footer{
+		display:flex;
+		text-align: center;
+		align-items: center;
+		margin-top: auto;
+
+	}
+
+	body {
+		display: flex;
+		min-height: 100vh;
+		flex-direction:column;
+	}
+
+
+ </style>
+
+
 
 
 
